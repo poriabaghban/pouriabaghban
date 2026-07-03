@@ -1,0 +1,205 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: pouriabaghban3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-27 00:00+0000\n"
+"PO-Revision-Date: 2026-06-27 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Active"
+msgstr "فعال"
+
+msgid "Inactive"
+msgstr "غیرفعال"
+
+msgid "Published"
+msgstr "منتشر شده"
+
+msgid "Draft"
+msgstr "پیش‌نویس"
+
+msgid "Archived"
+msgstr "آرشیو شده"
+
+msgid "Audio file"
+msgstr "فایل صوتی"
+
+msgid "Audio URL"
+msgstr "لینک صوتی"
+
+msgid "Video file"
+msgstr "فایل ویدیو"
+
+msgid "Video URL"
+msgstr "لینک ویدیو"
+
+msgid "Media"
+msgstr "رسانه"
+
+msgid "Publishing"
+msgstr "انتشار"
+
+msgid "Status"
+msgstr "وضعیت"
+
+msgid "Post \"%(title)s\" was created successfully."
+msgstr "پست «%(title)s» با موفقیت ایجاد شد."
+
+msgid "Post \"%(title)s\" was updated successfully."
+msgstr "پست «%(title)s» با موفقیت به‌روزرسانی شد."
+
+msgid "Please correct the errors below."
+msgstr "لطفاً خطاهای زیر را اصلاح کنید."
+
+msgid "Audio"
+msgstr "صوت"
+
+msgid "Video"
+msgstr "ویدیو"
+
+msgid "%(label)s must be one of these formats: %(formats)s."
+msgstr "%(label)s باید یکی از این فرمت‌ها باشد: %(formats)s."
+
+msgid "%(label)s URL must point to one of these formats: %(formats)s."
+msgstr "لینک %(label)s باید به یکی از این فرمت‌ها اشاره کند: %(formats)s."
+
+msgid "%(label)s URL must be a direct media URL or a supported embed URL."
+msgstr "لینک %(label)s باید لینک مستقیم رسانه یا لینک embed پشتیبانی‌شده باشد."
+
+msgid "Please enter a valid http or https URL."
+msgstr "لطفاً یک لینک معتبر http یا https وارد کنید."
+
+msgid "Post details"
+msgstr "جزئیات پست‌ها"
+
+msgid "All statuses"
+msgstr "تمام وضعیت‌ها"
+
+msgid "Filter"
+msgstr "فیلتر"
+
+msgid "Total posts"
+msgstr "کل پست‌ها"
+
+msgid "Title"
+msgstr "عنوان"
+
+msgid "Author"
+msgstr "نویسنده"
+
+msgid "Date"
+msgstr "تاریخ"
+
+msgid "No posts found for these filters."
+msgstr "هیچ پستی با این فیلترها پیدا نشد."
+
+msgid "Blog post management"
+msgstr "مدیریت پست‌های بلاگ"
+
+msgid "Write new post"
+msgstr "نوشتن پست جدید"
+
+msgid "All authors"
+msgstr "تمام نویسندگان"
+
+msgid "All categories"
+msgstr "تمام دسته‌بندی‌ها"
+
+msgid "View"
+msgstr "نمایش"
+
+msgid "No posts matched these filters."
+msgstr "هیچ پستی با این فیلترها پیدا نشد."
+
+msgid "Previous"
+msgstr "قبلی"
+
+msgid "Next"
+msgstr "بعدی"
+
+msgid "Page"
+msgstr "صفحه"
+
+msgid "of"
+msgstr "از"
+
+msgid "Main information"
+msgstr "اطلاعات اصلی"
+
+msgid "Persian content"
+msgstr "محتوای فارسی"
+
+msgid "English content"
+msgstr "محتوای انگلیسی"
+
+msgid "German content"
+msgstr "محتوای آلمانی"
+
+msgid "Legacy Persian fields"
+msgstr "فیلدهای قدیمی فارسی"
+
+msgid "Tags"
+msgstr "برچسب‌ها"
+
+msgid "Stats"
+msgstr "آمار"
+
+msgid "No image uploaded."
+msgstr "تصویری بارگذاری نشده است."
+
+msgid "Image preview"
+msgstr "پیش‌نمایش تصویر"
+
+msgid "Actions"
+msgstr "عملیات"
+
+msgid "Publish selected posts"
+msgstr "انتشار پست‌های انتخاب‌شده"
+
+msgid "Move selected posts to draft"
+msgstr "انتقال پست‌ها به پیش‌نویس"
+
+msgid "Archive selected posts"
+msgstr "آرشیو پست‌های انتخاب‌شده"
+
+msgid "Activate selected posts"
+msgstr "فعال کردن پست‌های انتخاب‌شده"
+
+msgid "Deactivate selected posts"
+msgstr "غیرفعال کردن پست‌های انتخاب‌شده"
+
+msgid "Feature selected posts"
+msgstr "برجسته کردن پست‌های انتخاب‌شده"
+
+msgid "Category"
+msgstr "دسته‌بندی"
+
+msgid "Image"
+msgstr "تصویر"
+
+msgid "Featured"
+msgstr "برجسته"
+
+msgid "Slug"
+msgstr "نشانی"
+
+msgid "Edit"
+msgstr "ویرایش"
+
+msgid "pouriabaghban | Full Stack Developer"
+msgstr "پوریا باغبان | توسعه‌دهندهٔ Full Stack"
+
+msgid "Personal website of pouriabaghban; portfolio, articles, and contact information."
+msgstr "وب‌سایت شخصی پوریا باغبان؛ نمونه‌کارها، نوشته‌ها و راه‌های ارتباطی."
+
+msgid "Portfolio, articles, skills, and contact information for pouriabaghban."
+msgstr "نمونه‌کارها، نوشته‌ها، مهارت‌ها و راه‌های ارتباط با پوریا باغبان."
+
+msgid "I am a Full Stack Developer interested in building user-friendly and efficient websites. With experience across different technologies, I try to find the best solution for every project."
+msgstr "من یک توسعه‌دهندهٔ Full Stack هستم که به ساخت وب‌سایت‌های کاربرپسند و کارآمد علاقه دارم. با تجربه در فناوری‌های مختلف، برای هر پروژه بهترین راهکار را پیدا می‌کنم."

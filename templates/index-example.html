@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Hero Section -->
+{% for section in sections %}
+    {% if section.section == 'hero' %}
+    <section class="hero-section">
+        <div class="container">
+            {% if section.image %}
+                <img src="{{ section.image.url }}" alt="{{ section.title }}" class="hero-image">
+            {% endif %}
+            
+            {% if section.title %}
+                <h1>{{ section.title }}</h1>
+            {% endif %}
+            
+            {% if section.description %}
+                <p>{{ section.description|safe }}</p>
+            {% endif %}
+            
+            {% if section.button_text and section.button_url %}
+                <a href="{{ section.button_url }}" class="btn btn-primary">{{ section.button_text }}</a>
+            {% endif %}
+        </div>
+    </section>
+    {% endif %}
+{% endfor %}
+
+<!-- About Section -->
+{% for section in sections %}
+    {% if section.section == 'about' %}
+    <section class="about-section">
+        <div class="container">
+            {% if section.title %}
+                <h2>{{ section.title }}</h2>
+            {% endif %}
+            
+            <div class="row">
+                {% if section.image %}
+                    <div class="col-md-6">
+                        <img src="{{ section.image.url }}" alt="{{ section.title }}" class="img-fluid">
+                    </div>
+                {% endif %}
+                
+                <div class="col-md-6">
+                    {% if section.text_field_1 %}
+                        <p>{{ section.text_field_1|safe }}</p>
+                    {% endif %}
+                    
+                    {% if section.text_field_2 %}
+                        <p>{{ section.text_field_2|safe }}</p>
+                    {% endif %}
+                    
+                    {% if section.button_text and section.button_url %}
+                        <a href="{{ section.button_url }}" class="btn btn-primary">{{ section.button_text }}</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+{% endfor %}
+
+<!-- Skills Section -->
+{% if skills %}
+<section class="skills-section">
+    <div class="container">
+        <h2>مهارت‌های من</h2>
+        <div class="skills-grid">
+            {% for skill in skills %}
+            <div class="skill-item">
+                {% if skill.icon %}
+                    <i class="{{ skill.icon }}"></i>
+                {% endif %}
+                <h4>{{ skill.name }}</h4>
+                <div class="progress">
+                    <div class="progress-bar" style="width: {{ skill.percentage }}%">
+                        {{ skill.percentage }}%
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Projects Section -->
+{% for section in sections %}
+    {% if section.section == 'projects' %}
+    <section class="projects-section">
+        <div class="container">
+            {% if section.title %}
+                <h2>{{ section.title }}</h2>
+            {% endif %}
+            
+            {% if section.description %}
+                <p class="section-description">{{ section.description|safe }}</p>
+            {% endif %}
+            
+            <div class="projects-grid">
+                {% for project in projects %}
+                <div class="project-card">
+                    {% if project.image %}
+                        <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                    {% endif %}
+                    <h4>{{ project.title }}</h4>
+                    <p>{{ project.description }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+{% endfor %}
+
+<!-- Services Section -->
+{% for section in sections %}
+    {% if section.section == 'services' %}
+    <section class="services-section">
+        <div class="container">
+            {% if section.title %}
+                <h2>{{ section.title }}</h2>
+            {% endif %}
+            
+            <div class="services-grid">
+                <div class="service-item">
+                    <h4>{{ section.text_field_1 }}</h4>
+                </div>
+                <div class="service-item">
+                    <h4>{{ section.text_field_2 }}</h4>
+                </div>
+                <div class="service-item">
+                    <h4>{{ section.text_field_3 }}</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+{% endfor %}
+
+<!-- CTA Section -->
+{% for section in sections %}
+    {% if section.section == 'other' %}
+    <section class="cta-section">
+        <div class="container">
+            {% if section.title %}
+                <h2>{{ section.title }}</h2>
+            {% endif %}
+            
+            {% if section.description %}
+                <p>{{ section.description|safe }}</p>
+            {% endif %}
+            
+            {% if section.button_text and section.button_url %}
+                <a href="{{ section.button_url }}" class="btn btn-large">{{ section.button_text }}</a>
+            {% endif %}
+        </div>
+    </section>
+    {% endif %}
+{% endfor %}
+
+{% endblock %}

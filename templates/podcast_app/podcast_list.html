@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ section_title|default:'شعر' }}</title>
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'fonts/fontawesome-free-7.0.0-web/css/all.min.css' %}" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; font-family: Tahoma, Arial, sans-serif; color: #172033; background: radial-gradient(circle at top right, rgba(0,108,255,.12), transparent 34%), linear-gradient(135deg, #f7fbff 0%, #f3f6f8 44%, #ffffff 100%); }
+    .podcast-shell { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 52px 0 96px; }
+    .top-panel { display: flex; gap: 16px; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+    .search-box { flex: 1; display: flex; gap: 10px; background: rgba(255,255,255,.9); border: 1px solid rgba(0,108,255,.16); border-radius: 8px; padding: 10px; box-shadow: 0 18px 50px rgba(16,24,40,.08); }
+    .search-box input { flex: 1; border: 0; outline: 0; background: transparent; padding: 12px; font-size: 15px; color: #172033; }
+    .search-box button, .mini-action, .home-btn, .auth-btn, .detail-link, .audio-guard { border: 0; border-radius: 6px; padding: 12px 18px; font-weight: 800; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; }
+    .search-box button, .home-btn, .detail-link { background: #006cff; color: #fff; }
+    .mini-action, .auth-btn, .audio-guard { background: #101828; color: #fff; }
+    .podcast-grid { display: grid; gap: 22px; }
+    .podcast-card { display: grid; grid-template-columns: 190px 1fr; gap: 24px; background: rgba(255,255,255,.95); border: 1px solid rgba(0,108,255,.12); border-radius: 8px; padding: 22px; box-shadow: 0 26px 70px rgba(16,24,40,.1); position: relative; overflow: hidden; }
+    .podcast-card::before { content: ''; position: absolute; inset-inline-start: 0; top: 0; width: 5px; height: 100%; background: linear-gradient(#006cff, #2f9e44); }
+    .cover-link, .title-link { color: inherit; text-decoration: none; }
+    .cover-link { display: block; }
+    .title-link:hover { color: #006cff; }
+    .cover { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 8px; box-shadow: 0 18px 35px rgba(16,24,40,.16); }
+    .cover-fallback { width: 100%; aspect-ratio: 1 / 1; border-radius: 8px; background: linear-gradient(135deg, #101828, #2f9e44); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 52px; }
+    .card-content h2 { margin: 0 0 12px; font-size: clamp(1.4rem, 2.5vw, 2.15rem); font-weight: 900; line-height: 1.4; }
+    .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; color: #506070; font-size: 13px; }
+    .meta span { display: inline-flex; gap: 6px; align-items: center; background: #f4f8ff; border: 1px solid rgba(0,108,255,.12); border-radius: 999px; padding: 7px 10px; }
+    .desc { color: #475467; line-height: 2; margin: 0 0 18px; }
+    .poem-text { color: #243044; line-height: 2.25; white-space: pre-line; background: #fbfdff; border: 1px solid rgba(0,108,255,.12); border-radius: 8px; padding: 18px 20px; margin-bottom: 18px; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
+    .detail-link { margin-bottom: 18px; }
+    .audio-guard { margin-inline-start: 10px; margin-bottom: 18px; }
+    .empty-state { text-align: center; padding: 56px 20px; background: rgba(255,255,255,.9); border: 1px dashed rgba(0,108,255,.35); border-radius: 8px; color: #667085; }
+    .pagination { display: flex; justify-content: center; gap: 10px; margin-top: 34px; flex-wrap: wrap; }
+    .pagination a, .pagination span { min-width: 42px; min-height: 42px; border-radius: 6px; background: #fff; color: #172033; border: 1px solid rgba(0,108,255,.18); display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-weight: 800; }
+    .pagination .current { background: #006cff; color: #fff; }
+    .bottom-actions { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 40px; flex-wrap: wrap; }
+    .watermark { position: fixed; inset-inline-end: 18px; bottom: 14px; z-index: 20; padding: 8px 12px; background: rgba(16,24,40,.72); color: rgba(255,255,255,.88); border-radius: 6px; font-size: 12px; pointer-events: none; }
+    .toast-protect { position: fixed; left: 50%; bottom: 68px; transform: translateX(-50%); background: #101828; color: #fff; padding: 12px 18px; border-radius: 8px; opacity: 0; transition: opacity .2s ease; z-index: 50; }
+    .toast-protect.show { opacity: 1; }
+    @media (max-width: 760px) { .top-panel, .podcast-card { grid-template-columns: 1fr; display: grid; } .search-box { flex-direction: column; } .audio-guard { margin-inline-start: 0; } }
+  </style>
+</head>
+<body oncontextmenu="return false;">
+  <main class="podcast-shell">
+    <div class="top-panel">
+      <form class="search-box" method="get" action="{% url list_url_name %}">
+        <input type="search" name="search" value="{{ search_query }}" data-live-search placeholder="جستجو بر اساس عنوان، شاعر یا متن شعر">
+        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> جستجو</button>
+      </form>
+      {% if user.is_authenticated %}
+        <form method="post" action="{% url 'podcast_app:logout' %}">{% csrf_token %}<button class="mini-action" type="submit"><i class="fa-solid fa-right-from-bracket"></i> خروج</button></form>
+      {% else %}
+        <a class="mini-action" href="{% url login_url_name %}?next={{ list_path|urlencode }}"><i class="fa-solid fa-right-to-bracket"></i> ورود</a>
+      {% endif %}
+    </div>
+
+    <section class="podcast-grid">
+      {% for podcast in podcasts %}
+      <article class="podcast-card" data-podcast-id="{{ podcast.id }}">
+        <div>
+          <a class="cover-link" href="{% url detail_url_name podcast.id %}" aria-label="{{ podcast.title }}">
+            {% if podcast.cover_image %}<img class="cover" src="{{ podcast.cover_image.url }}" alt="{{ podcast.title }}" draggable="false">{% else %}<div class="cover-fallback"><i class="fa-solid fa-feather-pointed"></i></div>{% endif %}
+          </a>
+        </div>
+        <div class="card-content">
+          <h2><a class="title-link" href="{% url detail_url_name podcast.id %}">{{ podcast.title }}</a></h2>
+          <div class="meta">
+            <span><i class="fa-solid fa-feather"></i>{{ podcast.speaker }}</span>
+            {% if podcast.duration %}<span><i class="fa-regular fa-clock"></i>{{ podcast.duration }}</span>{% endif %}
+            <span><i class="fa-regular fa-calendar"></i>{{ podcast.get_jalali_date }}</span>
+            <span><i class="fa-regular fa-eye"></i>{{ podcast.total_views }} بازدید</span>
+          </div>
+          <p class="desc">{{ podcast.description|truncatewords:50 }}</p>
+          {% if podcast.transcript %}<div class="poem-text">{{ podcast.transcript|truncatewords:80 }}</div>{% endif %}
+          <a class="detail-link" href="{% url detail_url_name podcast.id %}"><i class="fa-solid fa-circle-info"></i> مشاهده جزئیات</a>
+          {% if podcast.audio_file %}<button class="audio-guard" type="button"><i class="fa-solid fa-lock"></i> برای پخش روی پست کلیک کنید</button>{% endif %}
+        </div>
+      </article>
+      {% empty %}<div class="empty-state">شعری برای نمایش وجود ندارد.</div>{% endfor %}
+    </section>
+
+    {% if podcasts.paginator.num_pages > 1 %}
+    <nav class="pagination">
+      {% if podcasts.has_previous %}<a href="?page={{ podcasts.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">قبلی</a>{% endif %}
+      {% for num in podcasts.paginator.page_range %}{% if podcasts.number == num %}<span class="current">{{ num }}</span>{% else %}<a href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a>{% endif %}{% endfor %}
+      {% if podcasts.has_next %}<a href="?page={{ podcasts.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">بعدی</a>{% endif %}
+    </nav>
+    {% endif %}
+
+    <div class="bottom-actions">
+      <a class="home-btn" href="/"><i class="fa-solid fa-house"></i> خانه</a>
+      {% if user.is_authenticated %}<form method="post" action="{% url 'podcast_app:logout' %}">{% csrf_token %}<button class="auth-btn" type="submit"><i class="fa-solid fa-right-from-bracket"></i> خروج</button></form>{% else %}<a class="auth-btn" href="{% url login_url_name %}?next={{ list_path|urlencode }}"><i class="fa-solid fa-right-to-bracket"></i> ورود</a>{% endif %}
+    </div>
+  </main>
+  <div class="watermark">{{ watermark_name|default:'guest' }}</div>
+  <div class="toast-protect" id="protectToast">این محتوا محافظت شده است</div>
+  <script>
+    const toast = document.getElementById('protectToast');
+    const protectedMsg = 'این محتوا محافظت شده است';
+    const screenshotMsg = 'اسکرین‌شات از این محتوا مجاز نیست';
+    const postClickMsg = 'برای پخش فایل صوتی باید روی پست کلیک کنید.';
+    function showProtect(message) { toast.textContent = message || protectedMsg; toast.classList.add('show'); clearTimeout(window.__protectTimer); window.__protectTimer = setTimeout(() => toast.classList.remove('show'), 1800); }
+    document.querySelectorAll('.audio-guard').forEach(button => button.addEventListener('click', () => showProtect(postClickMsg)));
+    document.querySelectorAll('[data-live-search]').forEach(input => {
+      const form = input.closest('form');
+      const initialValue = input.value.trim();
+      let timer;
+      input.addEventListener('input', () => {
+        const value = input.value.trim();
+        clearTimeout(timer);
+        if (!value && !initialValue) return;
+        timer = setTimeout(() => form.requestSubmit(), 350);
+      });
+    });
+    document.addEventListener('contextmenu', e => { e.preventDefault(); showProtect(protectedMsg); });
+    document.addEventListener('keydown', e => { const key = e.key.toLowerCase(); if (e.key === 'F12' || e.key === 'PrintScreen' || (e.ctrlKey && ['a','c','p','s','u'].includes(key)) || (e.metaKey && e.shiftKey && ['3','4','s'].includes(key)) || (e.ctrlKey && e.shiftKey && ['i','s'].includes(key))) { e.preventDefault(); showProtect(e.key === 'PrintScreen' ? screenshotMsg : protectedMsg); } });
+    document.addEventListener('keyup', e => { if (e.key === 'PrintScreen') showProtect(screenshotMsg); });
+    document.addEventListener('copy', e => { e.preventDefault(); showProtect(protectedMsg); });
+    document.addEventListener('selectstart', e => { if (e.target.closest('.poem-text')) { e.preventDefault(); showProtect(protectedMsg); } });
+    document.addEventListener('dragstart', e => { e.preventDefault(); showProtect(protectedMsg); });
+  </script>
+</body>
+</html>

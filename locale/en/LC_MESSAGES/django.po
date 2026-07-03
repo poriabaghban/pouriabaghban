@@ -1,0 +1,661 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: pouriabaghban3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-29 00:00+0000\n"
+"PO-Revision-Date: 2026-06-29 00:00+0000\n"
+"Last-Translator: Codex\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "پوریا باغبان | توسعه‌دهنده Full Stack"
+msgstr "Pouria Baghban | Full Stack Developer"
+
+msgid "وب‌سایت شخصی پوریا باغبان؛ نمونه‌کارها، نوشته‌ها و راه‌های ارتباطی."
+msgstr "Pouria Baghban personal website; portfolio, articles, and contact information."
+
+msgid "خانه"
+msgstr "Home"
+
+msgid "ارتباط با من"
+msgstr "Contact me"
+
+msgid "بلاگ"
+msgstr "Blog"
+
+msgid "نمونه کار"
+msgstr "Portfolio"
+
+msgid "گالری"
+msgstr "Gallery"
+
+msgid "دانلود رزومه"
+msgstr "Download resume"
+
+msgid "سازنده و توسعه‌دهنده پوریا باغبان"
+msgstr "Built and developed by Pouria Baghban"
+
+msgid "ارسال ایمیل"
+msgstr "Send email"
+
+msgid "پوریا باغبان |pouriabaghban Full Stack"
+msgstr "Pouria Baghban | Full Stack Developer"
+
+msgid "نمونه‌کارها، نوشته‌ها، مهارت‌ها و راه‌های ارتباط با پوریا باغبان."
+msgstr "Portfolio, articles, skills, and ways to contact Pouria Baghban."
+
+msgid "توسعه‌دهندهٔ Full Stack"
+msgstr "Full Stack Developer"
+
+msgid "ایمیل"
+msgstr "Email"
+
+msgid "موقعیت"
+msgstr "Location"
+
+msgid "من یک توسعه‌دهندهٔ Full Stack هستم که علاقه‌مند به ساخت وب‌سایت‌های کاربرپسند و کارآمد هستم. با تجربهٔ کار با فناوری‌های مختلف، تلاش می‌کنم بهترین راهکارها را برای هر پروژه پیدا کنم."
+msgstr "I am a full stack developer interested in building user-friendly and efficient websites. With experience across different technologies, I try to find the best solution for each project."
+
+msgid "آخرین مقالات"
+msgstr "Latest articles"
+
+msgid "نوشته‌های تکنیکی و تجربیات توسعه‌دهنده"
+msgstr "Technical articles and developer experiences"
+
+msgid "بیشتر بدانید"
+msgstr "Learn more"
+
+msgid "فعلا بلاگی نیست"
+msgstr "No blog posts yet"
+
+msgid "مشاهدهٔ تمام مقالات"
+msgstr "View all articles"
+
+msgid "نظرات"
+msgstr "Comments"
+
+msgid "قبلی"
+msgstr "Previous"
+
+msgid "بعدی"
+msgstr "Next"
+
+msgid "هنوز نظری ثبت نشده است"
+msgstr "No comments have been posted yet"
+
+msgid "نظر شما با موفقیت ارسال شد!"
+msgstr "Your comment was sent successfully!"
+
+msgid "مشکلی پیش آمد، لطفاً دوباره تلاش کنید."
+msgstr "Something went wrong. Please try again."
+
+msgid "نام شما:"
+msgstr "Your name:"
+
+msgid "نام خود را وارد کنید"
+msgstr "Enter your name"
+
+msgid "ایمیل شما:"
+msgstr "Your email:"
+
+msgid "ایمیل خود را وارد کنید"
+msgstr "Enter your email"
+
+msgid "نظر شما (حداکثر 500 کاراکتر):"
+msgstr "Your comment (maximum 500 characters):"
+
+msgid "نظر و پیشنهاد خود را بنویسید..."
+msgstr "Write your comment or suggestion..."
+
+msgid "کاراکترهای باقی:"
+msgstr "Characters remaining:"
+
+msgid "ارسال نظر"
+msgstr "Send comment"
+
+msgid "در حال ارسال..."
+msgstr "Sending..."
+
+msgid "خطا در ارسال"
+msgstr "Sending failed"
+
+msgid "Are you sure you want to delete this item?"
+msgstr "Are you sure you want to delete this item?"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Save"
+msgstr "Save"
+
+msgid "در حال بارگذاری"
+msgstr "Loading"
+
+msgid "شما اینجا هستید"
+msgstr "You are here"
+
+msgid "ابزارهای مطالعه"
+msgstr "Reading tools"
+
+msgid "تغییر حالت مطالعه"
+msgstr "Toggle reading mode"
+
+msgid "اشتراک‌گذاری"
+msgstr "Share"
+
+msgid "نمایش گسترده"
+msgstr "Expanded view"
+
+msgid "بازگشت به بالا"
+msgstr "Back to top"
+
+msgid "واتساپ"
+msgstr "WhatsApp"
+
+msgid "تلگرام"
+msgstr "Telegram"
+
+msgid "توییتر"
+msgstr "Twitter"
+
+msgid "کپی لینک"
+msgstr "Copy link"
+
+msgid "جزئیات مقاله"
+msgstr "Article details"
+
+msgid "دقیقه مطالعه"
+msgstr "min read"
+
+msgid "بازدید"
+msgstr "views"
+
+msgid "اندازه فونت"
+msgstr "Font size"
+
+msgid "اندازه متن"
+msgstr "Text size"
+
+msgid "چینش متن"
+msgstr "Text alignment"
+
+msgid "راست چین"
+msgstr "Align right"
+
+msgid "وسط چین"
+msgstr "Align center"
+
+msgid "چپ چین"
+msgstr "Align left"
+
+msgid "برای مطالعه راحت‌تر می‌توانید اندازه و چینش متن را از همین صفحه تنظیم کنید."
+msgstr "For easier reading, you can adjust text size and alignment on this page."
+
+msgid "Your browser does not support the audio element."
+msgstr "Your browser does not support the audio element."
+
+msgid "Your browser does not support the video element."
+msgstr "Your browser does not support the video element."
+
+msgid "برچسب‌ها"
+msgstr "Tags"
+
+msgid "سایدبار مقاله"
+msgstr "Article sidebar"
+
+msgid "فهرست مطالب"
+msgstr "Table of contents"
+
+msgid "مطالب مرتبط"
+msgstr "Related posts"
+
+msgid "دقیقه"
+msgstr "minutes"
+
+msgid "هنوز مطلب مرتبطی برای نمایش وجود ندارد."
+msgstr "There are no related posts to display yet."
+
+msgid "امتیاز شما"
+msgstr "Your rating"
+
+msgid "نظر تایید شده"
+msgstr "approved comment"
+
+msgid "پسندیدن"
+msgstr "Like"
+
+msgid "پاسخ"
+msgstr "Reply"
+
+msgid "نام شما"
+msgstr "Your name"
+
+msgid "ایمیل شما"
+msgstr "Your email"
+
+msgid "پاسخ خود را بنویسید..."
+msgstr "Write your reply..."
+
+msgid "ارسال پاسخ"
+msgstr "Send reply"
+
+msgid "هنوز نظری ثبت نشده است. اولین نفر باشید."
+msgstr "No comments yet. Be the first."
+
+msgid "نظر خود را اینجا بنویسید..."
+msgstr "Write your comment here..."
+
+msgid "کپی شد"
+msgstr "Copied"
+
+msgid "لینک مقاله:"
+msgstr "Article link:"
+
+msgid "عنوانی در متن مقاله پیدا نشد."
+msgstr "No heading was found in the article text."
+
+msgid "پسندیده شد"
+msgstr "Liked"
+
+msgid "Create new post"
+msgstr "Create new post"
+
+msgid "Edit"
+msgstr "Edit"
+
+msgid "Current image"
+msgstr "Current image"
+
+msgid "Blog detail images"
+msgstr "Blog detail images"
+
+msgid "Delete this image"
+msgstr "Delete this image"
+
+msgid "Create post"
+msgstr "Create post"
+
+msgid "Save changes"
+msgstr "Save changes"
+
+msgid "Back"
+msgstr "Back"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "بلاگ | پوریا باغبان"
+msgstr "Blog | Pouria Baghban"
+
+msgid "آخرین نوشته‌ها و تجربه‌های فنی پوریا باغبان."
+msgstr "Latest posts and technical experiences from Pouria Baghban."
+
+msgid "آخرین نوشته‌ها"
+msgstr "Latest posts"
+
+msgid "مجله دانش و فناوری"
+msgstr "Knowledge and Technology Journal"
+
+msgid "یادداشت‌ها، تجربه‌ها و تحلیل‌های تازه را در فضایی تمیز و خوانا دنبال کنید."
+msgstr "Follow fresh notes, experiences, and analysis in a clean, readable space."
+
+msgid "مطلب در این فهرست"
+msgstr "posts in this list"
+
+msgid "برچسب فعال"
+msgstr "active tags"
+
+msgid "جستجوی مقاله‌ها..."
+msgstr "Search articles..."
+
+msgid "جستجوی مقاله‌ها"
+msgstr "Search articles"
+
+msgid "فیلتر بر اساس برچسب"
+msgstr "Filter by tag"
+
+msgid "همه"
+msgstr "All"
+
+msgid "جستجو"
+msgstr "Search"
+
+msgid "پاک کردن"
+msgstr "Clear"
+
+msgid "مقاله ویژه"
+msgstr "Featured article"
+
+msgid "ادامه مطلب"
+msgstr "Continue reading"
+
+msgid "لیست مقاله‌ها"
+msgstr "Article list"
+
+msgid "بیشتر"
+msgstr "More"
+
+msgid "Active"
+msgstr "Active"
+
+msgid "Inactive"
+msgstr "Inactive"
+
+msgid "Published"
+msgstr "Published"
+
+msgid "Draft"
+msgstr "Draft"
+
+msgid "Archived"
+msgstr "Archived"
+
+msgid "گالری تصاویر و نمونه‌کارهای پوریا باغبان."
+msgstr "Image gallery and portfolio of Pouria Baghban."
+
+msgid "مشاهده پروژه"
+msgstr "View project"
+
+msgid "اول"
+msgstr "First"
+
+msgid "آخر"
+msgstr "Last"
+
+msgid "Main information"
+msgstr "Main information"
+
+msgid "Persian content"
+msgstr "Persian content"
+
+msgid "English content"
+msgstr "English content"
+
+msgid "German content"
+msgstr "German content"
+
+msgid "Media"
+msgstr "Media"
+
+msgid "Legacy Persian fields"
+msgstr "Legacy Persian fields"
+
+msgid "Publishing"
+msgstr "Publishing"
+
+msgid "Tags"
+msgstr "Tags"
+
+msgid "Stats"
+msgstr "Stats"
+
+msgid "Title"
+msgstr "Title"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "No image uploaded."
+msgstr "No image uploaded."
+
+msgid "Image preview"
+msgstr "Image preview"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "%(count)s posts published."
+msgstr "%(count)s posts published."
+
+msgid "Publish selected posts"
+msgstr "Publish selected posts"
+
+msgid "%(count)s posts moved to draft."
+msgstr "%(count)s posts moved to draft."
+
+msgid "Move selected posts to draft"
+msgstr "Move selected posts to draft"
+
+msgid "%(count)s posts archived."
+msgstr "%(count)s posts archived."
+
+msgid "Archive selected posts"
+msgstr "Archive selected posts"
+
+msgid "%(count)s posts activated."
+msgstr "%(count)s posts activated."
+
+msgid "Activate selected posts"
+msgstr "Activate selected posts"
+
+msgid "%(count)s posts deactivated."
+msgstr "%(count)s posts deactivated."
+
+msgid "Deactivate selected posts"
+msgstr "Deactivate selected posts"
+
+msgid "%(count)s posts featured."
+msgstr "%(count)s posts featured."
+
+msgid "Feature selected posts"
+msgstr "Feature selected posts"
+
+msgid "https://example.com/audio.mp3"
+msgstr "https://example.com/audio.mp3"
+
+msgid "https://example.com/video.mp4"
+msgstr "https://example.com/video.mp4"
+
+msgid "عنوان فارسی"
+msgstr "Persian title"
+
+msgid "محتوای فارسی"
+msgstr "Persian content"
+
+msgid "خلاصه فارسی"
+msgstr "Persian excerpt"
+
+msgid "عنوان انگلیسی"
+msgstr "English title"
+
+msgid "محتوای انگلیسی"
+msgstr "English content"
+
+msgid "خلاصه انگلیسی"
+msgstr "English excerpt"
+
+msgid "عنوان آلمانی"
+msgstr "German title"
+
+msgid "محتوای آلمانی"
+msgstr "German content"
+
+msgid "خلاصه آلمانی"
+msgstr "German excerpt"
+
+msgid "عنوان قدیمی"
+msgstr "Legacy title"
+
+msgid "نشانی"
+msgstr "Slug"
+
+msgid "محتوای قدیمی"
+msgstr "Legacy content"
+
+msgid "خلاصه قدیمی"
+msgstr "Legacy excerpt"
+
+msgid "دسته‌بندی"
+msgstr "Category"
+
+msgid "تصویر"
+msgstr "Image"
+
+msgid "Audio file"
+msgstr "Audio file"
+
+msgid "Audio URL"
+msgstr "Audio URL"
+
+msgid "Video file"
+msgstr "Video file"
+
+msgid "Video URL"
+msgstr "Video URL"
+
+msgid "وضعیت"
+msgstr "Status"
+
+msgid "برجسته"
+msgstr "Featured"
+
+msgid "%(label)s must be one of these formats: %(formats)s."
+msgstr "%(label)s must be one of these formats: %(formats)s."
+
+msgid "Please enter a valid http or https URL."
+msgstr "Please enter a valid http or https URL."
+
+msgid "Post details"
+msgstr "Post details"
+
+msgid "All statuses"
+msgstr "All statuses"
+
+msgid "Filter"
+msgstr "Filter"
+
+msgid "Total posts"
+msgstr "Total posts"
+
+msgid "Author"
+msgstr "Author"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "No posts found for these filters."
+msgstr "No posts found for these filters."
+
+msgid "%(label)s URL must point to one of these formats: %(formats)s."
+msgstr "%(label)s URL must point to one of these formats: %(formats)s."
+
+msgid "%(label)s URL must be a direct media URL or a supported embed URL."
+msgstr "%(label)s URL must be a direct media URL or a supported embed URL."
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "لطفا حداقل یک زبان را کامل وارد کنید."
+msgstr "Please complete at least one language."
+
+msgid "عکس جزئیات"
+msgstr "Detail image"
+
+msgid "تیتر عکس"
+msgstr "Image title"
+
+msgid "متن کنار یا زیر عکس"
+msgstr "Text beside or below the image"
+
+msgid "ترتیب"
+msgstr "Order"
+
+msgid "نظر شما ثبت شد و پس از بررسی نمایش داده خواهد شد."
+msgstr "Your comment was submitted and will be displayed after review."
+
+msgid "لطفاً تمام فیلدها را پر کنید."
+msgstr "Please fill in all fields."
+
+msgid "Post \"%(title)s\" was created successfully."
+msgstr "Post \"%(title)s\" was created successfully."
+
+msgid "Please correct the errors below."
+msgstr "Please correct the errors below."
+
+msgid "Post \"%(title)s\" was updated successfully."
+msgstr "Post \"%(title)s\" was updated successfully."
+
+msgid "Edit: %(title)s"
+msgstr "Edit: %(title)s"
+
+msgid "بلاگ - %(category)s"
+msgstr "Blog - %(category)s"
+
+msgid "درخواست نامعتبر"
+msgstr "Bad request"
+
+msgid "متأسفانه، درخواست شما نامعتبر است."
+msgstr "Sorry, your request is invalid."
+
+msgid "بازگشت به صفحه اصلی"
+msgstr "Back to home page"
+
+msgid "دسترسی ممنوع"
+msgstr "Access denied"
+
+msgid "شما اجازهٔ دسترسی به این صفحه را ندارید."
+msgstr "You do not have permission to access this page."
+
+msgid "صفحه پیدا نشد"
+msgstr "Page not found"
+
+msgid "متأسفانه، صفحه‌ای که دنبال آن می‌گردید پیدا نشد."
+msgstr "Sorry, the page you are looking for was not found."
+
+msgid "خطای سرور"
+msgstr "Server error"
+
+msgid "متأسفانه، سرور یک خطا برخورد کرد."
+msgstr "Sorry, the server encountered an error."
+
+msgid "Blog post management"
+msgstr "Blog post management"
+
+msgid "Write new post"
+msgstr "Write new post"
+
+msgid "All authors"
+msgstr "All authors"
+
+msgid "All categories"
+msgstr "All categories"
+
+msgid "Category"
+msgstr "Category"
+
+msgid "View"
+msgstr "View"
+
+msgid "No posts matched these filters."
+msgstr "No posts matched these filters."
+
+msgid "Previous"
+msgstr "Previous"
+
+msgid "Page"
+msgstr "Page"
+
+msgid "of"
+msgstr "of"
+
+msgid "Next"
+msgstr "Next"
+
+msgid "pouriabaghban | Full Stack Developer"
+msgstr "pouriabaghban | Full Stack Developer"
+
+msgid "Personal website of pouriabaghban; portfolio, articles, and contact information."
+msgstr "Personal website of pouriabaghban; portfolio, articles, and contact information."
+
+msgid "Portfolio, articles, skills, and contact information for pouriabaghban."
+msgstr "Portfolio, articles, skills, and contact information for pouriabaghban."
+
+msgid "I am a Full Stack Developer interested in building user-friendly and efficient websites. With experience across different technologies, I try to find the best solution for every project."
+msgstr "I am a Full Stack Developer interested in building user-friendly and efficient websites. With experience across different technologies, I try to find the best solution for every project."

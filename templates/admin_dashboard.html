@@ -1,0 +1,305 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}پنل مدیریت - صفحه اصلی{% endblock %}
+
+{% block extrastyle %}
+<style>
+    body {
+        direction: rtl;
+    }
+    
+    .dashboard-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        margin-bottom: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .dashboard-header h1 {
+        margin: 0;
+        font-size: 28px;
+    }
+    
+    .dashboard-header p {
+        margin: 5px 0 0 0;
+        opacity: 0.9;
+    }
+    
+    .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .stat-box {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-right: 4px solid;
+        text-align: center;
+    }
+    
+    .stat-box.posts {
+        border-right-color: #667eea;
+    }
+    
+    .stat-box.comments {
+        border-right-color: #f5576c;
+    }
+    
+    .stat-box.messages {
+        border-right-color: #4facfe;
+    }
+    
+    .stat-box.authors {
+        border-right-color: #43e97b;
+    }
+    
+    .stat-box h3 {
+        margin: 0 0 10px 0;
+        color: #666;
+        font-size: 14px;
+        font-weight: normal;
+    }
+    
+    .stat-box .number {
+        font-size: 32px;
+        font-weight: bold;
+        color: #333;
+        margin: 10px 0;
+    }
+    
+    .stat-box .detail {
+        font-size: 12px;
+        color: #999;
+    }
+    
+    .quick-links {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+    }
+    
+    .quick-links h2 {
+        margin-top: 0;
+        color: #333;
+        border-bottom: 2px solid #667eea;
+        padding-bottom: 10px;
+    }
+    
+    .links-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+    }
+    
+    .link-box {
+        padding: 15px;
+        border-radius: 6px;
+        text-align: center;
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 60px;
+    }
+    
+    .link-box:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        text-decoration: none;
+        color: white;
+    }
+    
+    .link-box.blog {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .link-box.comments {
+        background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+    }
+    
+    .link-box.messages {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+    
+    .link-box.dashboard {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+    
+    .link-box.gallery {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+    
+    .link-box.contact {
+        background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+    }
+    
+    .recent-items {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+    
+    .recent-items h3 {
+        margin-top: 0;
+        color: #333;
+        border-bottom: 2px solid #667eea;
+        padding-bottom: 10px;
+    }
+    
+    .recent-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .recent-list li {
+        padding: 10px;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 13px;
+    }
+    
+    .recent-list li:last-child {
+        border-bottom: none;
+    }
+    
+    .recent-list strong {
+        color: #333;
+    }
+    
+    .recent-list .date {
+        color: #999;
+        font-size: 11px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1>🎯 خوش‌آمدید به پنل مدیریت</h1>
+    <p>سلام {{ user.first_name|default:user.username }}! اینجا می‌توانید تمام بخش‌های سایت را مدیریت کنید.</p>
+</div>
+
+<!-- آمار کلی -->
+<div class="stats-container">
+    <div class="stat-box posts">
+        <h3>📝 پست‌های بلاگ</h3>
+        <div class="number">{{ total_posts }}</div>
+        <div class="detail">{{ published_posts }} منتشر شده</div>
+    </div>
+    
+    <div class="stat-box comments">
+        <h3>💬 کامنت‌ها</h3>
+        <div class="number">{{ total_comments }}</div>
+        <div class="detail">{{ pending_comments }} منتظر تایید</div>
+    </div>
+    
+    <div class="stat-box messages">
+        <h3>📧 پیام‌های تماس</h3>
+        <div class="number">{{ total_messages }}</div>
+        <div class="detail">{{ unread_messages }} خوانده‌نشده</div>
+    </div>
+    
+    <div class="stat-box authors">
+        <h3>✍️ نویسندگان</h3>
+        <div class="number">{{ total_authors }}</div>
+        <div class="detail">نویسنده فعال</div>
+    </div>
+</div>
+
+<!-- لینک‌های سریع -->
+<div class="quick-links">
+    <h2>🚀 دسترسی سریع</h2>
+    <div class="links-grid">
+        <a href="/admin/blog/blogcomment/" class="link-box comments">
+            <span>💬 کامنت‌ها</span>
+        </a>
+        <a href="/admin/contact/contactmessage/" class="link-box messages">
+            <span>📧 پیام‌ها</span>
+        </a>
+        <a href="/dashboard/" class="link-box dashboard">
+            <span>📊 داشبورد</span>
+        </a>
+        <a href="/admin/gallery/gallery/" class="link-box gallery">
+            <span>🖼️ گالری</span>
+        </a>
+        <a href="/admin/pages/pagesection/" class="link-box contact">
+            <span>🎨 صفحات</span>
+        </a>
+    </div>
+</div>
+
+<!-- لیست‌های اخیر -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+    
+    <!-- آخرین پست‌ها -->
+    <div class="recent-items">
+        <h3>📝 آخرین پست‌ها</h3>
+        {% if recent_posts %}
+            <ul class="recent-list">
+                {% for post in recent_posts %}
+                <li>
+                    <strong>{{ post.title }}</strong>
+                    <br>
+                    <small class="date">{{ post.published_at|date:"Y-m-d H:i"|default:"پیش‌نویس" }}</small>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p style="color: #999; margin: 0;">هنوز پستی ایجاد نشده است</p>
+        {% endif %}
+    </div>
+    
+    <!-- کامنت‌های منتظر -->
+    <div class="recent-items">
+        <h3>💬 کامنت‌های منتظر تایید</h3>
+        {% if pending_comments_list %}
+            <ul class="recent-list">
+                {% for comment in pending_comments_list %}
+                <li>
+                    <strong>{{ comment.author }}</strong> در <em>{{ comment.post.title }}</em>
+                    <br>
+                    <small class="date">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p style="color: #999; margin: 0;">هیچ کامنت منتظر تایید نیست ✅</p>
+        {% endif %}
+    </div>
+    
+    <!-- پیام‌های خوانده‌نشده -->
+    <div class="recent-items">
+        <h3>📧 پیام‌های خوانده‌نشده</h3>
+        {% if unread_messages_list %}
+            <ul class="recent-list">
+                {% for message in unread_messages_list %}
+                <li>
+                    <strong>{{ message.name }}</strong> - {{ message.subject }}
+                    <br>
+                    <small class="date">{{ message.created_at|date:"Y-m-d H:i" }}</small>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p style="color: #999; margin: 0;">تمام پیام‌ها خوانده شده‌اند ✅</p>
+        {% endif %}
+    </div>
+    
+</div>
+
+{% endblock %}

@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ podcast.title }}</title>
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'fonts/fontawesome-free-7.0.0-web/css/all.min.css' %}" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; font-family: Tahoma, Arial, sans-serif; color: #172033; background: radial-gradient(circle at top right, rgba(0,108,255,.12), transparent 34%), linear-gradient(135deg, #f7fbff 0%, #f3f6f8 44%, #ffffff 100%); }
+    .frequency-frame { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 12; opacity: 0; transition: opacity .35s ease; }
+    .frequency-frame.is-active { opacity: .95; }
+    .detail-shell { width: min(1040px, calc(100% - 32px)); margin: 0 auto; padding: 42px 0 96px; position: relative; z-index: 14; }
+    .top-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
+    .action-btn { border: 0; border-radius: 6px; padding: 12px 18px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; background: #101828; color: #fff; cursor: pointer; }
+    .primary-btn { background: #006cff; }
+    .detail-panel { display: grid; grid-template-columns: minmax(220px, 320px) 1fr; gap: 28px; background: rgba(255,255,255,.96); border: 1px solid rgba(0,108,255,.12); border-radius: 8px; padding: 24px; box-shadow: 0 26px 70px rgba(16,24,40,.1); position: relative; overflow: hidden; }
+    .detail-panel::before { content: ''; position: absolute; inset-inline-start: 0; top: 0; width: 5px; height: 100%; background: linear-gradient(#006cff, #2f9e44); }
+    .cover { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 8px; box-shadow: 0 18px 35px rgba(16,24,40,.16); }
+    .cover-fallback { width: 100%; aspect-ratio: 1 / 1; border-radius: 8px; background: linear-gradient(135deg, #101828, #2f9e44); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 64px; }
+    h1 { margin: 0 0 14px; font-size: clamp(1.7rem, 3vw, 2.7rem); font-weight: 900; line-height: 1.45; }
+    .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; color: #506070; font-size: 13px; }
+    .meta span { display: inline-flex; gap: 6px; align-items: center; background: #f4f8ff; border: 1px solid rgba(0,108,255,.12); border-radius: 999px; padding: 7px 10px; }
+    .desc { color: #475467; line-height: 2; margin: 0 0 20px; }
+    .poem-text { color: #243044; line-height: 2.35; white-space: pre-line; background: #fbfdff; border: 1px solid rgba(0,108,255,.12); border-radius: 8px; padding: 22px 24px; margin-top: 20px; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
+    .secure-player { display: grid; grid-template-columns: 44px 36px 58px 1fr 58px 36px; align-items: center; gap: 12px; padding: 14px; border-radius: 8px; background: #0f172a; color: #fff; }
+    .play-btn, .seek-btn { border: 0; color: #fff; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+    .play-btn { width: 44px; height: 44px; border-radius: 50%; background: #006cff; font-size: 16px; }
+    .seek-btn { width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,.12); font-size: 13px; transition: background .2s ease, transform .2s ease; }
+    .seek-btn:hover { background: rgba(0,108,255,.72); transform: translateY(-1px); }
+    .time { direction: ltr; font-size: 13px; color: #d6e4ff; text-align: center; }
+    .progress-line { height: 8px; background: rgba(255,255,255,.16); border-radius: 999px; cursor: pointer; overflow: hidden; position: relative; }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #00a3ff, #7dd3fc); border-radius: inherit; }
+    audio { display: none !important; }
+    .watermark { position: fixed; inset-inline-end: 18px; bottom: 14px; z-index: 20; padding: 8px 12px; background: rgba(16,24,40,.72); color: rgba(255,255,255,.88); border-radius: 6px; font-size: 12px; pointer-events: none; }
+    .toast-protect { position: fixed; left: 50%; bottom: 68px; transform: translateX(-50%); background: #101828; color: #fff; padding: 12px 18px; border-radius: 8px; opacity: 0; transition: opacity .2s ease; z-index: 50; }
+    .toast-protect.show { opacity: 1; }
+    @media (max-width: 760px) { .detail-panel { grid-template-columns: 1fr; } .secure-player { grid-template-columns: 44px 36px 1fr 36px; } .secure-player .current { grid-column: 1 / 3; } .secure-player .progress-line { grid-column: 3 / 5; } .secure-player .duration { grid-column: 3 / 5; text-align: left; } }
+  </style>
+</head>
+<body oncontextmenu="return false;">
+  <canvas class="frequency-frame" id="frequencyFrame" aria-hidden="true"></canvas>
+  <main class="detail-shell">
+    <div class="top-actions">
+      <a class="action-btn primary-btn" href="{% url list_url_name %}"><i class="fa-solid fa-arrow-right"></i> {{ back_label|default:'بازگشت به شعرها' }}</a>
+      {% if user.is_authenticated %}
+        <form method="post" action="{% url 'podcast_app:logout' %}">{% csrf_token %}<button class="action-btn" type="submit"><i class="fa-solid fa-right-from-bracket"></i> خروج</button></form>
+      {% endif %}
+    </div>
+
+    <article class="detail-panel" data-podcast-id="{{ podcast.id }}">
+      <div>{% if podcast.cover_image %}<img class="cover" src="{{ podcast.cover_image.url }}" alt="{{ podcast.title }}" draggable="false">{% else %}<div class="cover-fallback"><i class="fa-solid fa-feather-pointed"></i></div>{% endif %}</div>
+      <div>
+        <h1>{{ podcast.title }}</h1>
+        <div class="meta">
+          <span><i class="fa-solid fa-feather"></i>{{ podcast.speaker }}</span>
+          {% if podcast.duration %}<span><i class="fa-regular fa-clock"></i>{{ podcast.duration }}</span>{% endif %}
+          <span><i class="fa-regular fa-calendar"></i>{{ podcast.get_jalali_date }}</span>
+          <span><i class="fa-regular fa-eye"></i>{{ podcast.total_views }} بازدید</span>
+        </div>
+        <p class="desc">{{ podcast.description }}</p>
+        {% if podcast.audio_file %}
+        <div class="secure-player" data-autoplay="{% if user.is_authenticated %}true{% else %}false{% endif %}" oncontextmenu="return false;">
+          <button class="play-btn" type="button" aria-label="play"><i class="fa-solid fa-play"></i></button>
+          <button class="seek-btn seek-back" type="button" aria-label="10 seconds back"><i class="fa-solid fa-backward"></i></button>
+          <span class="time current">00:00</span>
+          <div class="progress-line"><div class="progress-fill"></div></div>
+          <span class="time duration">00:00</span>
+          <button class="seek-btn seek-forward" type="button" aria-label="10 seconds forward"><i class="fa-solid fa-forward"></i></button>
+          <audio preload="metadata" controlsList="nodownload noplaybackrate" disablePictureInPicture {% if user.is_authenticated %}autoplay{% endif %}></audio>
+        </div>
+        {% endif %}
+        {% if podcast.transcript %}<div class="poem-text">{{ podcast.transcript }}</div>{% endif %}
+      </div>
+    </article>
+  </main>
+  <div class="watermark">{{ watermark_name|default:'guest' }}</div>
+  <div class="toast-protect" id="protectToast">این محتوا محافظت شده است</div>
+  <script>
+    const toast = document.getElementById('protectToast');
+    const protectedMsg = '\u0627\u06cc\u0646 \u0645\u062d\u062a\u0648\u0627 \u0645\u062d\u0627\u0641\u0638\u062a \u0634\u062f\u0647 \u0627\u0633\u062a';
+    const screenshotMsg = '\u0627\u0633\u06a9\u0631\u06cc\u0646\u200c\u0634\u0627\u062a \u0627\u0632 \u0627\u06cc\u0646 \u0645\u062d\u062a\u0648\u0627 \u0645\u062c\u0627\u0632 \u0646\u06cc\u0633\u062a';
+    const loginMsg = '\u0628\u0631\u0627\u06cc \u067e\u062e\u0634 \u0628\u0627\u06cc\u062f \u0648\u0627\u0631\u062f \u0634\u0648\u06cc\u062f';
+    function showProtect(message) { toast.textContent = message || protectedMsg; toast.classList.add('show'); clearTimeout(window.__protectTimer); window.__protectTimer = setTimeout(() => toast.classList.remove('show'), 1800); }
+    document.addEventListener('contextmenu', e => { e.preventDefault(); showProtect(protectedMsg); });
+    document.addEventListener('keydown', e => { const key = e.key.toLowerCase(); if (e.key === 'F12' || e.key === 'PrintScreen' || (e.ctrlKey && ['a','c','p','s','u'].includes(key)) || (e.metaKey && e.shiftKey && ['3','4','s'].includes(key)) || (e.ctrlKey && e.shiftKey && ['i','s'].includes(key))) { e.preventDefault(); showProtect(e.key === 'PrintScreen' ? screenshotMsg : protectedMsg); } });
+    document.addEventListener('keyup', e => { if (e.key === 'PrintScreen') showProtect(screenshotMsg); });
+    document.addEventListener('copy', e => { e.preventDefault(); showProtect(protectedMsg); });
+    document.addEventListener('selectstart', e => { if (e.target.closest('.poem-text')) { e.preventDefault(); showProtect(protectedMsg); } });
+    document.addEventListener('dragstart', e => { e.preventDefault(); showProtect(protectedMsg); });
+    function pad(n) { return String(Math.floor(n || 0)).padStart(2, '0'); }
+    function formatTime(seconds) { return pad(seconds / 60) + ':' + pad(seconds % 60); }
+    function clampTime(audio, value) { return Math.max(0, Math.min(audio.duration || 0, value)); }
+    const frameCanvas = document.getElementById('frequencyFrame');
+    const frameCtx = frameCanvas.getContext('2d');
+    let frameAudioContext, frameAnalyser, frameData, frameSource, frameAnimation;
+    function sizeFrameCanvas() { const ratio = window.devicePixelRatio || 1; frameCanvas.width = Math.floor(window.innerWidth * ratio); frameCanvas.height = Math.floor(window.innerHeight * ratio); frameCtx.setTransform(ratio, 0, 0, ratio, 0, 0); }
+    function drawFrequencyFrame() {
+      frameAnimation = requestAnimationFrame(drawFrequencyFrame);
+      const width = window.innerWidth, height = window.innerHeight, inset = 10;
+      frameCtx.clearRect(0, 0, width, height);
+      if (!frameAnalyser) return;
+      frameAnalyser.getByteFrequencyData(frameData);
+      const barsPerSide = 56, maxBar = Math.min(72, Math.max(34, width * .045));
+      frameCtx.lineCap = 'round';
+      for (let side = 0; side < 4; side++) {
+        const horizontal = side < 2;
+        const length = horizontal ? width : height;
+        const step = length / barsPerSide;
+        for (let i = 0; i < barsPerSide; i++) {
+          const value = frameData[(i * 3 + side * 31) % frameData.length] / 255;
+          const bar = 8 + value * maxBar;
+          const hue = 194 + value * 84;
+          frameCtx.strokeStyle = `hsla(${hue}, 88%, ${55 + value * 18}%, ${.28 + value * .6})`;
+          frameCtx.lineWidth = 2 + value * 3.5;
+          const pos = i * step + step / 2;
+          if (side === 0) { frameCtx.beginPath(); frameCtx.moveTo(pos, inset); frameCtx.lineTo(pos, inset + bar); frameCtx.stroke(); }
+          if (side === 1) { frameCtx.beginPath(); frameCtx.moveTo(pos, height - inset); frameCtx.lineTo(pos, height - inset - bar); frameCtx.stroke(); }
+          if (side === 2) { frameCtx.beginPath(); frameCtx.moveTo(inset, pos); frameCtx.lineTo(inset + bar, pos); frameCtx.stroke(); }
+          if (side === 3) { frameCtx.beginPath(); frameCtx.moveTo(width - inset, pos); frameCtx.lineTo(width - inset - bar, pos); frameCtx.stroke(); }
+        }
+      }
+    }
+    function connectFrequencyFrame(audio) {
+      if (!frameAudioContext) frameAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+      if (frameAudioContext.state === 'suspended') frameAudioContext.resume();
+      if (!frameAnalyser) { frameAnalyser = frameAudioContext.createAnalyser(); frameAnalyser.fftSize = 256; frameData = new Uint8Array(frameAnalyser.frequencyBinCount); }
+      if (!frameSource) { frameSource = frameAudioContext.createMediaElementSource(audio); frameSource.connect(frameAnalyser); frameAnalyser.connect(frameAudioContext.destination); }
+      frameCanvas.classList.add('is-active');
+      if (!frameAnimation) drawFrequencyFrame();
+    }
+    sizeFrameCanvas();
+    window.addEventListener('resize', sizeFrameCanvas);
+    document.querySelectorAll('.secure-player').forEach(player => {
+      const card = player.closest('[data-podcast-id]'), id = card.dataset.podcastId, audio = player.querySelector('audio'), play = player.querySelector('.play-btn'), icon = play.querySelector('i'), current = player.querySelector('.current'), duration = player.querySelector('.duration'), progress = player.querySelector('.progress-line'), fill = player.querySelector('.progress-fill'), seekBack = player.querySelector('.seek-back'), seekForward = player.querySelector('.seek-forward');
+      let loaded = false;
+      async function loadAudio() { if (loaded) return true; const res = await fetch(`/podcast/audio-token/${id}/`, { cache: 'no-store' }); if (!res.ok) { showProtect(loginMsg); return false; } const data = await res.json(); audio.src = `/podcast/secure-stream/${id}/?token=${encodeURIComponent(data.token)}`; loaded = true; return true; }
+      async function seekBy(seconds) { const ok = await loadAudio(); if (!ok || !audio.duration) return; audio.currentTime = clampTime(audio, audio.currentTime + seconds); }
+      async function startPlayback() { const ok = await loadAudio(); if (!ok) return; document.querySelectorAll('audio').forEach(a => { if (a !== audio) a.pause(); }); connectFrequencyFrame(audio); try { await audio.play(); } catch (error) { audio.pause(); } }
+      play.addEventListener('click', () => { if (audio.paused) startPlayback(); else audio.pause(); });
+      seekBack.addEventListener('click', () => seekBy(-10));
+      seekForward.addEventListener('click', () => seekBy(10));
+      audio.addEventListener('play', () => { icon.className = 'fa-solid fa-pause'; frameCanvas.classList.add('is-active'); });
+      audio.addEventListener('pause', () => { icon.className = 'fa-solid fa-play'; frameCanvas.classList.remove('is-active'); });
+      audio.addEventListener('ended', () => { frameCanvas.classList.remove('is-active'); });
+      audio.addEventListener('loadedmetadata', () => { duration.textContent = formatTime(audio.duration); });
+      audio.addEventListener('timeupdate', () => { current.textContent = formatTime(audio.currentTime); fill.style.width = audio.duration ? `${(audio.currentTime / audio.duration) * 100}%` : '0%'; });
+      progress.addEventListener('click', async e => { const ok = await loadAudio(); if (!ok || !audio.duration) return; const rect = progress.getBoundingClientRect(); const ratio = (e.clientX - rect.left) / rect.width; audio.currentTime = clampTime(audio, ratio * audio.duration); });
+      if (player.dataset.autoplay === 'true') startPlayback();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:"مدیریت سایت" }}{% endblock %}
+
+{% block branding %}
+<div class="admin-branding">
+    <h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:"پنل مدیریت" }}</a></h1>
+    <a href="/" class="home-button" title="بازگشت به صفحه اصلی">خانه</a>
+</div>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    :root {
+        --lux-primary: #6c63ff;
+        --lux-secondary: #1a1a2e;
+        --lux-success: #00d25b;
+        --lux-warning: #ffab00;
+        --lux-danger: #ff4d4f;
+        --lux-info: #00d0ff;
+        --lux-bg: #f5f7fa;
+        --lux-card: #ffffff;
+        --lux-text: #171827;
+        --lux-muted: #6b7280;
+        --lux-border: rgba(26, 26, 46, .1);
+        --lux-shadow: 0 8px 30px rgba(0, 0, 0, .08);
+        --primary: var(--lux-primary);
+        --secondary: var(--lux-secondary);
+        --accent: var(--lux-info);
+        --primary-fg: #fff;
+        --body-bg: var(--lux-bg);
+        --body-fg: var(--lux-text);
+        --body-quiet-color: var(--lux-muted);
+        --hairline-color: var(--lux-border);
+        --border-color: var(--lux-border);
+        --link-fg: #5148f0;
+        --link-hover-color: #342bd6;
+        --default-button-bg: var(--lux-primary);
+        --default-button-hover-bg: #584fff;
+        --button-bg: var(--lux-secondary);
+        --button-hover-bg: #292948;
+    }
+
+    html, body { direction: rtl; }
+
+    body, button, input, select, textarea {
+        font-family: Vazirmatn, Vazir, "IRANYekan", Tahoma, Arial, sans-serif;
+        letter-spacing: 0;
+    }
+
+    body {
+        background: radial-gradient(circle at 18% 0%, rgba(108, 99, 255, .11), transparent 28rem), linear-gradient(180deg, #fbfcff 0%, var(--lux-bg) 32rem);
+        color: var(--lux-text);
+    }
+
+    a:link, a:visited { color: var(--link-fg); }
+
+    #header {
+        background: rgba(26, 26, 46, .97);
+        border: 0;
+        box-shadow: 0 14px 35px rgba(26, 26, 46, .18);
+        direction: rtl;
+        min-height: 64px;
+        padding: 0 28px;
+    }
+
+    #branding h1,
+    #branding h1 a:link,
+    #branding h1 a:visited {
+        color: #fff;
+        font-weight: 800;
+    }
+
+    #user-tools {
+        color: rgba(255, 255, 255, .78);
+        font-size: 12px;
+        letter-spacing: 0;
+    }
+
+    #user-tools a {
+        border-bottom-color: rgba(255, 255, 255, .32);
+        color: #fff;
+    }
+
+    div.breadcrumbs {
+        background: transparent;
+        color: var(--lux-muted);
+        padding: 18px 32px 4px;
+        text-align: right;
+    }
+
+    div.breadcrumbs a {
+        color: #5148f0;
+        font-weight: 700;
+    }
+
+    #content { padding: 24px 32px 36px; }
+    #content-main { float: none; }
+
+    .module,
+    .inline-group,
+    #changelist,
+    .form-row,
+    fieldset.module {
+        border-color: var(--lux-border);
+        border-radius: 8px;
+    }
+
+    .module,
+    .inline-group,
+    #changelist {
+        background: var(--lux-card);
+        box-shadow: var(--lux-shadow);
+        overflow: hidden;
+    }
+
+    .module h2,
+    .module caption,
+    .inline-group h2 {
+        background: linear-gradient(135deg, var(--lux-secondary), #252547);
+        color: #fff;
+        font-weight: 800;
+        text-align: right;
+    }
+
+    table { border-collapse: collapse; }
+    th, td { vertical-align: middle; }
+
+    thead th {
+        background: #f7f8fc;
+        color: #2b2d42;
+        font-weight: 800;
+    }
+
+    tr:nth-child(even), .row2 { background: #fbfcff; }
+
+    .object-tools a,
+    .object-tools a:link,
+    .object-tools a:visited,
+    input[type=submit],
+    button,
+    .button {
+        border-radius: 8px;
+        box-shadow: none;
+        font-weight: 800;
+    }
+
+    .object-tools a,
+    .object-tools a:link,
+    .object-tools a:visited {
+        background: var(--lux-primary);
+        border: 1px solid rgba(255, 255, 255, .2);
+    }
+
+    input[type=submit].default,
+    .submit-row input.default { background: var(--lux-primary); }
+
+    input, textarea, select, .vTextField {
+        border-color: rgba(26, 26, 46, .15);
+        border-radius: 8px;
+    }
+
+    input:focus, textarea:focus, select:focus {
+        border-color: var(--lux-primary);
+        box-shadow: 0 0 0 3px rgba(108, 99, 255, .14);
+        outline: none;
+    }
+
+    .admin-branding {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .home-button {
+        background: rgba(255, 255, 255, .12);
+        border: 1px solid rgba(255, 255, 255, .2);
+        border-radius: 8px;
+        color: #fff;
+        display: inline-flex;
+        font-weight: 700;
+        padding: 9px 16px;
+        text-decoration: none;
+    }
+
+    .home-button:focus,
+    .home-button:hover {
+        background: var(--lux-primary);
+        color: #fff;
+    }
+
+    .aligned label {
+        float: right;
+        padding-left: 10px;
+        padding-right: 0;
+        text-align: right;
+    }
+
+    .submit-row {
+        background: var(--lux-card);
+        border-color: var(--lux-border);
+        border-radius: 8px;
+        box-shadow: var(--lux-shadow);
+        text-align: left;
+    }
+
+    .breadcrumbs { text-align: right; }
+
+    @media (max-width: 767px) {
+        #header { padding: 10px 16px; }
+        #content { padding: 18px 14px 28px; }
+        .admin-branding { align-items: flex-start; gap: 10px; }
+    }
+</style>
+{% endblock %}

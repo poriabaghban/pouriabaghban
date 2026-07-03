@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}kskh login{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+{% include "kskh/_styles.html" %}
+<main class="kskh-shell">
+  <div class="kskh-wrap" style="max-width: 520px;">
+    <section class="kskh-panel">
+      <h1 class="kskh-title">kskh login</h1>
+      <p class="kskh-muted">این لاگین فقط برای ورود به بخش kskh است.</p>
+      <form method="post" style="margin-top: 22px;">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="kskh-field">
+          <label for="{{ form.username.id_for_label }}">Username</label>
+          {{ form.username }}
+          {{ form.username.errors }}
+        </div>
+        <div class="kskh-field">
+          <label for="{{ form.password.id_for_label }}">Password</label>
+          {{ form.password }}
+          {{ form.password.errors }}
+        </div>
+        <input type="hidden" name="next" value="{{ next }}">
+        <button class="kskh-btn kskh-btn-primary" type="submit" style="width: 100%;">Login</button>
+      </form>
+    </section>
+  </div>
+</main>
+{% endblock %}

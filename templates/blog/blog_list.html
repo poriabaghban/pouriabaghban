@@ -1,0 +1,629 @@
+﻿{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans 'Blog | Pouria Baghban' %}{% endblock %}
+{% block meta_description %}{% trans 'Latest technical articles and experiences by Pouria Baghban.' %}{% endblock %}
+
+{% block content %}
+<script>document.body.classList.add('blog-page');</script>
+<style>
+  
+  body.blog-page > header,
+  body:has(.lux-blog-shell) > header {
+    display: none !important;
+  }
+
+  body.blog-page .pattern-v,
+  body:has(.lux-blog-shell) .pattern-v {
+    padding-top: 0 !important;
+  }
+.lux-blog-shell {
+    direction: inherit;
+    color: #182033;
+    background:
+      linear-gradient(135deg, rgba(247, 250, 252, .94), rgba(255, 255, 255, .98) 40%, rgba(234, 243, 255, .92));
+    border-radius: 0;
+    padding: 34px 0 86px;
+    overflow: hidden;
+  }
+
+  .lux-blog-wrap {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+  }
+
+  .lux-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    color: #697386;
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+
+  .lux-breadcrumb a {
+    color: #354052;
+    text-decoration: none;
+    transition: color .2s ease;
+  }
+
+  .lux-breadcrumb a:hover { color: #006cff; }
+
+  .lux-blog-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(260px, .7fr);
+    gap: 28px;
+    align-items: end;
+    margin-bottom: 28px;
+  }
+
+  .lux-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 13px;
+    border: 1px solid rgba(0, 108, 255, .22);
+    color: #0052cc;
+    background: rgba(234, 243, 255, .86);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    margin-bottom: 14px;
+  }
+
+  .lux-blog-title {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 4.6rem);
+    line-height: 1.08;
+    color: #151b28;
+    font-weight: 900;
+    letter-spacing: 0;
+  }
+
+  .lux-blog-lead {
+    max-width: 700px;
+    margin: 16px 0 0;
+    color: #596579;
+    line-height: 2;
+    font-size: 15px;
+  }
+
+  .lux-stat-strip {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .lux-stat {
+    min-height: 96px;
+    border: 1px solid rgba(24, 32, 51, .08);
+    background: rgba(255, 255, 255, .76);
+    backdrop-filter: blur(14px);
+    padding: 18px;
+    border-radius: 8px;
+    box-shadow: 0 18px 50px rgba(30, 42, 62, .08);
+  }
+
+  .lux-stat strong {
+    display: block;
+    font-size: 28px;
+    color: #006cff;
+    line-height: 1;
+  }
+
+  .lux-stat span {
+    display: block;
+    margin-top: 10px;
+    color: #677386;
+    font-size: 13px;
+  }
+
+  .lux-filter-panel {
+    display: grid;
+    grid-template-columns: minmax(220px, 360px) 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px;
+    border: 1px solid rgba(24, 32, 51, .09);
+    background: rgba(255, 255, 255, .82);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 20px 70px rgba(23, 36, 54, .08);
+    border-radius: 8px;
+    margin-bottom: 32px;
+  }
+
+  .lux-search {
+    position: relative;
+  }
+
+  .lux-search i {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #8c98aa;
+  }
+
+  .lux-search input {
+    width: 100%;
+    min-height: 48px;
+    border: 1px solid #dfe6ee;
+    background: #f9fbfd;
+    color: #182033;
+    border-radius: 8px;
+    padding: 0 44px 0 14px;
+    outline: none;
+    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+
+  .lux-search input:focus {
+    border-color: #006cff;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(0, 108, 255, .11);
+  }
+
+  .lux-tags {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 2px;
+  }
+
+  .lux-tag,
+  .lux-filter-submit,
+  .lux-clear-link,
+  .lux-read-link,
+  .lux-page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    border-radius: 8px;
+    white-space: nowrap;
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+  }
+
+  .lux-tag {
+    border: 1px solid #dfe6ee;
+    color: #596579;
+    background: #fff;
+    min-height: 40px;
+    padding: 0 14px;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .lux-tag:hover,
+  .lux-tag.is-active {
+    color: #fff;
+    background: #006cff;
+    border-color: #006cff;
+    box-shadow: 0 12px 24px rgba(0, 108, 255, .18);
+    transform: translateY(-1px);
+  }
+
+  .lux-filter-submit {
+    min-height: 48px;
+    border: 0;
+    padding: 0 18px;
+    color: #fff;
+    background: linear-gradient(135deg, #006cff, #111827);
+    font-weight: 900;
+    cursor: pointer;
+  }
+
+  .lux-clear-link {
+    min-height: 48px;
+    padding: 0 14px;
+    color: #0047a8;
+    background: #edf6ff;
+    border: 1px solid rgba(0, 108, 255, .22);
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .lux-featured {
+    display: grid;
+    grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+    gap: 0;
+    min-height: 390px;
+    margin-bottom: 34px;
+    border: 1px solid rgba(24, 32, 51, .08);
+    background: #111827;
+    color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 26px 80px rgba(17, 24, 39, .18);
+  }
+
+  .lux-featured-media,
+  .lux-card-media {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #111827, #006cff);
+  }
+
+  .lux-featured-media img,
+  .lux-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .6s ease;
+  }
+
+  .lux-featured:hover img,
+  .lux-card:hover img { transform: scale(1.045); }
+
+  .lux-initial {
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+    display: grid;
+    place-items: center;
+    color: rgba(255,255,255,.9);
+    font-size: clamp(4rem, 11vw, 8rem);
+    font-weight: 900;
+  }
+
+  .lux-featured-body {
+    padding: clamp(24px, 4vw, 46px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .lux-badge {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 12px;
+    background: rgba(0, 108, 255, .16);
+    border: 1px solid rgba(0, 108, 255, .34);
+    color: #b9d8ff;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 900;
+    margin-bottom: 18px;
+  }
+
+  .lux-featured h2,
+  .lux-card h3 {
+    margin: 0;
+    letter-spacing: 0;
+  }
+
+  .lux-featured h2 {
+    font-size: clamp(1.6rem, 3vw, 2.7rem);
+    line-height: 1.45;
+  }
+
+  .lux-featured p,
+  .lux-card p {
+    line-height: 1.9;
+  }
+
+  .lux-featured p {
+    margin: 16px 0 22px;
+    color: rgba(255, 255, 255, .76);
+  }
+
+  .lux-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 18px;
+    color: #7a8598;
+    font-size: 12px;
+  }
+
+  .lux-featured .lux-meta { color: rgba(255, 255, 255, .72); }
+
+  .lux-read-link {
+    align-self: flex-start;
+    min-height: 42px;
+    margin-top: 22px;
+    padding: 0 16px;
+    color: #111827;
+    background: #006cff;
+    font-weight: 900;
+  }
+
+  .lux-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+  }
+
+  .lux-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    overflow: hidden;
+    border: 1px solid rgba(24, 32, 51, .08);
+    background: rgba(255, 255, 255, .9);
+    border-radius: 8px;
+    box-shadow: 0 18px 58px rgba(23, 36, 54, .08);
+    transform: translateY(12px);
+    opacity: 0;
+    animation: luxFadeUp .55s ease forwards;
+  }
+
+  .lux-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 28px 72px rgba(23, 36, 54, .13);
+  }
+
+  .lux-card-media {
+    height: 210px;
+  }
+
+  .lux-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    flex: 1;
+  }
+
+  .lux-card h3 {
+    color: #182033;
+    font-size: 20px;
+    line-height: 1.55;
+  }
+
+  .lux-card h3 a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .lux-card h3 a:hover { color: #006cff; }
+
+  .lux-card p {
+    color: #596579;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .lux-card-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    min-height: 27px;
+  }
+
+  .lux-card-tags span {
+    color: #0052cc;
+    background: #eaf3ff;
+    border: 1px solid rgba(0, 108, 255, .16);
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .lux-card-footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding-top: 14px;
+    border-top: 1px solid #edf1f5;
+  }
+
+  .lux-card-footer a {
+    color: #006cff;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 13px;
+  }
+
+  .lux-empty {
+    text-align: center;
+    padding: 70px 20px;
+    border: 1px dashed #cdd7e3;
+    background: rgba(255, 255, 255, .76);
+    border-radius: 8px;
+    color: #596579;
+  }
+
+  .lux-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 38px;
+  }
+
+  .lux-page-link {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1px solid #dfe6ee;
+    color: #4b586b;
+    background: #fff;
+    font-weight: 900;
+  }
+
+  .lux-page-link:hover,
+  .lux-page-link.is-current {
+    color: #fff;
+    background: #111827;
+    border-color: #111827;
+  }
+
+  @keyframes luxFadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lux-card,
+    .lux-featured-media img,
+    .lux-card-media img,
+    .lux-tag,
+    .lux-read-link,
+    .lux-page-link { animation: none; transition: none; transform: none; opacity: 1; }
+  }
+
+  @media (max-width: 992px) {
+    .lux-blog-intro,
+    .lux-featured,
+    .lux-filter-panel { grid-template-columns: 1fr; }
+    .lux-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .lux-featured-media { min-height: 280px; }
+  }
+
+  @media (max-width: 640px) {
+    .lux-blog-wrap { width: min(100% - 22px, 1180px); }
+    .lux-blog-shell { padding-top: 24px; }
+    .lux-grid { grid-template-columns: 1fr; }
+    .lux-stat-strip { grid-template-columns: 1fr; }
+    .lux-filter-panel { padding: 10px; }
+    .lux-card-media { height: 190px; }
+  }
+</style>
+
+<main class="lux-blog-shell">
+  <div class="lux-blog-wrap">
+    <nav class="lux-breadcrumb" aria-label="breadcrumb">
+      <span>{% trans "شما اینجا هستید" %}</span>
+      <span>/</span>
+      <a href="/">{% trans "خانه" %}</a>
+      <span>/</span>
+      <strong>{% trans "بلاگ" %}</strong>
+    </nav>
+
+    <section class="lux-blog-intro" aria-labelledby="blog-title">
+      <div>
+        <span class="lux-kicker"><i class="fa-solid fa-feather-pointed"></i> {% trans "آخرین نوشته‌ها" %}</span>
+        <h1 id="blog-title" class="lux-blog-title">{% trans "مجله دانش و فناوری" %}</h1>
+        <p class="lux-blog-lead">{% trans "یادداشت‌ها، تجربه‌ها و تحلیل‌های تازه را در فضایی تمیز و خوانا دنبال کنید." %}</p>
+      </div>
+      <div class="lux-stat-strip" aria-label="blog stats">
+        <div class="lux-stat">
+          <strong>{{ total_posts }}</strong>
+          <span>{% trans "مطلب در این فهرست" %}</span>
+        </div>
+        <div class="lux-stat">
+          <strong>{{ all_tags|length }}</strong>
+          <span>{% trans "برچسب فعال" %}</span>
+        </div>
+      </div>
+    </section>
+
+    <form class="lux-filter-panel" method="get" action="{% url 'blog:blog-list' %}">
+      <div class="lux-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="search" name="q" value="{{ query }}" placeholder="{% trans 'جستجوی مقاله‌ها...' %}" aria-label="{% trans 'جستجوی مقاله‌ها' %}">
+      </div>
+
+      <div class="lux-tags" aria-label="{% trans 'فیلتر بر اساس برچسب' %}">
+        <a class="lux-tag {% if not selected_tag %}is-active{% endif %}" href="{% url 'blog:blog-list' %}{% if query %}?q={{ query|urlencode }}{% endif %}">
+          <i class="fa-solid fa-layer-group"></i> {% trans "همه" %}
+        </a>
+        {% for tag in all_tags %}
+          <a class="lux-tag {% if selected_tag == tag.slug %}is-active{% endif %}" href="{% url 'blog:blog-list' %}?tag={{ tag.slug }}{% if query %}&q={{ query|urlencode }}{% endif %}">{{ tag.name }}</a>
+        {% endfor %}
+      </div>
+
+      <button class="lux-filter-submit" type="submit"><i class="fa-solid fa-arrow-left"></i> {% trans "جستجو" %}</button>
+      {% if query or selected_tag %}
+        <a class="lux-clear-link" href="{% url 'blog:blog-list' %}">{% trans "پاک کردن" %}</a>
+      {% endif %}
+    </form>
+
+    {% if featured_post and posts.number == 1 and not query and not selected_tag %}
+      <article class="lux-featured">
+        <a class="lux-featured-media" href="{% url 'blog:post-detail' featured_post.slug %}" aria-label="{{ featured_post.get_title }}">
+          {% if featured_post.image %}
+            <img src="{{ featured_post.image.url }}" alt="{{ featured_post.get_title }}">
+          {% else %}
+            <div class="lux-initial">{{ featured_post.get_title|slice:":1" }}</div>
+          {% endif %}
+        </a>
+        <div class="lux-featured-body">
+          <span class="lux-badge"><i class="fa-solid fa-star"></i> {% trans "مقاله ویژه" %}</span>
+          <h2>{{ featured_post.get_title }}</h2>
+          <p>{{ featured_post.get_excerpt|truncatewords:34 }}</p>
+          <div class="lux-meta">
+            <span><i class="fa-regular fa-user"></i> {{ featured_post.author.first_name }} {{ featured_post.author.last_name|default:featured_post.author.username }}</span>
+            <span><i class="fa-regular fa-calendar"></i> {{ featured_post.published_at|date:'Y/m/d' }}</span>
+            <span><i class="fa-regular fa-clock"></i> {{ featured_post.read_time }} {% trans "دقیقه" %}</span>
+          </div>
+          <a class="lux-read-link" href="{% url 'blog:post-detail' featured_post.slug %}">{% trans "ادامه مطلب" %} <i class="fa-solid fa-arrow-left"></i></a>
+        </div>
+      </article>
+    {% endif %}
+
+    {% if posts %}
+      <section class="lux-grid" aria-label="{% trans 'لیست مقاله‌ها' %}">
+        {% for post in posts %}
+          <article class="lux-card" style="animation-delay: {{ forloop.counter0 }}00ms;">
+            <a class="lux-card-media" href="{% url 'blog:post-detail' post.slug %}" aria-label="{{ post.get_title }}">
+              {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.get_title }}">
+              {% else %}
+                <div class="lux-initial">{{ post.get_title|slice:":1" }}</div>
+              {% endif %}
+            </a>
+            <div class="lux-card-body">
+              <div class="lux-meta">
+                <span><i class="fa-regular fa-calendar"></i> {{ post.published_at|date:'Y/m/d' }}</span>
+                <span><i class="fa-regular fa-clock"></i> {{ post.read_time }} {% trans "دقیقه" %}</span>
+              </div>
+              <h3><a href="{% url 'blog:post-detail' post.slug %}">{{ post.get_title }}</a></h3>
+              {% if post.category %}
+                <div class="lux-card-tags"><span>{{ post.category.name }}</span></div>
+              {% endif %}
+              <p>{{ post.get_excerpt|truncatewords:24 }}</p>
+              {% if post.tags.all %}
+                <div class="lux-card-tags">
+                  {% for tag in post.tags.all|slice:":3" %}
+                    <span>{{ tag.name }}</span>
+                  {% endfor %}
+                </div>
+              {% endif %}
+              <div class="lux-card-footer">
+                <span class="lux-meta"><i class="fa-regular fa-user"></i> {{ post.author.first_name }} {{ post.author.last_name|default:post.author.username }}</span>
+                <a href="{% url 'blog:post-detail' post.slug %}">{% trans "بیشتر" %} <i class="fa-solid fa-arrow-left"></i></a>
+              </div>
+            </div>
+          </article>
+        {% endfor %}
+      </section>
+    {% else %}
+      <section class="lux-empty">
+        <h2>{% trans "فعلا بلاگی نیست" %}</h2>
+      </section>
+    {% endif %}
+
+    {% if posts.has_other_pages %}
+      <nav class="lux-pagination" aria-label="pagination">
+        {% if posts.has_previous %}
+          <a class="lux-page-link" href="?page={{ posts.previous_page_number }}{% if query %}&q={{ query|urlencode }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}"><i class="fa-solid fa-chevron-right"></i></a>
+        {% endif %}
+
+        {% for page_number in posts.paginator.page_range %}
+          {% if page_number == posts.number %}
+            <span class="lux-page-link is-current">{{ page_number }}</span>
+          {% else %}
+            <a class="lux-page-link" href="?page={{ page_number }}{% if query %}&q={{ query|urlencode }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}">{{ page_number }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if posts.has_next %}
+          <a class="lux-page-link" href="?page={{ posts.next_page_number }}{% if query %}&q={{ query|urlencode }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}"><i class="fa-solid fa-chevron-left"></i></a>
+        {% endif %}
+      </nav>
+    {% endif %}
+  </div>
+</main>
+{% endblock %}
+
+
+
+

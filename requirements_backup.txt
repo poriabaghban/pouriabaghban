@@ -1,0 +1,10 @@
+﻿Django==5.2.14
+gunicorn
+whitenoise
+django-cors-headers
+djangorestframework
+djangorestframework-simplejwt
+django-environ
+psycopg2-binary
+mysqlclient
+pillow

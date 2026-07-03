@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}kskh{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+{% include "kskh/_styles.html" %}
+<main class="kskh-shell">
+  <div class="kskh-wrap">
+    <header class="kskh-topbar">
+      <div class="kskh-brand">
+        <h1>kskh</h1>
+        <p>فقط app و کانفیگ؛ همراه با کامنت، ریپلای و وضعیت وصل بودن.</p>
+      </div>
+      <div class="kskh-actions">
+        <a class="kskh-btn" href="{% url 'kskh:upload' %}">Upload</a>
+        <a class="kskh-btn" href="{% url 'kskh:logout' %}">Logout</a>
+      </div>
+    </header>
+
+    {% if messages %}
+      {% for message in messages %}<div class="kskh-alert">{{ message }}</div>{% endfor %}
+    {% endif %}
+
+    <section class="kskh-panel" style="margin-bottom: 18px;">
+      <div class="kskh-actions" style="justify-content: flex-end; margin-bottom: 16px;">
+        <a class="kskh-btn" href="{% url 'kskh:upload' %}">Upload</a>
+        <a class="kskh-btn" href="{% url 'kskh:logout' %}">Logout</a>
+      </div>
+      <form method="get" class="kskh-actions">
+        <input
+          class="kskh-input"
+          type="search"
+          name="q"
+          value="{{ search_query }}"
+          placeholder="Search app name, format, apk, exe, zip, config"
+          style="flex: 1 1 260px;"
+        >
+        <button class="kskh-btn kskh-btn-primary" type="submit">Search</button>
+        {% if search_query %}
+          <a class="kskh-btn" href="{% url 'kskh:index' %}">Clear</a>
+        {% endif %}
+      </form>
+    </section>
+
+    <section class="kskh-panel kskh-config-download">
+      <div>
+        <h2 class="kskh-title">دانلود app apk</h2>
+        {% if latest_apk %}
+          <p class="kskh-muted">آخرین فایل APK آماده دانلود است.</p>
+        {% else %}
+          <p class="kskh-muted">هنوز فایل APK برای دانلود ثبت نشده است.</p>
+        {% endif %}
+      </div>
+      {% if latest_apk %}
+        <a class="kskh-btn kskh-btn-primary" href="{{ latest_apk.get_absolute_url }}?download=1">دانلود</a>
+      {% endif %}
+    </section>
+
+    {% if apk_posts %}
+      <section class="kskh-grid kskh-config-grid">
+        {% for app in apk_posts %}
+          <article class="kskh-post">
+            <div class="kskh-file-row">
+              <div class="kskh-file-name">
+                <span class="kskh-file-label">اسم فایل</span>
+                <span class="kskh-file-value">{{ app.file_name|default:app.title }}</span>
+              </div>
+              <div>
+                <span class="kskh-file-label">حجم</span>
+                <span class="kskh-badge">{{ app.file_size_display }}</span>
+              </div>
+              <div>
+                <span class="kskh-file-label">فرمت</span>
+                <span class="kskh-badge">{{ app.file_extension|default:"-" }}</span>
+              </div>
+            </div>
+            <h2><a class="kskh-btn" href="{{ app.get_absolute_url }}">{{ app.title }}</a></h2>
+            {% if app.description %}<p class="kskh-muted">{{ app.description|truncatechars:110 }}</p>{% endif %}
+            <div class="kskh-actions">
+              <a class="kskh-btn kskh-btn-primary" href="{{ app.get_absolute_url }}?download=1">دانلود</a>
+            </div>
+          </article>
+        {% endfor %}
+      </section>
+    {% endif %}
+
+    <section class="kskh-panel kskh-config-download">
+      <div>
+        <h2 class="kskh-title">دانلود app exe</h2>
+        {% if latest_exe %}
+          <p class="kskh-muted">آخرین فایل EXE آماده دانلود است.</p>
+        {% else %}
+          <p class="kskh-muted">هنوز فایل EXE برای دانلود ثبت نشده است.</p>
+        {% endif %}
+      </div>
+      {% if latest_exe %}
+        <a class="kskh-btn kskh-btn-primary" href="{{ latest_exe.get_absolute_url }}?download=1">دانلود</a>
+      {% endif %}
+    </section>
+
+    {% if exe_posts %}
+      <section class="kskh-grid kskh-config-grid">
+        {% for app in exe_posts %}
+          <article class="kskh-post">
+            <div class="kskh-file-row">
+              <div class="kskh-file-name">
+                <span class="kskh-file-label">اسم فایل</span>
+                <span class="kskh-file-value">{{ app.file_name|default:app.title }}</span>
+              </div>
+              <div>
+                <span class="kskh-file-label">حجم</span>
+                <span class="kskh-badge">{{ app.file_size_display }}</span>
+              </div>
+              <div>
+                <span class="kskh-file-label">فرمت</span>
+                <span class="kskh-badge">{{ app.file_extension|default:"-" }}</span>
+              </div>
+            </div>
+            <h2><a class="kskh-btn" href="{{ app.get_absolute_url }}">{{ app.title }}</a></h2>
+            {% if app.description %}<p class="kskh-muted">{{ app.description|truncatechars:110 }}</p>{% endif %}
+            <div class="kskh-actions">
+              <a class="kskh-btn kskh-btn-primary" href="{{ app.get_absolute_url }}?download=1">دانلود</a>
+            </div>
+          </article>
+        {% endfor %}
+      </section>
+    {% endif %}
+
+    <section class="kskh-panel kskh-config-download">
+      <div>
+        <h2 class="kskh-title">دانلود کانفیگ</h2>
+        {% if latest_config %}
+          <p class="kskh-muted">آخرین کانفیگ آماده دانلود است.</p>
+        {% else %}
+          <p class="kskh-muted">هنوز کانفیگی برای دانلود ثبت نشده است.</p>
+        {% endif %}
+      </div>
+      {% if latest_config %}
+        <a class="kskh-btn kskh-btn-primary" href="{{ latest_config.get_absolute_url }}?download=1">دانلود</a>
+      {% endif %}
+    </section>
+
+    {% if config_posts %}
+      <section class="kskh-grid kskh-config-grid">
+        {% for config in config_posts %}
+          <article class="kskh-post">
+            <div class="kskh-file-row">
+              <div class="kskh-file-name">
+                <span class="kskh-file-label">اسم فایل</span>
+                <span class="kskh-file-value">{{ config.file_name|default:config.title }}</span>
+              </div>
+              <div>
+                <span class="kskh-file-label">حجم</span>
+                <span class="kskh-badge">{{ config.file_size_display }}</span>
+              </div>
+              <div>
+                <span class="kskh-file-label">فرمت</span>
+                <span class="kskh-badge">{{ config.file_extension|default:"-" }}</span>
+              </div>
+            </div>
+            <h2><a class="kskh-btn" href="{{ config.get_absolute_url }}">{{ config.title }}</a></h2>
+            {% if config.description %}<p class="kskh-muted">{{ config.description|truncatechars:110 }}</p>{% endif %}
+            <div class="kskh-actions">
+              <a class="kskh-btn kskh-btn-primary" href="{{ config.get_absolute_url }}?download=1">دانلود</a>
+            </div>
+          </article>
+        {% endfor %}
+      </section>
+    {% endif %}
+
+    <section class="kskh-grid">
+      {% for post in posts %}
+        <article class="kskh-post">
+          <div class="kskh-file-row">
+            <div class="kskh-file-name">
+              <span class="kskh-file-label">اسم فایل</span>
+              <span class="kskh-file-value">{{ post.file_name|default:post.title }}</span>
+            </div>
+            <div>
+              <span class="kskh-file-label">حجم</span>
+              <span class="kskh-badge">{{ post.file_size_display }}</span>
+            </div>
+            <div>
+              <span class="kskh-file-label">فرمت</span>
+              <span class="kskh-badge">{{ post.file_extension|default:post.get_kind_display }}</span>
+            </div>
+          </div>
+          <h2><a class="kskh-btn" href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+          {% if post.description %}<p class="kskh-muted">{{ post.description|truncatechars:140 }}</p>{% endif %}
+          <div class="kskh-actions">
+            <a class="kskh-btn kskh-btn-primary" href="{{ post.get_absolute_url }}?download=1">دانلود</a>
+          </div>
+          <div class="kskh-meta">
+            <span>Like {{ post.like_total }}</span>
+            <span>Dislike {{ post.dislike_total }}</span>
+            <span>{{ post.download_count }} downloads</span>
+          </div>
+        </article>
+      {% empty %}
+        <div class="kskh-panel">هنوز فایلی در kskh ثبت نشده است.</div>
+      {% endfor %}
+    </section>
+  </div>
+</main>
+{% endblock %}

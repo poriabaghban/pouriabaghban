@@ -1,0 +1,299 @@
+<style>
+  .kskh-shell {
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+    padding: 56px 0;
+    color: #fff;
+    background: #000;
+  }
+
+  .kskh-shell::before {
+    content: "";
+    position: fixed;
+    inset: -30%;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 20% 25%, rgba(0, 255, 179, 0.32), transparent 28%),
+      radial-gradient(circle at 82% 22%, rgba(0, 132, 255, 0.38), transparent 30%),
+      radial-gradient(circle at 50% 82%, rgba(0, 210, 140, 0.24), transparent 32%),
+      linear-gradient(125deg, #000 0%, #001a13 34%, #001328 66%, #000 100%);
+    background-size: 180% 180%;
+    filter: blur(10px);
+    opacity: 0.92;
+    animation: kskhGradientMove 14s ease-in-out infinite alternate;
+  }
+
+  .kskh-shell::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+      rgba(0, 0, 0, 0.34);
+    background-size: 42px 42px, 42px 42px, auto;
+  }
+
+  @keyframes kskhGradientMove {
+    0% {
+      transform: translate3d(-2%, -2%, 0) scale(1);
+      background-position: 0% 45%;
+    }
+
+    50% {
+      transform: translate3d(2%, 1%, 0) scale(1.05);
+      background-position: 100% 50%;
+    }
+
+    100% {
+      transform: translate3d(-1%, 2%, 0) scale(1.08);
+      background-position: 35% 100%;
+    }
+  }
+
+  footer,
+  .kskh-topbar {
+    display: none !important;
+  }
+
+  .kskh-shell,
+  .kskh-shell * {
+    color: #fff;
+  }
+
+  .kskh-wrap {
+    position: relative;
+    z-index: 1;
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+  }
+
+  .kskh-topbar,
+  .kskh-panel,
+  .kskh-post,
+  .kskh-comment {
+    border: 1px solid rgba(126, 255, 219, 0.24);
+    background:
+      linear-gradient(145deg, rgba(0, 0, 0, 0.82), rgba(0, 26, 20, 0.7)),
+      linear-gradient(135deg, rgba(0, 255, 179, 0.12), rgba(0, 132, 255, 0.12));
+    box-shadow: 0 22px 70px rgba(0, 132, 255, 0.18), 0 14px 46px rgba(0, 255, 179, 0.12);
+    backdrop-filter: blur(16px);
+  }
+
+  .kskh-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 20px;
+    border-radius: 8px;
+    margin-bottom: 28px;
+  }
+
+  .kskh-brand h1,
+  .kskh-title {
+    margin: 0;
+    color: #fff;
+    font-weight: 800;
+    letter-spacing: 0;
+  }
+
+  .kskh-brand p,
+  .kskh-muted {
+    color: #fff;
+    margin: 6px 0 0;
+  }
+
+  .kskh-actions,
+  .kskh-meta,
+  .kskh-reactions,
+  .kskh-comment-head {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .kskh-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(99, 224, 190, 0.42);
+    color: #fff;
+    background: rgba(0, 0, 0, 0.48);
+    text-decoration: none;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .kskh-btn:hover {
+    color: #fff;
+    border-color: rgba(94, 210, 255, 0.75);
+    background: linear-gradient(135deg, rgba(0, 121, 255, 0.52), rgba(0, 172, 113, 0.66));
+  }
+
+  .kskh-btn-primary {
+    border: 0;
+    background: linear-gradient(135deg, #0084ff, #00a86b);
+    box-shadow: 0 10px 24px rgba(0, 132, 255, 0.22), 0 8px 18px rgba(0, 255, 179, 0.14);
+  }
+
+  .kskh-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+  }
+
+  .kskh-config-download {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+
+  .kskh-config-grid {
+    margin-bottom: 18px;
+  }
+
+  .kskh-post,
+  .kskh-panel,
+  .kskh-comment {
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .kskh-post h2 {
+    font-size: 1.18rem;
+    margin: 0 0 10px;
+  }
+
+  .kskh-file-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: start;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .kskh-file-name {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .kskh-file-label {
+    display: block;
+    margin-bottom: 4px;
+    color: rgba(255, 255, 255, 0.74);
+    font-size: 0.74rem;
+    font-weight: 700;
+  }
+
+  .kskh-file-value {
+    display: block;
+    color: #fff;
+    font-size: 0.94rem;
+    font-weight: 800;
+    line-height: 1.35;
+  }
+
+  .kskh-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 5px 9px;
+    border-radius: 8px;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.38);
+    border: 1px solid rgba(103, 232, 205, 0.3);
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .kskh-input {
+    width: 100%;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.48);
+    border: 1px solid rgba(163, 244, 221, 0.3);
+    border-radius: 8px;
+    padding: 11px 12px;
+    outline: none;
+  }
+
+  .kskh-input:focus {
+    border-color: #46d7ff;
+    box-shadow: 0 0 0 3px rgba(70, 215, 255, 0.16);
+  }
+
+  .kskh-field {
+    margin-bottom: 16px;
+  }
+
+  .kskh-field label {
+    display: block;
+    margin-bottom: 7px;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .kskh-alert {
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    color: #fff;
+    background: linear-gradient(135deg, rgba(0, 132, 255, 0.18), rgba(0, 168, 107, 0.16));
+    border: 1px solid rgba(95, 231, 205, 0.3);
+  }
+
+  .kskh-detail-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 20px;
+  }
+
+  .kskh-comment {
+    margin-top: 14px;
+    box-shadow: 0 12px 36px rgba(0, 132, 255, 0.12), 0 10px 28px rgba(0, 82, 55, 0.16);
+  }
+
+  .kskh-reply {
+    margin-inline-start: 28px;
+  }
+
+  .kskh-link-button {
+    border: 0;
+    padding: 0;
+    color: #fff;
+    background: transparent;
+    cursor: pointer;
+    font-weight: 700;
+  }
+
+  @media (max-width: 800px) {
+    .kskh-topbar,
+    .kskh-detail-grid,
+    .kskh-config-download {
+      display: block;
+    }
+
+    .kskh-actions {
+      margin-top: 16px;
+    }
+
+    .kskh-file-row {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .kskh-file-name {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

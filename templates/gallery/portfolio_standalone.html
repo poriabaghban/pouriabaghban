@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نمونه کار</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #ffffff; color: #111111; font-family: Arial, sans-serif; }
+    .page { width: min(1140px, calc(100% - 40px)); margin: 20px auto 0; }
+    .breadcrumb { margin: 0; font-size: 14px; line-height: 1.6; color: #7a7f87; }
+    .breadcrumb a { color: #111111; text-decoration: none; transition: color 0.2s ease; }
+    .breadcrumb a:hover { color: #5dade2; }
+    .breadcrumb span { color: #7a7f87; }
+    .filters { display: flex; flex-wrap: wrap; gap: 10px; margin: 34px 0 26px; }
+    .filter-btn { border: 1px solid #cfe4f6; background: #ffffff; color: #5dade2; padding: 10px 18px; border-radius: 8px; cursor: pointer; font: inherit; transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+    .filter-btn:hover, .filter-btn.active { background: #5dade2; border-color: #5dade2; color: #ffffff; }
+    .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .project-card { overflow: hidden; border: 1px solid #e8edf2; border-radius: 14px; background: #ffffff; box-shadow: 0 12px 30px rgba(27, 64, 95, 0.08); opacity: 1; transform: translateY(0); transition: opacity 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease; }
+    .project-card:hover { transform: translateY(-6px); box-shadow: 0 18px 42px rgba(27, 64, 95, 0.14); }
+    .project-card.hide { display: none; }
+    .project-thumb { width: 100%; height: 210px; background: linear-gradient(135deg, rgba(255,255,255,0.22), transparent 44%), var(--thumb-color); }
+    .project-body { padding: 20px; }
+    .project-title { margin: 0 0 10px; font-size: 21px; line-height: 1.4; color: #111111; }
+    .project-desc { margin: 0 0 20px; color: #666f78; font-size: 15px; line-height: 1.9; }
+    .project-link { border: 0; border-radius: 8px; background: #5dade2; color: #ffffff; padding: 10px 16px; cursor: pointer; font: inherit; transition: background 0.2s ease, transform 0.2s ease; }
+    .project-link:hover { background: #3498db; transform: translateY(-2px); }
+    .site-footer { margin-top: 64px; padding: 34px 0; border-top: 1px solid #edf1f5; background: #f8fafc; color: #7a7f87; } .site-footer__inner { width: min(1140px, calc(100% - 40px)); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; } .site-footer__brand { margin: 0; color: #111111; font-size: 18px; font-weight: 700; } .site-footer__text { margin: 6px 0 0; color: #7a7f87; font-size: 14px; line-height: 1.8; } .site-footer__copy { color: #7a7f87; font-size: 14px; white-space: nowrap; }
+    @keyframes cardIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 900px) { .portfolio-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .page { width: calc(100% - 28px); } .filters { gap: 8px; } .filter-btn { flex: 1 1 calc(50% - 8px); padding: 10px 12px; } .portfolio-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <p class="breadcrumb"><a href="/">خانه</a> &gt; <span>نمونه کار</span></p>
+
+    <section class="filters" aria-label="فیلتر نمونه کار">
+      <button class="filter-btn active" type="button" data-filter="all">همه</button>
+      <button class="filter-btn" type="button" data-filter="web">طراحی وب</button>
+      <button class="filter-btn" type="button" data-filter="graphic">گرافیک</button>
+      <button class="filter-btn" type="button" data-filter="branding">برندینگ</button>
+    </section>
+
+    <section class="portfolio-grid" aria-label="پروژه‌ها">
+      <article class="project-card" data-category="web" style="--thumb-color:#d8ecfb"><div class="project-thumb" role="img" aria-label="تصویر شاخص پروژه طراحی وب"></div><div class="project-body"><h2 class="project-title">وب‌سایت شرکتی</h2><p class="project-desc">طراحی یک تجربه ساده، سریع و واکنش‌گرا برای معرفی خدمات شرکت.</p><button class="project-link" type="button">مشاهده پروژه</button></div></article>
+      <article class="project-card" data-category="graphic" style="--thumb-color:#eef2f6"><div class="project-thumb" role="img" aria-label="تصویر شاخص پروژه گرافیک"></div><div class="project-body"><h2 class="project-title">کمپین شبکه اجتماعی</h2><p class="project-desc">مجموعه طرح‌های گرافیکی هماهنگ برای معرفی یک محصول جدید.</p><button class="project-link" type="button">مشاهده پروژه</button></div></article>
+      <article class="project-card" data-category="branding" style="--thumb-color:#cfe4f6"><div class="project-thumb" role="img" aria-label="تصویر شاخص پروژه برندینگ"></div><div class="project-body"><h2 class="project-title">هویت برند مینیمال</h2><p class="project-desc">طراحی رنگ، تایپوگرافی و اجزای بصری برای یک برند تازه‌تأسیس.</p><button class="project-link" type="button">مشاهده پروژه</button></div></article>
+      <article class="project-card" data-category="web" style="--thumb-color:#b9dcf4"><div class="project-thumb" role="img" aria-label="تصویر شاخص فروشگاه آنلاین"></div><div class="project-body"><h2 class="project-title">فروشگاه آنلاین</h2><p class="project-desc">چیدمان کارت‌محور برای نمایش محصول، دسته‌بندی و مسیر خرید روان.</p><button class="project-link" type="button">مشاهده پروژه</button></div></article>
+      <article class="project-card" data-category="graphic" style="--thumb-color:#e7edf3"><div class="project-thumb" role="img" aria-label="تصویر شاخص پوستر تبلیغاتی"></div><div class="project-body"><h2 class="project-title">پوستر تبلیغاتی</h2><p class="project-desc">طراحی پوستر با ترکیب رنگ‌های ملایم و ساختار خوانا برای رویداد.</p><button class="project-link" type="button">مشاهده پروژه</button></div></article>
+      <article class="project-card" data-category="branding" style="--thumb-color:#dfeaf2"><div class="project-thumb" role="img" aria-label="تصویر شاخص بازطراحی برند"></div><div class="project-body"><h2 class="project-title">بازطراحی برند</h2><p class="project-desc">بازنگری نشانه، رنگ‌ها و لحن بصری برای یک کسب‌وکار خدماتی.</p><button class="project-link" type="button">مشاهده پروژه</button></div></article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div>
+        <p class="site-footer__brand">Pouria Baghban</p>
+        <p class="site-footer__text">Design and development of digital experiences</p>
+      </div>
+      <span class="site-footer__copy">© 2026</span>
+    </div>
+  </footer>
+
+  <script>
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.project-card');
+    const projectButtons = document.querySelectorAll('.project-link');
+
+    filterButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const filter = button.dataset.filter;
+        filterButtons.forEach((item) => item.classList.remove('active'));
+        button.classList.add('active');
+
+        cards.forEach((card, index) => {
+          const show = filter === 'all' || card.dataset.category === filter;
+          card.classList.toggle('hide', !show);
+          if (show) {
+            card.style.animation = 'none';
+            card.offsetHeight;
+            card.style.animation = `cardIn 0.28s ease ${index * 0.04}s both`;
+          }
+        });
+      });
+    });
+
+    projectButtons.forEach((button) => {
+      button.addEventListener('click', () => alert('مشاهده پروژه'));
+    });
+  </script>
+</body>
+</html>

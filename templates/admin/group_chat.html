@@ -1,0 +1,1115 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    .admin-chat-wrap {
+        --admin-chat-day-gradient: linear-gradient(125deg, #35a7ff, #45f0a1, #0f7bdc, #2ee68f);
+        --admin-chat-night-gradient: linear-gradient(125deg, #08a8ff, #22e68a, #006dff, #00c976);
+        --admin-chat-bg: var(--admin-chat-day-gradient);
+        --admin-chat-surface: rgba(255, 255, 255, .9);
+        --admin-chat-surface-2: rgba(255, 255, 255, .78);
+        --admin-chat-text: #071321;
+        --admin-chat-muted: #34465a;
+        --admin-chat-border: rgba(7, 37, 56, .16);
+        direction: rtl;
+        max-width: 1180px;
+        padding: 14px;
+        border-radius: 8px;
+        background: var(--admin-chat-bg);
+        background-size: 300% 300%;
+        color: var(--admin-chat-text);
+        animation: adminChatGradientFlow 13s ease infinite;
+    }
+
+    @keyframes adminChatGradientFlow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .admin-chat-wrap[data-chat-theme="night"] {
+        --admin-chat-bg: #030303;
+        --admin-chat-surface: #0f0f0f;
+        --admin-chat-surface-2: #171717;
+        --admin-chat-text: #fff;
+        --admin-chat-muted: #c3ccd5;
+        --admin-chat-border: rgba(31, 228, 151, .24);
+        animation: none;
+    }
+
+    .admin-chat-panel {
+        background: var(--admin-chat-surface);
+        border: 1px solid var(--admin-chat-border);
+        border-radius: 8px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, .08);
+        overflow: hidden;
+    }
+
+    .admin-chat-header {
+        align-items: center;
+        background: var(--admin-chat-day-gradient);
+        background-size: 240% 240%;
+        color: #fff;
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+        padding: 16px 20px;
+        animation: adminChatGradientFlow 10s ease infinite;
+    }
+
+    .admin-chat-wrap[data-chat-theme="night"] .admin-chat-header {
+        background: #080808;
+        border-bottom: 1px solid var(--admin-chat-border);
+        animation: none;
+    }
+
+    .admin-chat-header h1 {
+        color: #fff;
+        font-size: 18px;
+        font-weight: 900;
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    .admin-chat-actions {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: flex-end;
+    }
+
+    .admin-chat-actions a {
+        background: rgba(255, 255, 255, .14);
+        border: 1px solid rgba(255, 255, 255, .24);
+        border-radius: 8px;
+        color: #fff;
+        font-weight: 800;
+        padding: 7px 12px;
+        text-decoration: none;
+    }
+
+    .admin-chat-theme-toggle,
+    .admin-chat-emoji-toggle {
+        align-items: center;
+        background: rgba(255, 255, 255, .14);
+        border: 1px solid rgba(255, 255, 255, .24);
+        border-radius: 8px;
+        color: #fff;
+        cursor: pointer;
+        display: inline-flex;
+        font-weight: 900;
+        height: 34px;
+        justify-content: center;
+        min-width: 38px;
+        padding: 0 10px;
+    }
+
+    .admin-chat-actions a:hover { background: rgba(255, 255, 255, .22); }
+
+    .admin-chat-status {
+        background: rgba(0, 210, 91, .16);
+        border: 1px solid rgba(0, 210, 91, .34);
+        border-radius: 999px;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 900;
+        padding: 6px 11px;
+        white-space: nowrap;
+    }
+
+    .admin-chat-status.is-waiting {
+        background: rgba(255, 180, 0, .18);
+        border-color: rgba(255, 180, 0, .38);
+    }
+
+    .admin-chat-status.is-disconnected {
+        background: rgba(255, 77, 77, .18);
+        border-color: rgba(255, 77, 77, .38);
+    }
+
+    .admin-chat-layout {
+        display: grid;
+        grid-template-columns: 292px minmax(0, 1fr);
+        min-height: 560px;
+    }
+
+    .admin-chat-members {
+        background: var(--admin-chat-surface-2);
+        border-left: 1px solid var(--admin-chat-border);
+        padding: 16px;
+    }
+
+    .admin-chat-members-head {
+        align-items: center;
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .admin-chat-members h2 {
+        color: var(--admin-chat-text);
+        font-size: 14px;
+        font-weight: 900;
+        margin: 0;
+    }
+
+    .admin-chat-members button {
+        background: rgba(108, 99, 255, .1);
+        border: 1px solid rgba(108, 99, 255, .18);
+        border-radius: 8px;
+        color: #5148f0;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 900;
+        padding: 6px 10px;
+    }
+
+    .admin-chat-help {
+        color: var(--admin-chat-muted);
+        font-size: 12px;
+        line-height: 1.9;
+        margin: 0 0 12px;
+    }
+
+    .admin-chat-member-list {
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        max-height: 410px;
+        overflow-y: auto;
+        padding-left: 3px;
+    }
+
+    .admin-chat-member {
+        align-items: center;
+        background: var(--admin-chat-surface);
+        border: 1px solid var(--admin-chat-border);
+        border-radius: 8px;
+        cursor: pointer;
+        display: grid;
+        gap: 3px 9px;
+        grid-template-columns: auto minmax(0, 1fr);
+        padding: 10px;
+        transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+    }
+
+    .admin-chat-member:hover {
+        border-color: rgba(108, 99, 255, .32);
+        box-shadow: 0 8px 22px rgba(108, 99, 255, .1);
+        transform: translateY(-1px);
+    }
+
+    .admin-chat-member input {
+        grid-row: span 2;
+        margin: 0;
+    }
+
+    .admin-chat-member-name {
+        color: var(--admin-chat-text);
+        font-weight: 900;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .admin-chat-member-status {
+        color: var(--admin-chat-muted);
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .admin-chat-member.is-online .admin-chat-member-status {
+        color: #008f47;
+        font-weight: 900;
+    }
+
+    .admin-chat-main {
+        background: var(--admin-chat-surface);
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    .admin-chat-messages {
+        background: transparent;
+        flex: 1;
+        height: 460px;
+        overflow-y: auto;
+        padding: 18px;
+    }
+
+    .admin-chat-message {
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: 13px;
+    }
+
+    .admin-chat-message.mine { justify-content: flex-end; }
+
+    .admin-chat-bubble {
+        background: var(--admin-chat-surface);
+        border: 1px solid var(--admin-chat-border);
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(26, 26, 46, .08);
+        color: var(--admin-chat-text);
+        line-height: 1.9;
+        max-width: min(72%, 660px);
+        padding: 10px 12px;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .admin-chat-message.mine .admin-chat-bubble {
+        background: rgba(213, 255, 238, .92);
+        border-color: rgba(11, 126, 89, .18);
+        color: #06121f;
+    }
+
+    .admin-chat-wrap[data-chat-theme="night"] .admin-chat-bubble {
+        border: 1px solid transparent;
+        background-image:
+            linear-gradient(var(--admin-chat-surface), var(--admin-chat-surface)),
+            var(--admin-chat-night-gradient);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+        background-size: 100% 100%, 240% 240%;
+        color: #fff;
+        animation: adminChatGradientFlow 8s ease infinite;
+    }
+
+    .admin-chat-wrap[data-chat-theme="night"] .admin-chat-message.mine .admin-chat-bubble {
+        background-image:
+            linear-gradient(#070707, #070707),
+            var(--admin-chat-night-gradient);
+        color: #fff;
+    }
+
+    .admin-chat-meta {
+        align-items: center;
+        color: var(--admin-chat-muted);
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 11px;
+        gap: 8px;
+        justify-content: space-between;
+        margin-top: 7px;
+    }
+
+    .admin-chat-message.mine .admin-chat-meta,
+    .admin-chat-message.mine .admin-chat-read-status { color: rgba(255, 255, 255, .82); }
+
+    .admin-chat-sender {
+        color: #5148f0;
+        display: block;
+        font-size: 12px;
+        font-weight: 900;
+        margin-bottom: 5px;
+    }
+
+    .admin-chat-read-status {
+        color: #77838d;
+        font-weight: 900;
+        letter-spacing: 0;
+        min-width: 22px;
+        text-align: left;
+    }
+
+    .admin-chat-read-status.is-read { color: #00d0ff; }
+
+    .admin-chat-message-actions {
+        display: flex;
+        gap: 6px;
+        margin-top: 8px;
+    }
+
+    .admin-chat-message-actions button,
+    .admin-chat-reply-cancel {
+        background: rgba(26, 26, 46, .06);
+        border: 1px solid rgba(26, 26, 46, .1);
+        border-radius: 8px;
+        color: inherit;
+        cursor: pointer;
+        font-size: 11px;
+        font-weight: 900;
+        padding: 4px 8px;
+    }
+
+    .admin-chat-message.mine .admin-chat-message-actions button {
+        background: rgba(255, 255, 255, .16);
+        border-color: rgba(255, 255, 255, .22);
+    }
+
+    .admin-chat-reply-preview,
+    .admin-chat-reply-context {
+        border-right: 3px solid #6c63ff;
+        color: var(--admin-chat-muted);
+        font-size: 12px;
+        line-height: 1.7;
+        margin-bottom: 8px;
+        padding: 6px 9px;
+        white-space: normal;
+    }
+
+    .admin-chat-message.mine .admin-chat-reply-context {
+        border-right-color: rgba(255, 255, 255, .75);
+        color: rgba(255, 255, 255, .85);
+    }
+
+    .admin-chat-reply-preview {
+        align-items: center;
+        background: var(--admin-chat-surface-2);
+        border-radius: 8px;
+        display: none;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .admin-chat-reply-preview.is-active { display: flex; }
+
+    .admin-chat-deleted {
+        color: #8b949e;
+        font-style: italic;
+    }
+
+    .admin-chat-typing {
+        color: var(--admin-chat-muted);
+        font-size: 12px;
+        min-height: 20px;
+        padding: 0 18px 10px;
+    }
+
+    .admin-chat-sticker {
+        font-size: 36px;
+        line-height: 1.2;
+    }
+
+    .admin-chat-attachment {
+        background: rgba(255, 255, 255, .7);
+        border: 1px solid rgba(26, 26, 46, .1);
+        border-radius: 8px;
+        display: block;
+        margin-top: 8px;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .admin-chat-attachment img,
+    .admin-chat-attachment video {
+        display: block;
+        max-height: 260px;
+        max-width: 100%;
+        object-fit: contain;
+    }
+
+    .admin-chat-attachment audio {
+        display: block;
+        max-width: 100%;
+        width: 280px;
+    }
+
+    .admin-chat-file-link {
+        align-items: center;
+        color: #5148f0;
+        display: inline-flex;
+        font-weight: 900;
+        gap: 6px;
+        padding: 9px 11px;
+        text-decoration: none;
+    }
+
+    .admin-chat-message.mine .admin-chat-file-link { color: #fff; }
+
+    .admin-chat-composer {
+        background: var(--admin-chat-surface);
+        border-top: 1px solid var(--admin-chat-border);
+        padding: 14px;
+        position: relative;
+    }
+
+    .admin-chat-stickers {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+
+    .admin-chat-stickers button {
+        background: var(--admin-chat-surface);
+        border: 1px solid var(--admin-chat-border);
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 22px;
+        height: 40px;
+        line-height: 1;
+        width: 40px;
+    }
+
+    .admin-chat-stickers button:hover {
+        border-color: rgba(108, 99, 255, .35);
+        box-shadow: 0 8px 18px rgba(108, 99, 255, .12);
+    }
+
+    .admin-chat-input-row {
+        align-items: stretch;
+        display: flex;
+        gap: 8px;
+    }
+
+    .admin-chat-emoji-picker {
+        background: var(--admin-chat-surface);
+        border: 1px solid var(--admin-chat-border);
+        border-radius: 8px;
+        box-shadow: 0 16px 36px rgba(0, 0, 0, .18);
+        display: none;
+        gap: 6px;
+        grid-template-columns: repeat(8, 1fr);
+        max-height: 230px;
+        overflow-y: auto;
+        padding: 10px;
+        position: absolute;
+        right: 14px;
+        bottom: 76px;
+        width: min(340px, calc(100vw - 36px));
+        z-index: 5;
+    }
+
+    .admin-chat-emoji-picker.is-open { display: grid; }
+
+    .admin-chat-emoji-picker button {
+        background: transparent;
+        border: 0;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 21px;
+        height: 34px;
+        line-height: 1;
+    }
+
+    .admin-chat-emoji-picker button:hover { background: var(--admin-chat-surface-2); }
+
+    #message-input {
+        background: var(--admin-chat-surface-2);
+        border: 1px solid var(--admin-chat-border);
+        border-radius: 8px;
+        color: var(--admin-chat-text);
+        flex: 1;
+        line-height: 1.8;
+        min-height: 44px;
+        resize: vertical;
+    }
+
+    #message-input::placeholder { color: var(--admin-chat-muted); }
+
+    #attach-btn,
+    #emoji-btn {
+        align-items: center;
+        background: var(--admin-chat-surface);
+        border: 1px solid var(--admin-chat-border);
+        border-radius: 8px;
+        cursor: pointer;
+        display: inline-flex;
+        font-size: 20px;
+        justify-content: center;
+        min-width: 44px;
+    }
+
+    #send-btn { min-width: 92px; }
+
+    .admin-chat-file-name {
+        color: #6b7280;
+        font-size: 12px;
+        line-height: 1.8;
+        margin-top: 8px;
+        min-height: 18px;
+    }
+
+    .admin-chat-empty {
+        color: #6b7280;
+        line-height: 1.9;
+        padding: 24px;
+        text-align: center;
+    }
+
+    @media (max-width: 900px) {
+        .admin-chat-layout { grid-template-columns: 1fr; }
+        .admin-chat-members { border-bottom: 1px solid rgba(26, 26, 46, .08); border-left: 0; }
+        .admin-chat-member-list { max-height: 190px; }
+        .admin-chat-bubble { max-width: 92%; }
+    }
+
+    @media (max-width: 640px) {
+        .admin-chat-header { align-items: flex-start; flex-direction: column; }
+        .admin-chat-actions { justify-content: flex-start; width: 100%; }
+        .admin-chat-input-row { flex-wrap: wrap; }
+        #message-input { flex-basis: 100%; }
+        #send-btn { flex: 1; }
+    }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">خانه</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label='auth' %}">احراز هویت و دسترسی‌ها</a>
+    &rsaquo; <a href="{% url 'admin:auth_group_changelist' %}">گروه‌ها</a>
+    &rsaquo; {{ group.name }}
+    &rsaquo; چت
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="admin-chat-wrap" data-chat-theme="day">
+    <div class="admin-chat-panel">
+        <div class="admin-chat-header">
+            <h1>چت گروه {{ group.name }}</h1>
+            <div class="admin-chat-actions">
+                <button id="group-theme-toggle" class="admin-chat-theme-toggle" type="button" title="تغییر حالت">☀</button>
+                <a href="{% url 'admin:auth_group_add' %}">ساخت گروه</a>
+                <span id="chat-status" class="admin-chat-status is-waiting">درحال انتظار</span>
+            </div>
+        </div>
+
+        <div class="admin-chat-layout">
+            <aside class="admin-chat-members" aria-label="گیرندگان پیام">
+                <div class="admin-chat-members-head">
+                    <h2>گیرندگان</h2>
+                    <button id="select-all-members" type="button">انتخاب همه</button>
+                </div>
+                <p class="admin-chat-help">برای پیام خصوصی فقط یک نفر را انتخاب کن؛ برای پیام گروهی چند نفر یا همه را انتخاب کن.</p>
+                <div class="admin-chat-member-list">
+                    {% for member in chat_members %}
+                        <label class="admin-chat-member{% if member.id in online_user_ids %} is-online{% endif %}" data-user-id="{{ member.id }}">
+                            <input class="recipient-checkbox" type="checkbox" value="{{ member.id }}" {% if member.id == request.user.id %}disabled{% else %}checked{% endif %}>
+                            <span class="admin-chat-member-name">{{ member.get_full_name|default:member.username }}</span>
+                            <span class="admin-chat-member-status">{% if member.id in online_user_ids %}آنلاین{% else %}آفلاین{% endif %}</span>
+                        </label>
+                    {% empty %}
+                        <div class="admin-chat-empty">هیچ کاربر فعالی برای چت پیدا نشد.</div>
+                    {% endfor %}
+                </div>
+            </aside>
+
+            <main class="admin-chat-main">
+                <div id="messages" class="admin-chat-messages" aria-live="polite">
+                    {% for message in recent_messages %}
+                        <div class="admin-chat-message{% if message.user_id == request.user.id %} mine{% endif %}{% if message.is_deleted %} is-deleted{% endif %}" data-message-id="{{ message.id }}" data-sender-id="{{ message.user_id|default:'' }}" data-recipients="{{ message.recipient_user_ids|join:',' }}" data-read-by="{{ message.read_user_ids|join:',' }}" data-read-names="{{ message.read_user_names|join:'، ' }}">
+                            <div class="admin-chat-bubble">
+                                {% if message.user_id != request.user.id %}
+                                    <span class="admin-chat-sender">{% if message.user %}{{ message.user.get_full_name|default:message.user.username }}{% else %}کاربر{% endif %}</span>
+                                {% endif %}
+                                {% if message.reply_to_payload %}
+                                    <div class="admin-chat-reply-context" data-reply-target="{{ message.reply_to_payload.id }}">
+                                        <strong>{{ message.reply_to_payload.username }}</strong>
+                                        <div>{{ message.reply_to_payload.message|default:message.reply_to_payload.type|truncatechars:90 }}</div>
+                                    </div>
+                                {% endif %}
+                                {% if message.is_deleted %}
+                                    <div class="admin-chat-deleted">پیام حذف شد</div>
+                                {% elif message.message_type == 'sticker' %}
+                                    <div class="admin-chat-sticker">{{ message.content }}</div>
+                                {% else %}
+                                    {% if message.content %}<div>{{ message.content|linebreaksbr }}</div>{% endif %}
+                                {% endif %}
+                                {% if message.attachment_url and not message.is_deleted %}
+                                    <div class="admin-chat-attachment">
+                                        <a class="admin-chat-file-link" href="{{ message.attachment_url }}" target="_blank" rel="noopener" download>دریافت فایل {{ message.attachment_name }}</a>
+                                    </div>
+                                {% endif %}
+                                <div class="admin-chat-meta">
+                                    <span>{{ message.created_at|date:"Y/m/d H:i" }}</span>
+                                    {% if message.user_id == request.user.id %}
+                                        <span class="admin-chat-read-status{% if message.read_user_ids %} is-read{% endif %}" title="{% if message.read_user_names %}دیده شده توسط: {{ message.read_user_names|join:'، ' }}{% else %}ارسال شد{% endif %}">{% if message.read_user_ids %}دیده شد{% else %}ارسال شد{% endif %}</span>
+                                    {% endif %}
+                                </div>
+                                {% if not message.is_deleted %}
+                                    <div class="admin-chat-message-actions">
+                                        <button type="button" data-action="reply">پاسخ</button>
+                                        <button type="button" data-action="delete">حذف</button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div id="empty-chat" class="admin-chat-empty">هنوز پیامی در این چت نیست.</div>
+                    {% endfor %}
+                </div>
+
+                <div id="typing-line" class="admin-chat-typing"></div>
+
+                <div class="admin-chat-composer">
+                    <div id="reply-preview" class="admin-chat-reply-preview">
+                        <div>
+                            <strong id="reply-preview-name"></strong>
+                            <div id="reply-preview-text"></div>
+                        </div>
+                        <button id="reply-cancel" class="admin-chat-reply-cancel" type="button">لغو</button>
+                    </div>
+                    <div class="admin-chat-stickers" aria-label="استیکرها">
+                        <button type="button" data-sticker="🙂" title="لبخند">🙂</button>
+                        <button type="button" data-sticker="👍" title="تایید">👍</button>
+                        <button type="button" data-sticker="🙏" title="سپاس">🙏</button>
+                        <button type="button" data-sticker="❤️" title="دوست داشتن">❤️</button>
+                        <button type="button" data-sticker="🔥" title="عالی">🔥</button>
+                        <button type="button" data-sticker="✅" title="انجام شد">✅</button>
+                    </div>
+                    <div id="group-emoji-picker" class="admin-chat-emoji-picker" aria-label="ایموجی‌ها"></div>
+
+                    <div class="admin-chat-input-row">
+                        <textarea id="message-input" rows="2" placeholder="پیام خود را بنویسید..."></textarea>
+                        <button id="emoji-btn" type="button" title="ایموجی">😊</button>
+                        <button id="attach-btn" type="button" title="ارسال پیوست">📎</button>
+                        <input id="file-input" type="file" hidden>
+                        <button id="send-btn" type="button" class="default">ارسال</button>
+                    </div>
+                    <div id="file-name" class="admin-chat-file-name"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const groupId = '{{ group.pk }}';
+    const sendUrl = '{% url "send_group_message" group.pk %}';
+    const readUrl = '{% url "mark_group_messages_read" group.pk %}';
+    const deleteUrlTemplate = '{% url "delete_group_message" group.pk 0 %}';
+    const presenceUrl = '{% url "group_members_presence" group.pk %}';
+    const csrfToken = '{{ csrf_token }}';
+    const currentUserId = Number('{{ request.user.id }}');
+    const currentUser = '{{ request.user.get_full_name|default:request.user.username|escapejs }}';
+    const wsScheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const wsPath = wsScheme + '://' + window.location.host + '/ws/admin/groups/' + groupId + '/';
+    const messagesEl = document.getElementById('messages');
+    const chatWrapEl = document.querySelector('.admin-chat-wrap');
+    const inputEl = document.getElementById('message-input');
+    const sendBtn = document.getElementById('send-btn');
+    const attachBtn = document.getElementById('attach-btn');
+    const emojiBtn = document.getElementById('emoji-btn');
+    const emojiPickerEl = document.getElementById('group-emoji-picker');
+    const fileInput = document.getElementById('file-input');
+    const fileNameEl = document.getElementById('file-name');
+    const statusEl = document.getElementById('chat-status');
+    const themeToggleBtn = document.getElementById('group-theme-toggle');
+    const selectAllBtn = document.getElementById('select-all-members');
+    const typingLineEl = document.getElementById('typing-line');
+    const replyPreviewEl = document.getElementById('reply-preview');
+    const replyPreviewNameEl = document.getElementById('reply-preview-name');
+    const replyPreviewTextEl = document.getElementById('reply-preview-text');
+    const replyCancelBtn = document.getElementById('reply-cancel');
+    const seenMessageIds = new Set(Array.from(document.querySelectorAll('[data-message-id]')).map(function(el) { return el.getAttribute('data-message-id'); }));
+    let socket = null;
+    let replyTo = null;
+    let typingTimer = null;
+    let typingClearTimer = null;
+
+    function scrollToEnd() { messagesEl.scrollTop = messagesEl.scrollHeight; }
+    function removeEmptyState() { const empty = document.getElementById('empty-chat'); if (empty) empty.remove(); }
+    function selectedRecipientIds() { return Array.from(document.querySelectorAll('.recipient-checkbox:checked:not(:disabled)')).map(function(input) { return Number(input.value); }); }
+    function shouldDisplay(data) { const senderId = Number(data.sender_id || 0); const recipients = (data.recipient_ids || []).map(Number); return senderId === currentUserId || recipients.length === 0 || recipients.includes(currentUserId); }
+    function readStatusText(readByIds) { return readByIds && readByIds.length ? 'دیده شد' : 'ارسال شد'; }
+    function readStatusTitle(names) { return names && names.length ? 'دیده شده توسط: ' + names.join('، ') : 'ارسال شد'; }
+    function messagePreviewText(data) { return (data.message || data.attachment_name || data.type || '').trim(); }
+    function deleteUrl(messageId) { return deleteUrlTemplate.replace('/0/delete/', '/' + messageId + '/delete/'); }
+
+    function applyChatTheme(theme) {
+        const nextTheme = theme === 'night' ? 'night' : 'day';
+        chatWrapEl.dataset.chatTheme = nextTheme;
+        if (themeToggleBtn) themeToggleBtn.textContent = nextTheme === 'night' ? '☾' : '☀';
+        window.localStorage.setItem('adminGroupChatTheme', nextTheme);
+    }
+
+    function insertAtCursor(value) {
+        const start = inputEl.selectionStart || 0;
+        const end = inputEl.selectionEnd || 0;
+        inputEl.setRangeText(value, start, end, 'end');
+        inputEl.focus();
+    }
+
+    function renderEmojiPicker() {
+        const emojis = [
+            '😀', '😃', '😄', '😁', '😆', '😂', '🤣', '😊',
+            '😍', '😘', '😎', '🙂', '😉', '😢', '😭', '😡',
+            '👍', '👎', '👏', '🙏', '🤝', '💪', '👌', '✌️',
+            '❤️', '💙', '💚', '💛', '🔥', '✨', '⭐', '✅',
+            '❌', '⚠️', '📌', '📎', '💬', '🎉', '🚀', '☕',
+            '🌙', '☀️', '🌿', '💡', '📷', '🎧', '📁', '📝'
+        ];
+        emojiPickerEl.innerHTML = '';
+        emojis.forEach(function(emoji) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = emoji;
+            button.title = emoji;
+            button.addEventListener('click', function() {
+                insertAtCursor(emoji);
+                emojiPickerEl.classList.remove('is-open');
+            });
+            emojiPickerEl.appendChild(button);
+        });
+    }
+
+    function clearReply() {
+        replyTo = null;
+        replyPreviewEl.classList.remove('is-active');
+        replyPreviewNameEl.textContent = '';
+        replyPreviewTextEl.textContent = '';
+    }
+
+    function setReplyFromRow(row) {
+        if (!row || row.classList.contains('is-deleted')) return;
+        const sender = row.querySelector('.admin-chat-sender');
+        const content = row.querySelector('.admin-chat-sticker, .admin-chat-bubble > div:not(.admin-chat-reply-context):not(.admin-chat-meta):not(.admin-chat-message-actions)');
+        replyTo = {
+            id: row.dataset.messageId,
+            username: sender ? sender.textContent.trim() : currentUser,
+            message: content ? content.textContent.trim() : ''
+        };
+        replyPreviewNameEl.textContent = replyTo.username;
+        replyPreviewTextEl.textContent = replyTo.message || 'پیام';
+        replyPreviewEl.classList.add('is-active');
+        inputEl.focus();
+    }
+
+    function replyContextNode(reply) {
+        if (!reply) return null;
+        const wrap = document.createElement('div');
+        wrap.className = 'admin-chat-reply-context';
+        wrap.dataset.replyTarget = reply.id || '';
+        const name = document.createElement('strong');
+        name.textContent = reply.username || 'کاربر';
+        const text = document.createElement('div');
+        text.textContent = (reply.message || reply.type || 'پیام').slice(0, 90);
+        wrap.appendChild(name);
+        wrap.appendChild(text);
+        return wrap;
+    }
+
+    function messageActionsNode() {
+        const actions = document.createElement('div');
+        actions.className = 'admin-chat-message-actions';
+        const replyBtn = document.createElement('button');
+        replyBtn.type = 'button';
+        replyBtn.dataset.action = 'reply';
+        replyBtn.textContent = 'پاسخ';
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.dataset.action = 'delete';
+        deleteBtn.textContent = 'حذف';
+        actions.appendChild(replyBtn);
+        actions.appendChild(deleteBtn);
+        return actions;
+    }
+
+    function attachmentNode(data) {
+        if (!data.attachment_url) return null;
+        const wrap = document.createElement('div');
+        wrap.className = 'admin-chat-attachment';
+        const url = data.attachment_url;
+        const name = data.attachment_name || 'فایل پیوست';
+        const lower = name.toLowerCase();
+        if (/\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(lower)) {
+            const img = document.createElement('img'); img.src = url; img.alt = name; wrap.appendChild(img);
+        } else if (/\.(mp4|webm|ogg|mov|m4v)$/i.test(lower)) {
+            const video = document.createElement('video'); video.controls = true; video.src = url; wrap.appendChild(video);
+        } else if (/\.(mp3|wav|m4a|aac|flac|oga)$/i.test(lower)) {
+            const audio = document.createElement('audio'); audio.controls = true; audio.src = url; wrap.appendChild(audio);
+        }
+        const link = document.createElement('a');
+        link.className = 'admin-chat-file-link';
+        link.href = url;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.download = '';
+        link.textContent = 'دریافت فایل ' + name;
+        wrap.appendChild(link);
+        return wrap;
+    }
+
+    function appendMessage(data) {
+        if (!shouldDisplay(data)) return;
+        if (data.id) {
+            const messageId = String(data.id);
+            if (seenMessageIds.has(messageId)) return;
+            seenMessageIds.add(messageId);
+        }
+        removeEmptyState();
+        const senderId = Number(data.sender_id || 0);
+        const isMine = senderId === currentUserId || (data.username || '') === currentUser;
+        const readByIds = (data.read_by_ids || []).map(Number);
+        const readByNames = data.read_by_names || [];
+        const row = document.createElement('div');
+        row.className = 'admin-chat-message' + (isMine ? ' mine' : '') + (data.is_deleted ? ' is-deleted' : '');
+        row.dataset.messageId = data.id || '';
+        row.dataset.senderId = senderId || '';
+        row.dataset.recipients = (data.recipient_ids || []).join(',');
+        row.dataset.readBy = readByIds.join(',');
+        row.dataset.readNames = readByNames.join('، ');
+        const bubble = document.createElement('div');
+        bubble.className = 'admin-chat-bubble';
+        if (!isMine) {
+            const name = document.createElement('span');
+            name.className = 'admin-chat-sender';
+            name.textContent = data.username || 'کاربر';
+            bubble.appendChild(name);
+        }
+        const replyContext = replyContextNode(data.reply_to);
+        if (replyContext) bubble.appendChild(replyContext);
+        if (data.is_deleted) {
+            const deleted = document.createElement('div');
+            deleted.className = 'admin-chat-deleted';
+            deleted.textContent = 'پیام حذف شد';
+            bubble.appendChild(deleted);
+        } else if (data.message) {
+            const content = document.createElement('div');
+            if (data.type === 'sticker') content.className = 'admin-chat-sticker';
+            content.textContent = data.message;
+            bubble.appendChild(content);
+        }
+        const attachment = data.is_deleted ? null : attachmentNode(data);
+        if (attachment) bubble.appendChild(attachment);
+        const meta = document.createElement('div');
+        meta.className = 'admin-chat-meta';
+        const time = document.createElement('span');
+        time.textContent = data.created_at || '';
+        meta.appendChild(time);
+        if (isMine) {
+            const status = document.createElement('span');
+            status.className = 'admin-chat-read-status' + (readByIds.length ? ' is-read' : '');
+            status.title = readStatusTitle(readByNames);
+            status.textContent = readStatusText(readByIds);
+            meta.appendChild(status);
+        }
+        bubble.appendChild(meta);
+        if (!data.is_deleted) bubble.appendChild(messageActionsNode());
+        row.appendChild(bubble);
+        messagesEl.appendChild(row);
+        scrollToEnd();
+        markVisibleMessagesRead();
+    }
+
+    function updatePresence(onlineIds) {
+        const onlineSet = new Set((onlineIds || []).map(Number));
+        document.querySelectorAll('.admin-chat-member').forEach(function(member) {
+            const userId = Number(member.dataset.userId);
+            const status = member.querySelector('.admin-chat-member-status');
+            if (onlineSet.has(userId)) { member.classList.add('is-online'); status.textContent = 'آنلاین'; }
+            else { member.classList.remove('is-online'); status.textContent = 'آفلاین'; }
+        });
+    }
+
+    async function fetchPresence() {
+        try {
+            const response = await fetch(presenceUrl, { headers: {'X-Requested-With': 'XMLHttpRequest'}, credentials: 'same-origin' });
+            if (!response.ok) return;
+            const data = await response.json();
+            updatePresence(data.online_user_ids || []);
+        } catch (error) { return; }
+    }
+
+    function updateReadReceipts(messageIds, readerId, readerName) {
+        (messageIds || []).forEach(function(id) {
+            const row = messagesEl.querySelector('[data-message-id="' + id + '"]');
+            if (!row) return;
+            const readBy = row.dataset.readBy ? row.dataset.readBy.split(',').filter(Boolean).map(Number) : [];
+            if (readerId && !readBy.includes(Number(readerId))) { readBy.push(Number(readerId)); row.dataset.readBy = readBy.join(','); }
+            const readNames = row.dataset.readNames ? row.dataset.readNames.split('، ').filter(Boolean) : [];
+            if (readerName && !readNames.includes(readerName)) { readNames.push(readerName); row.dataset.readNames = readNames.join('، '); }
+            const status = row.querySelector('.admin-chat-read-status');
+            if (status && readBy.length) { status.classList.add('is-read'); status.title = readStatusTitle(readNames); status.textContent = 'دیده شد'; }
+        });
+    }
+
+    async function postRead(ids) {
+        if (!ids.length) return;
+        if (socket && socket.readyState === WebSocket.OPEN) { socket.send(JSON.stringify({type: 'read', ids: ids})); return; }
+        const body = new URLSearchParams();
+        ids.forEach(function(id) { body.append('ids', id); });
+        try {
+            await fetch(readUrl, { method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', 'X-CSRFToken': csrfToken, 'X-Requested-With': 'XMLHttpRequest'}, credentials: 'same-origin', body: body.toString() });
+        } catch (error) { statusEl.textContent = 'خطا در ثبت خوانده شدن پیام'; }
+    }
+
+    function markVisibleMessagesRead() {
+        const ids = [];
+        messagesEl.querySelectorAll('[data-message-id]').forEach(function(row) {
+            const senderId = Number(row.dataset.senderId || 0);
+            if (!row.dataset.messageId || row.classList.contains('is-deleted') || senderId === currentUserId || row.dataset.readRequested === '1') return;
+            row.dataset.readRequested = '1';
+            ids.push(row.dataset.messageId);
+        });
+        postRead(ids);
+    }
+
+    async function sendMessage(message, type, file) {
+        if (!message && !file) return false;
+        sendBtn.disabled = true;
+        attachBtn.disabled = true;
+        const body = new FormData();
+        body.set('message', message || '');
+        body.set('type', file ? 'file' : (type || 'text'));
+        if (file) body.set('attachment', file);
+        if (replyTo && replyTo.id) body.set('reply_to', replyTo.id);
+        selectedRecipientIds().forEach(function(id) { body.append('recipients', id); });
+        try {
+            const response = await fetch(sendUrl, { method: 'POST', headers: {'X-CSRFToken': csrfToken, 'X-Requested-With': 'XMLHttpRequest'}, credentials: 'same-origin', body: body });
+            if (!response.ok) throw new Error('send_failed');
+            const data = await response.json();
+            if (data.ok === false || data.error === 'connection_lost') throw new Error('send_failed');
+            if (socket === null || socket.readyState !== WebSocket.OPEN) appendMessage(data);
+            setConnectionStatus('connected');
+            clearReply();
+            return true;
+        } catch (error) {
+            setConnectionStatus('disconnected');
+            return false;
+        } finally {
+            sendBtn.disabled = false;
+            attachBtn.disabled = false;
+        }
+    }
+
+    function markMessageDeleted(messageId) {
+        const row = messagesEl.querySelector('[data-message-id="' + messageId + '"]');
+        if (!row) return;
+        row.classList.add('is-deleted');
+        const bubble = row.querySelector('.admin-chat-bubble');
+        if (!bubble) return;
+        bubble.querySelectorAll('.admin-chat-sticker, .admin-chat-attachment, .admin-chat-message-actions').forEach(function(el) { el.remove(); });
+        Array.from(bubble.children).forEach(function(child) {
+            if (!child.classList.contains('admin-chat-reply-context') && !child.classList.contains('admin-chat-meta') && !child.classList.contains('admin-chat-sender')) {
+                child.remove();
+            }
+        });
+        const meta = bubble.querySelector('.admin-chat-meta');
+        const deleted = document.createElement('div');
+        deleted.className = 'admin-chat-deleted';
+        deleted.textContent = 'پیام حذف شد';
+        if (meta) bubble.insertBefore(deleted, meta);
+        else bubble.appendChild(deleted);
+    }
+
+    async function deleteMessage(row) {
+        if (!row || !row.dataset.messageId) return;
+        try {
+            const response = await fetch(deleteUrl(row.dataset.messageId), {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrfToken, 'X-Requested-With': 'XMLHttpRequest'},
+                credentials: 'same-origin'
+            });
+            if (!response.ok) throw new Error('delete_failed');
+            markMessageDeleted(row.dataset.messageId);
+        } catch (error) {
+            statusEl.textContent = 'خطا در حذف پیام';
+        }
+    }
+
+    function sendTyping(isTyping) {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            socket.send(JSON.stringify({type: 'typing', is_typing: isTyping}));
+        }
+    }
+
+    function setConnectionStatus(state) {
+        statusEl.classList.remove('is-waiting', 'is-disconnected');
+        if (state === 'connected') {
+            statusEl.textContent = 'وصل';
+        } else if (state === 'disconnected') {
+            statusEl.textContent = 'قطع اتصال';
+            statusEl.classList.add('is-disconnected');
+        } else {
+            statusEl.textContent = 'درحال انتظار';
+            statusEl.classList.add('is-waiting');
+        }
+    }
+
+    applyChatTheme(window.localStorage.getItem('adminGroupChatTheme') || 'day');
+    renderEmojiPicker();
+
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', function() {
+            applyChatTheme(chatWrapEl.dataset.chatTheme === 'night' ? 'day' : 'night');
+        });
+    }
+
+    if (emojiBtn) {
+        emojiBtn.addEventListener('click', function() {
+            emojiPickerEl.classList.toggle('is-open');
+        });
+    }
+
+    document.addEventListener('click', function(event) {
+        if (!emojiPickerEl || !emojiBtn) return;
+        if (emojiPickerEl.contains(event.target) || emojiBtn.contains(event.target)) return;
+        emojiPickerEl.classList.remove('is-open');
+    });
+
+    try {
+        if (!navigator.onLine) setConnectionStatus('waiting');
+        socket = new WebSocket(wsPath);
+        socket.addEventListener('open', function() { setConnectionStatus('connected'); markVisibleMessagesRead(); });
+        socket.addEventListener('message', function(event) {
+            const data = JSON.parse(event.data);
+            if (data.event === 'presence') { updatePresence(data.online_user_ids); return; }
+            if (data.event === 'read_receipt') { updateReadReceipts(data.message_ids, data.reader_id, data.reader_name); return; }
+            if (data.event === 'message_deleted') { markMessageDeleted(data.message_id); return; }
+            if (data.event === 'typing') {
+                typingLineEl.textContent = data.is_typing ? (data.username || 'کاربر') + ' درحال نوشتن...' : '';
+                window.clearTimeout(typingClearTimer);
+                if (data.is_typing) typingClearTimer = window.setTimeout(function() { typingLineEl.textContent = ''; }, 1800);
+                return;
+            }
+            appendMessage(data);
+        });
+        socket.addEventListener('close', function() { setConnectionStatus(navigator.onLine ? 'disconnected' : 'waiting'); });
+        socket.addEventListener('error', function() { setConnectionStatus(navigator.onLine ? 'disconnected' : 'waiting'); });
+    } catch (error) { setConnectionStatus(navigator.onLine ? 'disconnected' : 'waiting'); }
+
+    window.addEventListener('offline', function() { setConnectionStatus('waiting'); });
+    window.addEventListener('online', function() {
+        if (!socket || socket.readyState === WebSocket.CLOSED) setConnectionStatus('waiting');
+    });
+
+    sendBtn.addEventListener('click', async function() {
+        const text = inputEl.value.trim();
+        const file = fileInput.files[0] || null;
+        if (!text && !file) return;
+        const sent = await sendMessage(text, 'text', file);
+        if (sent) { inputEl.value = ''; fileInput.value = ''; fileNameEl.textContent = ''; sendTyping(false); inputEl.focus(); }
+    });
+
+    attachBtn.addEventListener('click', function() { fileInput.click(); });
+    fileInput.addEventListener('change', function() { fileNameEl.textContent = fileInput.files[0] ? 'پیوست انتخاب شد: ' + fileInput.files[0].name : ''; });
+    inputEl.addEventListener('keydown', function(event) { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendBtn.click(); } });
+    inputEl.addEventListener('input', function() {
+        sendTyping(true);
+        window.clearTimeout(typingTimer);
+        typingTimer = window.setTimeout(function() { sendTyping(false); }, 900);
+    });
+    replyCancelBtn.addEventListener('click', clearReply);
+    messagesEl.addEventListener('click', function(event) {
+        const button = event.target.closest('button[data-action]');
+        if (!button) return;
+        const row = button.closest('.admin-chat-message');
+        if (button.dataset.action === 'reply') setReplyFromRow(row);
+        if (button.dataset.action === 'delete') deleteMessage(row);
+    });
+    document.querySelectorAll('[data-sticker]').forEach(function(button) { button.addEventListener('click', function() { sendMessage(button.getAttribute('data-sticker'), 'sticker', null); }); });
+    selectAllBtn.addEventListener('click', function() {
+        const boxes = Array.from(document.querySelectorAll('.recipient-checkbox:not(:disabled)'));
+        const shouldCheck = boxes.some(function(box) { return !box.checked; });
+        boxes.forEach(function(box) { box.checked = shouldCheck; });
+        selectAllBtn.textContent = shouldCheck ? 'لغو انتخاب' : 'انتخاب همه';
+    });
+
+    scrollToEnd();
+    markVisibleMessagesRead();
+    fetchPresence();
+    setInterval(fetchPresence, 20000);
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,76 @@
+﻿{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}{{ item.title }} | pouriabaghban{% endblock %}
+{% block meta_description %}{{ item.description|default:item.title }}{% endblock %}
+
+{% block content %}
+<main class="container portfolio-detail-page" style="margin-top:40px; margin-bottom:80px;">
+  <nav class="portfolio-detail-breadcrumb" aria-label="breadcrumb">
+    <a href="/">{% trans "خانه" %}</a>
+    <span>&gt;</span>
+    <a href="{% url 'gallery:portfolio-list' %}">{% trans "نمونه کار" %}</a>
+    <span>&gt;</span>
+    <strong>{{ item.title }}</strong>
+  </nav>
+
+  <section class="portfolio-detail-hero">
+    <div class="portfolio-detail-media">
+      {% if item.detail_image %}
+      <img src="{{ item.detail_image.url }}" alt="{{ item.title }}">
+      {% else %}
+      <img src="{{ item.image.url }}" alt="{{ item.title }}">
+      {% endif %}
+    </div>
+
+    <div class="portfolio-detail-content">
+      {% if item.category %}
+      <span class="portfolio-detail-chip">{{ item.category.name }}</span>
+      {% endif %}
+      <h1>{{ item.title }}</h1>
+      {% if item.description %}
+      <p class="portfolio-detail-summary">{{ item.description }}</p>
+      {% endif %}
+
+      <div class="portfolio-detail-actions">
+        {% if item.project_url %}
+        <a href="{{ item.project_url }}" target="_blank" rel="noopener" class="portfolio-detail-btn primary">{% if current_language == "de" %}Projekt ansehen{% elif current_language == "en" %}View Project{% else %}مشاهده پروژه{% endif %}</a>
+        {% endif %}
+        {% if item.project_file %}
+        <a href="{{ item.project_file.url }}" download class="portfolio-detail-btn secondary">{% if current_language == "de" %}Projekt herunterladen{% elif current_language == "en" %}Download Project{% else %}دانلود پروژه{% endif %}</a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  {% if item.detail_description %}
+  <section class="portfolio-detail-section">
+    <h2>{% if current_language == "de" %}Projektdetails{% elif current_language == "en" %}Project Details{% else %}جزئیات پروژه{% endif %}</h2>
+    <div class="portfolio-detail-text">{{ item.detail_description|linebreaks }}</div>
+  </section>
+  {% endif %}
+</main>
+
+<style>
+.portfolio-detail-breadcrumb { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:28px; color:#6b7280; font-size:14px; }
+.portfolio-detail-breadcrumb a { color:#006cff; text-decoration:none; font-weight:700; }
+.portfolio-detail-breadcrumb strong { color:#253041; }
+.portfolio-detail-hero { display:grid; grid-template-columns:minmax(0, 1.1fr) minmax(280px, 0.9fr); gap:34px; align-items:start; }
+.portfolio-detail-media { border-radius:8px; overflow:hidden; background:#f0f3f7; box-shadow:0 12px 34px rgba(0,0,0,0.12); }
+.portfolio-detail-media img { width:100%; display:block; aspect-ratio:16/10; object-fit:cover; }
+.portfolio-detail-content { padding:28px; border:1px solid rgba(0,108,255,0.12); border-radius:8px; background:#fff; box-shadow:0 10px 28px rgba(0,0,0,0.06); }
+.portfolio-detail-chip { display:inline-block; margin-bottom:14px; padding:6px 12px; border-radius:999px; background:#e8f4f8; color:#006cff; font-size:13px; font-weight:700; }
+.portfolio-detail-content h1 { margin:0 0 16px; font-size:clamp(26px, 4vw, 40px); font-weight:800; color:#172033; }
+.portfolio-detail-summary { margin:0; color:#556070; font-size:16px; line-height:2; }
+.portfolio-detail-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; }
+.portfolio-detail-btn { display:inline-flex; align-items:center; justify-content:center; min-height:42px; padding:10px 18px; border-radius:7px; text-decoration:none; font-weight:800; transition:transform 0.2s ease, box-shadow 0.2s ease; }
+.portfolio-detail-btn:hover { transform:translateY(-2px); box-shadow:0 10px 22px rgba(0,108,255,0.18); }
+.portfolio-detail-btn.primary { color:#fff; background:linear-gradient(135deg, #006cff 0%, #0052cc 100%); }
+.portfolio-detail-btn.secondary { color:#006cff; background:#eef6ff; border:1px solid rgba(0,108,255,0.2); }
+.portfolio-detail-section { margin-top:34px; padding:28px; background:#fff; border-radius:8px; border:1px solid #edf1f5; box-shadow:0 8px 24px rgba(0,0,0,0.04); }
+.portfolio-detail-section h2 { margin:0 0 16px; font-size:24px; color:#172033; }
+.portfolio-detail-text { color:#4b5563; font-size:16px; line-height:2.1; }
+.portfolio-detail-text p { margin:0 0 14px; }
+@media (max-width: 900px) { .portfolio-detail-hero { grid-template-columns:1fr; } .portfolio-detail-content { padding:22px; } }
+</style>
+{% endblock %}

@@ -1,0 +1,605 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %}{% trans 'pouriabaghban | Full Stack Developer' %}{% endblock %}
+{% block meta_description %}{% trans 'Portfolio, articles, skills, and contact information for pouriabaghban.' %}{% endblock %}
+
+{% block content %}
+
+<style>
+  .progress-bar { transition: width 1.5s ease-in-out; }
+  .item-project { transition: transform 0.3s, box-shadow 0.3s; }
+  .item-project:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,108,255,0.2); }
+  .btn-project:hover { color: #0041a8; }
+</style>
+
+<!-- Header Section with Image and Info -->
+<section id="hero" class="hero-intro-section" style="padding: 60px 0; background: linear-gradient(135deg, rgba(0,108,255,0.05) 0%, rgba(0,82,204,0.05) 100%);">
+  <div class="container">
+    <div class="row gy-4 align-items-center">
+      <div class="col-lg-5 order-lg-2">
+        {% if site_settings.owner_image %}<img src="{{ site_settings.owner_image.url }}" class="img-fluid hero-image" alt="{% if current_language == 'fa' %}پوریا باغبان{% else %}pouriabaghban{% endif %}"{% else %}<img src="{% static 'images/image.png' %}" class="img-fluid hero-image" alt="{% if current_language == 'fa' %}پوریا باغبان{% else %}pouriabaghban{% endif %}"{% endif %} style="border-radius: 8px; box-shadow: 0 8px 20px rgba(0,108,255,0.2);">
+      </div>
+      <div class="col-lg-7 order-lg-1">
+        <h1 class="hero-title" style="font-size: 2.8em; font-weight: 700; margin-bottom: 15px;">{% if current_language == "fa" %}پوریا باغبان{% else %}pouriabaghban{% endif %}</h1>
+         
+ 
+        </h2>
+        <p style="font-size: 16px; line-height: 1.8; color: #555; margin-bottom: 20px;">
+          {% if current_language == "de" %}Full-Stack-Entwickler{% elif current_language == "en" %}Full Stack Developer{% else %}توسعه‌دهندهٔ Full Stack{% endif %}
+        </p>
+        <div class="hero-meta" style="display: flex; gap: 30px; margin-bottom: 30px;">
+          <div>
+            <p style="font-size: 12px; color: #999; margin-bottom: 5px;">{% trans "ایمیل" %}</p>
+            <p style="font-size: 15px; font-weight: 600;">{{ site_settings.email|default:"poriab426@gmail.com" }}</p>
+          </div>
+          <div>
+            <p style="font-size: 12px; color: #999; margin-bottom: 5px;">{% trans "موقعیت" %}</p>
+            <p style="font-size: 15px; font-weight: 600;">{% if current_language == "de" %}Maschhad, Iran{% elif current_language == "en" %}Mashhad, Iran{% else %}مشهد، ایران{% endif %}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section id="about" style="padding: 80px 0;">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2 style="text-align: center; font-size: 2.2em; margin-bottom: 40px; font-weight: 700;">📝 {% if current_language == "de" %}Über mich{% elif current_language == "en" %}About me{% else %}درباره‌ی من{% endif %}</h2>
+        <p style="font-size: 16px; line-height: 1.9; color: #666; text-align: center; max-width: 800px; margin: 0 auto;">
+          {% if current_language == "de" %}{% if home_sections.about.description_de %}{{ home_sections.about.description_de }}{% else %}{% trans "I am a Full Stack Developer interested in building user-friendly and efficient websites. With experience across different technologies, I try to find the best solution for every project." %}{% endif %}{% elif current_language == "en" %}{% if home_sections.about.description_en %}{{ home_sections.about.description_en }}{% else %}{% trans "I am a Full Stack Developer interested in building user-friendly and efficient websites. With experience across different technologies, I try to find the best solution for every project." %}{% endif %}{% else %}{% if home_sections.about.description_fa %}{{ home_sections.about.description_fa }}{% elif site_settings and site_settings.owner_bio %}{{ site_settings.owner_bio }}{% else %}{% trans "I am a Full Stack Developer interested in building user-friendly and efficient websites. With experience across different technologies, I try to find the best solution for every project." %}{% endif %}{% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Skills Section -->
+<section id="skills" class="skills-section" style="padding: 80px 0; background: rgba(0,108,255,0.02);">
+  <div class="container">
+    <h2 style="text-align: center; font-size: 2.2em; margin-bottom: 50px; font-weight: 700;">🛠️ {% if current_language == "de" %}{% if home_sections.skills.title_de %}{{ home_sections.skills.title_de }}{% else %}Fähigkeiten{% endif %}{% elif current_language == "en" %}{% if home_sections.skills.title_en %}{{ home_sections.skills.title_en }}{% else %}Skills{% endif %}{% else %}{{ home_sections.skills.get_title|default:"مهارت‌ها" }}{% endif %}</h2>
+    <div class="row">
+      <div class="col-lg-10 offset-lg-1 skills-animation">
+        <div class="skills-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 25px; justify-items: center;">
+          {% for skill in skills %}
+          <div class="skill-circle" style="display: flex; flex-direction: column; align-items: center; text-align: center;" data-percentage="{{ skill.percentage }}">
+            <div class="skill-visual" style="position: relative; width: 100px; height: 120px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center;">
+              <div style="font-size: 48px; margin-bottom: 5px;">
+                {% if skill.icon %}
+                  <i class="{{ skill.icon }}"></i>
+                {% else %}
+                  🔧
+                {% endif %}
+              </div>
+              <div class="skill-percent-badge" style="position: absolute; bottom: 0; right: 50%; transform: translateX(50%); background: linear-gradient(135deg, #006cff 0%, #0052cc 100%); color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 12px; white-space: nowrap;">
+                <span class="skill-percent">0</span>%
+              </div>
+            </div>
+            <p style="font-size: 14px; font-weight: 600; color: #333; margin: 0; margin-top: 10px;">{{ skill.name }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+  
+  <style>
+  </style>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Animate skills with Intersection Observer
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+          entry.target.classList.add('animated');
+          
+          // Animate each skill
+          const skillCircles = entry.target.querySelectorAll('.skill-circle');
+          skillCircles.forEach((circle, index) => {
+            setTimeout(() => {
+              const percentage = parseInt(circle.getAttribute('data-percentage'));
+              const percentDisplay = circle.querySelector('.skill-percent');
+              
+              // Animate from 0 to percentage in 1200ms
+              let currentPercent = 0;
+              const duration = 1200;
+              const steps = 60; // 60 frames per second
+              const increment = percentage / (duration / (1000 / steps));
+              
+              const startTime = Date.now();
+              
+              const animate = () => {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                currentPercent = Math.round(percentage * progress);
+                
+                if (percentDisplay) {
+                  percentDisplay.textContent = currentPercent;
+                }
+                
+                if (progress < 1) {
+                  requestAnimationFrame(animate);
+                }
+              };
+              
+              animate();
+            }, index * 100); // Stagger animation by 100ms
+          });
+          
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    
+    const skillsSection = document.querySelector('.skills-animation');
+    if (skillsSection) observer.observe(skillsSection);
+  }
+});
+</script>
+
+<!-- Latest Blog Posts Section -->
+<section id="blog" style="padding: 80px 0;">
+  <div class="container">
+    <h2 style="text-align: center; font-size: 2.2em; margin-bottom: 15px; font-weight: 700;">📚 {% if current_language == "de" %}{% if home_sections.blog_preview.title_de %}{{ home_sections.blog_preview.title_de }}{% else %}{% trans "آخرین مقالات" %}{% endif %}{% else %}{% if home_sections.blog_preview.get_title %}{{ home_sections.blog_preview.get_title }}{% else %}{% trans "آخرین مقالات" %}{% endif %}{% endif %}</h2>
+    <p style="text-align: center; color: #999; margin-bottom: 50px;">{% if current_language == "de" %}{% if home_sections.blog_preview.description_de %}{{ home_sections.blog_preview.description_de }}{% else %}{% trans "Technical articles and developer experiences" %}{% endif %}{% else %}{{ home_sections.blog_preview.get_description|default:"Technical articles and developer experiences" }}{% endif %}</p>
+    
+    <div class="row g-4 responsive-project-grid">
+      {% for post in latest_posts %}
+      <div class="col-md-6 col-lg-4">
+        <a href="{% url 'blog:post-detail' post.slug %}" style="text-decoration: none; color: inherit;">
+          <div class="item-project responsive-project-card" style="border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <div style="width: 100%; height: 180px; background: linear-gradient(135deg, #006cff 0%, #0052cc 100%); display: flex; align-items: center; justify-content: center; font-size: 64px; color: white;">
+              {{ post.get_title|slice:":1" }}
+            </div>
+            <div class="content-project responsive-project-content" style="padding: 20px;">
+              <h4 style="border-bottom: 3px solid #006cff; padding-bottom: 12px; margin-bottom: 12px; font-size: 1.1em;">{{ post.get_title }}</h4>
+              <p style="font-size: 14px; color: #666; margin-bottom: 12px;">{{ post.get_excerpt|truncatewords:20 }}</p>
+              <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid #eee; font-size: 12px; color: #999;">
+                <span>✍️ {{ post.author.first_name }} {{ post.author.last_name }}</span>
+                <span>📅 {{ post.published_at|date:'Y/m/d' }}</span>
+              </div>
+              {% if post.tags.all %}
+              <div style="margin-top: 10px; display: flex; gap: 5px; flex-wrap: wrap;">
+                {% for tag in post.tags.all|slice:":3" %}
+                <span style="background: #f0f8ff; color: #006cff; padding: 3px 8px; border-radius: 12px; font-size: 11px;">{{ tag.name }}</span>
+                {% endfor %}
+              </div>
+              {% endif %}
+              <div style="margin-top: 12px;">
+                <a class="btn-project" style="color: #006cff; font-weight: 600; font-size: 13px;">{% trans "بیشتر بدانید" %} →</a>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+      {% empty %}
+      <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">
+        <p>{% trans "فعلا بلاگی نیست" %}</p>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div style="text-align: center; margin-top: 50px;">
+      <a href="{% url 'blog:blog-list' %}" style="display: inline-block; padding: 12px 30px; background: linear-gradient(135deg, #006cff 0%, #0052cc 100%); color: white; text-decoration: none; border-radius: 5px; font-weight: 600; transition: transform 0.3s;">
+        📖 {% trans "مشاهدهٔ تمام مقالات" %}
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Slider Section -->
+<section id="testimonials" class="testimonials-section" style="padding: 80px 0; background: linear-gradient(135deg, #f0f4ff 0%, #e8f0ff 100%);">
+  <div class="container">
+    <h2 style="text-align: center; font-size: 2.2em; margin-bottom: 50px; font-weight: 700;">⭐ {% trans "نظرات" %}</h2>
+    
+    {% if testimonials %}
+    <div class="testimonial-shell" style="max-width: 900px; margin: 0 auto; position: relative;">
+      <div id="testimonials-slider" class="testimonial-slider" style="overflow: hidden; border-radius: 12px; background: white; box-shadow: 0 8px 24px rgba(0,0,0,0.12);">
+        <div class="testimonial-track" style="display: flex; transition: transform 0.5s ease; transform: translateX(0%);" id="testimonials-track">
+          {% for testimonial in testimonials %}
+          <div class="testimonial-slide" data-testimonial-id="{{ testimonial.id }}" style="min-width: 100%; padding: 60px 40px; box-sizing: border-box; flex-shrink: 0;">
+            <div style="text-align: center;">
+              <!-- Star Rating -->
+              <div style="margin-bottom: 20px; font-size: 24px; letter-spacing: 4px;">
+                {% for i in "12345" %}
+                  {% if forloop.counter <= testimonial.rating %}
+                    ⭐
+                  {% else %}
+                    ☆
+                  {% endif %}
+                {% endfor %}
+              </div>
+              
+              <!-- Message -->
+              <p style="font-size: 16px; line-height: 1.8; color: #555; margin-bottom: 30px; font-style: italic;">
+                "{{ testimonial.message }}"
+              </p>
+              
+              <!-- Author -->
+              <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+                {% if testimonial.image %}
+                <img src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                {% else %}
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px;">
+                  {{ testimonial.name|first }}
+                </div>
+                {% endif %}
+                
+                <div style="text-align: right;">
+                  <p style="font-weight: 700; color: #333; margin: 0;">{{ testimonial.name }}</p>
+                  {% if testimonial.title %}
+                  <p style="font-size: 14px; color: #888; margin: 0;">{{ testimonial.title }}</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <!-- Slider Controls -->
+      <div style="display: flex; justify-content: center; gap: 15px; margin-top: 30px;">
+        <button class="testimonial-control" onclick="testimonialPrev()" style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: all 0.3s;">← {% trans "قبلی" %}</button>
+        <button class="testimonial-control" onclick="testimonialNext()" style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: all 0.3s;">{% trans "بعدی" %} →</button>
+      </div>
+      
+      <!-- Dots Indicator -->
+      <div style="display: flex; justify-content: center; gap: 8px; margin-top: 20px;" id="testimonials-dots"></div>
+    </div>
+    {% else %}
+    <p style="text-align: center; color: #888; font-size: 16px;">{% trans "هنوز نظری ثبت نشده است" %}</p>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Comments Section -->
+<section id="comments" class="comments-section" style="padding: 80px 0; background: rgba(0,108,255,0.02);">
+  <div class="container">
+    <h2 style="text-align: center; font-size: 2.2em; margin-bottom: 18px; font-weight: 700;">💬 {% if current_language == "de" %}{% if home_sections.comments.title_de %}{{ home_sections.comments.title_de }}{% else %}Benutzerkommentare{% endif %}{% elif current_language == "en" %}{% if home_sections.comments.title_en %}{{ home_sections.comments.title_en }}{% else %}User Comments{% endif %}{% else %}{{ home_sections.comments.get_title|default:"نظرات کاربران" }}{% endif %}</h2>
+    {% if current_language == "de" %}{% if home_sections.comments.description_de %}<p style="text-align: center; color: #777; margin-bottom: 38px;">{{ home_sections.comments.description_de }}</p>{% endif %}{% else %}{% if home_sections.comments.get_description %}<p style="text-align: center; color: #777; margin-bottom: 38px;">{{ home_sections.comments.get_description }}</p>{% endif %}{% endif %}
+
+    
+    {% if home_comments %}
+    <div class="home-comments-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; max-width: 980px; margin: 0 auto 32px;">
+      {% for item in home_comments %}
+      <article style="background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 12px rgba(0,108,255,0.08); border: 1px solid rgba(0,108,255,0.08);">
+        <p style="font-size: 14px; line-height: 1.9; color: #555; margin-bottom: 16px;">{{ item.comment }}</p>
+        <strong style="display: block; color: #222; font-size: 14px;">{{ item.name }}</strong>
+      </article>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <div class="comment-form-card" style="max-width: 800px; margin: 0 auto; padding: 40px; background: white; border-radius: 8px; border-right: 4px solid #006cff; box-shadow: 0 2px 12px rgba(0,108,255,0.1);">
+      <div class="success-message" id="mainPageSuccessMessage" style="padding: 15px; background: rgba(76,175,80,0.1); border-left: 4px solid #4caf50; border-radius: 4px; color: #4caf50; margin-bottom: 20px; display: none;">
+        <i class="fas fa-check-circle"></i> {% trans "نظر شما با موفقیت ارسال شد!" %}
+      </div>
+
+      <div class="error-message" id="mainPageErrorMessage" style="padding: 15px; background: rgba(244,67,54,0.1); border-left: 4px solid #f44336; border-radius: 4px; color: #f44336; margin-bottom: 20px; display: none;">
+        <i class="fas fa-exclamation-circle"></i> {% trans "مشکلی پیش آمد، لطفاً دوباره تلاش کنید." %}
+      </div>
+
+      <form class="comment-form" style="display: flex; flex-direction: column; gap: 18px;" id="mainPageCommentForm">
+        {% csrf_token %}
+        <div>
+          <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #333;">{% trans "نام شما:" %}</label>
+          <input type="text" name="name" placeholder="{% trans 'نام خود را وارد کنید' %}" required style="width: 100%; padding: 12px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px; color: #333; font-family: 'Poppins', sans-serif; font-size: 14px;">
+        </div>
+
+        <div>
+          <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #333;">{% trans "ایمیل شما:" %}</label>
+          <input type="email" name="email" placeholder="{% trans 'ایمیل خود را وارد کنید' %}" required style="width: 100%; padding: 12px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px; color: #333; font-family: 'Poppins', sans-serif; font-size: 14px;">
+        </div>
+
+        <div>
+          <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: #333;">{% trans "نظر شما (حداکثر 500 کاراکتر):" %}</label>
+          <textarea name="comment" placeholder="{% trans 'نظر و پیشنهاد خود را بنویسید...' %}" maxlength="500" required style="width: 100%; padding: 12px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px; color: #333; font-family: 'Poppins', sans-serif; resize: vertical; min-height: 120px; font-size: 14px;"></textarea>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 12px; color: #999;">
+            <span>{% trans "کاراکترهای باقی:" %}</span>
+            <span style="color: #006cff; font-weight: 600;"><span id="mainPageCharCount">0</span>/500</span>
+          </div>
+        </div>
+
+        <button class="comment-submit" type="submit" style="padding: 12px 30px; background: linear-gradient(135deg, #006cff 0%, #0052cc 100%); color: white; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; transition: all 0.3s; align-self: flex-start; font-size: 14px;">
+          ✉️ {% trans "ارسال نظر" %}
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Scripts -->
+<script>
+// Typewriter effect
+(function(){
+  const words = ['back-end', 'front-end', 'fullstack'];
+  let current = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+
+  function tick(){
+    const el = document.getElementById('typed-word');
+    if (!el) return;
+    const full = words[current];
+
+    if (!isDeleting){
+      charIndex++;
+      el.textContent = full.substring(0, charIndex);
+      if (charIndex === full.length){
+        isDeleting = true;
+        setTimeout(tick, 1200);
+        return;
+      }
+    } else {
+      charIndex--;
+      el.textContent = full.substring(0, charIndex);
+      if (charIndex === 0){
+        isDeleting = false;
+        current = (current + 1) % words.length;
+      }
+    }
+
+    const delay = isDeleting ? 60 : 120;
+    setTimeout(tick, delay);
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(tick, 300);
+  });
+})();
+
+// Comment form handler
+document.addEventListener('DOMContentLoaded', function() {
+  const commentInput = document.querySelector('#mainPageCommentForm textarea');
+  if (commentInput) {
+    commentInput.addEventListener('input', (e) => {
+      document.getElementById('mainPageCharCount').textContent = e.target.value.length;
+    });
+  }
+
+  const mainForm = document.getElementById('mainPageCommentForm');
+  if (mainForm) {
+    const currentLanguage = '{{ current_language|default:"fa"|slice:":2" }}';
+    const commentMessages = {
+      fa: {
+        success: 'نظر شما با موفقیت ارسال شد',
+        failure: 'متاسفانه نظر ارسال نشد مجددا تلاش فرمایید'
+      },
+      en: {
+        success: 'Your comment was sent successfully.',
+        failure: 'Unfortunately, your comment was not sent. Please try again.'
+      },
+      de: {
+        success: 'Ihr Kommentar wurde erfolgreich gesendet.',
+        failure: 'Leider wurde Ihr Kommentar nicht gesendet. Bitte versuchen Sie es erneut.'
+      }
+    };
+    const activeCommentMessages = commentMessages[currentLanguage] || commentMessages.fa;
+
+    mainForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = mainForm.querySelector('input[name="name"]').value;
+      const email = mainForm.querySelector('input[name="email"]').value;
+      const comment = mainForm.querySelector('textarea[name="comment"]').value;
+      const submitBtn = mainForm.querySelector('button[type="submit"]');
+
+      submitBtn.style.opacity = '0.7';
+      submitBtn.style.cursor = 'not-allowed';
+      submitBtn.textContent = '{% trans 'در حال ارسال...' %}';
+
+      try {
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('email', email);
+        formData.append('comment', comment);
+        const response = await fetch('{% url 'pages:submit_home_comment' %}', {
+          method: 'POST',
+          body: formData,
+          credentials: 'same-origin',
+          headers: {
+            'X-CSRFToken': mainForm.querySelector('input[name=csrfmiddlewaretoken]').value,
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        });
+        const data = await response.json().catch(() => ({}));
+
+        if (response.ok) {
+          const successMessage = document.getElementById('mainPageSuccessMessage');
+          successMessage.textContent = data.message || activeCommentMessages.success;
+          successMessage.style.display = 'block';
+          document.getElementById('mainPageErrorMessage').style.display = 'none';
+          mainForm.reset();
+          document.getElementById('mainPageCharCount').textContent = '0';
+
+          setTimeout(() => {
+            successMessage.style.display = 'none';
+          }, 5000);
+        } else {
+          throw new Error(data.message || activeCommentMessages.failure);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        const errorMessage = document.getElementById('mainPageErrorMessage');
+        errorMessage.textContent = error.message || activeCommentMessages.failure;
+        errorMessage.style.display = 'block';
+        document.getElementById('mainPageSuccessMessage').style.display = 'none';
+
+        setTimeout(() => {
+          errorMessage.style.display = 'none';
+        }, 5000);
+      } finally {
+        submitBtn.style.opacity = '1';
+        submitBtn.style.cursor = 'pointer';
+        submitBtn.textContent = '✉️ {% trans "ارسال نظر" %}';
+      }
+    });
+  }
+
+  // Animate skills bars
+  const bars = document.querySelectorAll('.progress .progress-bar');
+  bars.forEach(el => {
+    if (!el.style.width || el.style.width === '0%') {
+      if (!el.style.transition) el.style.transition = 'width 1.5s ease-in-out';
+      el.dataset.animated = 'false';
+    }
+  });
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.querySelectorAll('.progress .progress-bar').forEach(el => {
+          if (el.dataset.animated === 'true') return;
+          el.style.width = el.getAttribute('aria-valuenow') + '%';
+          el.dataset.animated = 'true';
+        });
+        obs.unobserve(entry.target);
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.skills-animation').forEach(el => observer.observe(el));
+  }
+
+  // Testimonials Slider (simpler, robust): show one slide at a time using display toggles
+  (function(){
+    const testimonialsTrack = document.getElementById('testimonials-track');
+    const dotsContainer = document.getElementById('testimonials-dots');
+    let slides = testimonialsTrack ? Array.from(testimonialsTrack.children) : [];
+    let current = 0;
+    let autoId = null;
+
+    function collectSlides() {
+      slides = testimonialsTrack ? Array.from(testimonialsTrack.children) : [];
+      // normalize slide styles
+      slides.forEach(s => {
+        s.style.position = 'relative';
+        s.style.display = 'none';
+        s.style.width = '100%';
+        s.style.boxSizing = 'border-box';
+      });
+    }
+
+    function buildDots() {
+      if (!dotsContainer) return;
+      dotsContainer.innerHTML = '';
+      slides.forEach((_, i) => {
+        const dot = document.createElement('div');
+        Object.assign(dot.style, { width: '12px', height: '12px', borderRadius: '50%', margin: '0 6px', backgroundColor: i === current ? '#667eea' : '#ddd', cursor: 'pointer' });
+        dot.addEventListener('click', () => show(i));
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    function show(index) {
+      if (!slides || slides.length === 0) return;
+      current = (index + slides.length) % slides.length;
+      slides.forEach((s, i) => s.style.display = (i === current) ? 'block' : 'none');
+      buildDots();
+    }
+
+    function next() { show(current + 1); }
+    function prev() { show(current - 1); }
+
+    window.testimonialNext = next;
+    window.testimonialPrev = prev;
+    window.goToTestimonial = function(i){ show(i); };
+
+    // observe DOM changes and refresh slides
+    if (testimonialsTrack) {
+      const mo = new MutationObserver(() => {
+        collectSlides();
+        // if new slide added, jump to last
+        show(slides.length - 1);
+      });
+      mo.observe(testimonialsTrack, { childList: true });
+    }
+
+    // init
+    collectSlides();
+    show(0);
+
+    // auto-advance
+    if (autoId) clearInterval(autoId);
+    autoId = setInterval(next, 5000);
+
+    // polling to append new testimonials (keeps previous behavior)
+    try {
+      const testimonialsUrl = "{% url 'pages:testimonials_json' %}";
+      let knownIds = slides.map(s => s.dataset && s.dataset.testimonialId ? parseInt(s.dataset.testimonialId) : null).filter(Boolean);
+
+      async function pollTestimonials() {
+        try {
+          const res = await fetch(testimonialsUrl, { cache: 'no-store' });
+          if (!res.ok) return;
+          const data = await res.json();
+          if (!data || !Array.isArray(data.testimonials)) return;
+
+          for (const t of data.testimonials) {
+            if (knownIds.indexOf(t.id) === -1) {
+              const slide = document.createElement('div');
+              slide.setAttribute('data-testimonial-id', t.id);
+              slide.style.padding = '60px 40px';
+              slide.style.boxSizing = 'border-box';
+
+              const inner = document.createElement('div'); inner.style.textAlign = 'center';
+              const stars = document.createElement('div'); stars.style.marginBottom = '20px'; stars.style.fontSize = '24px'; stars.style.letterSpacing = '4px';
+              for (let i = 1; i <= 5; i++) stars.appendChild(document.createTextNode(i <= (t.rating||0) ? '⭐' : '☆'));
+              const msg = document.createElement('p'); msg.style.fontSize = '16px'; msg.style.lineHeight = '1.8'; msg.style.color = '#555'; msg.style.marginBottom = '30px'; msg.style.fontStyle = 'italic'; msg.textContent = '"' + (t.message || '') + '"';
+
+              const authorWrap = document.createElement('div'); authorWrap.style.display = 'flex'; authorWrap.style.alignItems = 'center'; authorWrap.style.justifyContent = 'center'; authorWrap.style.gap = '15px';
+              if (t.image) { const img = document.createElement('img'); img.src = t.image; img.alt = t.name || ''; img.style.width = '50px'; img.style.height = '50px'; img.style.borderRadius = '50%'; img.style.objectFit = 'cover'; authorWrap.appendChild(img); }
+              else { const avatar = document.createElement('div'); avatar.style.width = '50px'; avatar.style.height = '50px'; avatar.style.borderRadius = '50%'; avatar.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; avatar.style.display = 'flex'; avatar.style.alignItems = 'center'; avatar.style.justifyContent = 'center'; avatar.style.color = 'white'; avatar.style.fontWeight = 'bold'; avatar.style.fontSize = '20px'; avatar.textContent = (t.name || '').slice(0,1); authorWrap.appendChild(avatar); }
+
+              const authorInfo = document.createElement('div'); authorInfo.style.textAlign = 'right'; const authorName = document.createElement('p'); authorName.style.fontWeight = '700'; authorName.style.color = '#333'; authorName.style.margin = '0'; authorName.textContent = t.name || ''; authorInfo.appendChild(authorName); if (t.title) { const titleEl = document.createElement('p'); titleEl.style.fontSize = '14px'; titleEl.style.color = '#888'; titleEl.style.margin = '0'; titleEl.textContent = t.title; authorInfo.appendChild(titleEl); }
+              authorWrap.appendChild(authorInfo);
+              inner.appendChild(stars); inner.appendChild(msg); inner.appendChild(authorWrap); slide.appendChild(inner);
+
+              testimonialsTrack.appendChild(slide);
+              knownIds.push(t.id);
+              collectSlides();
+              show(slides.length - 1);
+            }
+          }
+        } catch (e) {
+          // ignore poll errors
+        }
+      }
+
+      setInterval(pollTestimonials, 6000);
+    } catch (e) {}
+  })();
+});
+</script>
+
+<style>
+  @keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+  .cursor { animation: blink 1s infinite; }
+</style>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+

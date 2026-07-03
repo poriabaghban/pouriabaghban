@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} | kskh{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+{% include "kskh/_styles.html" %}
+<main class="kskh-shell">
+  <div class="kskh-wrap">
+    <header class="kskh-topbar">
+      <div class="kskh-brand">
+        <h1>{{ post.title }}</h1>
+        <p>{{ post.get_kind_display }} | {{ post.file_size_display }} | {{ post.download_count }} downloads</p>
+      </div>
+      <div class="kskh-actions">
+        <a class="kskh-btn" href="{% url 'kskh:index' %}">Back</a>
+        <a class="kskh-btn kskh-btn-primary" href="{% url 'kskh:download' post.slug %}">Download</a>
+      </div>
+    </header>
+
+    {% if messages %}
+      {% for message in messages %}<div class="kskh-alert">{{ message }}</div>{% endfor %}
+    {% endif %}
+
+    <div class="kskh-detail-grid">
+      <section class="kskh-panel">
+        <div class="kskh-meta">
+          <span class="kskh-badge">{{ post.file_extension }}</span>
+          <span class="kskh-badge">{{ post.get_kind_display }}</span>
+          {% if post.uploaded_by %}<span class="kskh-badge">{{ post.uploaded_by.get_username }}</span>{% endif %}
+        </div>
+        {% if post.description %}
+          <p style="white-space: pre-wrap; margin-top: 18px;">{{ post.description }}</p>
+        {% else %}
+          <p class="kskh-muted">توضیحی برای این فایل ثبت نشده است.</p>
+        {% endif %}
+      </section>
+
+      <aside class="kskh-panel">
+        <h2 class="kskh-title" style="font-size: 1.2rem;">وضعیت وصل بودن</h2>
+        <p class="kskh-muted">با لایک و دیس‌لایک مشخص می‌شود app یا کانفیگ هنوز کار می‌کند یا نه.</p>
+        <form id="kskhReactionForm" data-url="{% url 'kskh:react' post.slug %}">
+          {% csrf_token %}
+         <div class="kskh-reactions" style="margin-top: 16px;">
+  <button class="kskh-btn {% if user_reaction == 'like' %}kskh-btn-primary{% endif %}" type="submit" name="reaction_type" value="like">
+    Like <span id="kskhLikeCount">{{ like_count }}</span>
+  </button>
+
+  <button class="kskh-btn {% if user_reaction == 'dislike' %}kskh-btn-primary{% endif %}" type="submit" name="reaction_type" value="dislike">
+    Dislike <span id="kskhDislikeCount">{{ dislike_count }}</span>
+  </button>
+
+  <a class="kskh-btn" href="{% url 'kskh:index' %}">
+    بازگشت
+  </a>
+</div>
+
+    <section class="kskh-panel" style="margin-top: 22px;">
+      <h2 class="kskh-title" style="font-size: 1.25rem;">کامنت‌ها و ریپلای‌ها</h2>
+      <form method="post" style="margin-top: 18px;">
+        {% csrf_token %}
+        {{ comment_form.non_field_errors }}
+        {{ comment_form.body }}
+        {{ comment_form.body.errors }}
+        <button class="kskh-btn kskh-btn-primary" type="submit" style="margin-top: 10px;">ارسال کامنت</button>
+      </form>
+
+      <div style="margin-top: 22px;">
+        {% for comment in comments %}
+          <article class="kskh-comment">
+            <div class="kskh-comment-head">
+              <strong>{{ comment.user.get_username }}</strong>
+              <span class="kskh-muted">{{ comment.created_at }}</span>
+              {% if kskh_user == comment.user %}
+                <form method="post" action="{% url 'kskh:delete_comment' comment.pk %}">
+                  {% csrf_token %}
+                  <button class="kskh-link-button" type="submit">حذف</button>
+                </form>
+              {% endif %}
+            </div>
+            <p style="white-space: pre-wrap;">{{ comment.body }}</p>
+            <form method="post" style="margin-top: 12px;">
+              {% csrf_token %}
+              <input type="hidden" name="parent_id" value="{{ comment.pk }}">
+              <textarea class="kskh-input" name="body" rows="2" placeholder="ریپلای"></textarea>
+              <button class="kskh-btn" type="submit" style="margin-top: 8px;">ارسال ریپلای</button>
+            </form>
+
+            {% for reply in comment.replies.all %}
+              {% if reply.is_active and reply.is_approved %}
+                <article class="kskh-comment kskh-reply">
+                  <div class="kskh-comment-head">
+                    <strong>{{ reply.user.get_username }}</strong>
+                    <span class="kskh-muted">{{ reply.created_at }}</span>
+                    {% if kskh_user == reply.user %}
+                      <form method="post" action="{% url 'kskh:delete_comment' reply.pk %}">
+                        {% csrf_token %}
+                        <button class="kskh-link-button" type="submit">حذف</button>
+                      </form>
+                    {% endif %}
+                  </div>
+                  <p style="white-space: pre-wrap;">{{ reply.body }}</p>
+                </article>
+              {% endif %}
+            {% endfor %}
+          </article>
+        {% empty %}
+          <div class="kskh-alert">هنوز کامنتی وجود ندارد.</div>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("kskhReactionForm");
+  if (!form) return;
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    const button = event.submitter;
+    const data = new FormData(form);
+    data.set("reaction_type", button.value);
+    const response = await fetch(form.dataset.url, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": form.querySelector("input[name='csrfmiddlewaretoken']").value,
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: data
+    });
+    const payload = await response.json();
+    if (!response.ok || !payload.success) {
+      alert(payload.error || "رای ثبت نشد.");
+      return;
+    }
+    document.getElementById("kskhLikeCount").textContent = payload.like_count;
+    document.getElementById("kskhDislikeCount").textContent = payload.dislike_count;
+    form.querySelectorAll("button").forEach((btn) => {
+      btn.classList.toggle("kskh-btn-primary", btn.value === payload.reaction_type);
+    });
+  });
+
+  {% if auto_download %}
+  const downloadFrame = document.createElement("iframe");
+  downloadFrame.hidden = true;
+  downloadFrame.src = "{% url 'kskh:download' post.slug %}";
+  document.body.appendChild(downloadFrame);
+  {% endif %}
+});
+</script>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="container" style="margin-top:40px; margin-bottom:80px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+        <h1 style="margin:0;">👥 جزئیات کاربران</h1>
+        <a href="{% url 'dashboard:index' %}" style="padding:10px 20px; background:#4facfe; color:white; text-decoration:none; border-radius:4px;">← بازگشت</a>
+    </div>
+    
+    <!-- فیلترها -->
+    <div style="background:#f9f9f9; padding:15px; border-radius:8px; margin-bottom:20px;">
+        <form method="get" style="display:flex; gap:10px;">
+            <select name="status" style="padding:8px; border-radius:4px; border:1px solid #ddd;">
+                <option value="">تمام کاربران</option>
+                <option value="active" {% if status_filter == 'active' %}selected{% endif %}>✅ فعال</option>
+                <option value="inactive" {% if status_filter == 'inactive' %}selected{% endif %}>🔒 غیرفعال</option>
+            </select>
+            <select name="staff" style="padding:8px; border-radius:4px; border:1px solid #ddd;">
+                <option value="">همه</option>
+                <option value="staff" {% if staff_filter == 'staff' %}selected{% endif %}>👨‍💼 اپراتور</option>
+                <option value="regular" {% if staff_filter == 'regular' %}selected{% endif %}>👤 کاربر عادی</option>
+            </select>
+            <button type="submit" style="padding:8px 15px; background:#4facfe; color:white; border:none; border-radius:4px; cursor:pointer;">🔍 فیلتر</button>
+        </form>
+    </div>
+    
+    <!-- آمار -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:15px; margin-bottom:30px;">
+        <div style="background:linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color:white; padding:15px; border-radius:8px; text-align:center;">
+            <div style="font-size:24px; font-weight:bold;">{{ total }}</div>
+            <div style="font-size:12px;">کل کاربران</div>
+        </div>
+        <div style="background:linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color:white; padding:15px; border-radius:8px; text-align:center;">
+            <div style="font-size:24px; font-weight:bold;">{{ active }}</div>
+            <div style="font-size:12px;">فعال</div>
+        </div>
+        <div style="background:linear-gradient(135deg, #fa709a 0%, #fee140 100%); color:white; padding:15px; border-radius:8px; text-align:center;">
+            <div style="font-size:24px; font-weight:bold;">{{ inactive }}</div>
+            <div style="font-size:12px;">غیرفعال</div>
+        </div>
+        <div style="background:linear-gradient(135deg, #30cfd0 0%, #330867 100%); color:white; padding:15px; border-radius:8px; text-align:center;">
+            <div style="font-size:24px; font-weight:bold;">{{ staff }}</div>
+            <div style="font-size:12px;">اپراتور</div>
+        </div>
+    </div>
+    
+    <!-- جدول کاربران -->
+    <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <thead>
+                <tr style="background:#f0f0f0; border-bottom:2px solid #ddd;">
+                    <th style="padding:15px; text-align:right;">👤 نام کاربری</th>
+                    <th style="padding:15px; text-align:right;">📧 ایمیل</th>
+                    <th style="padding:15px; text-align:right;">👨‍💼 نقش</th>
+                    <th style="padding:15px; text-align:right;">📅 تاریخ عضویت</th>
+                    <th style="padding:15px; text-align:right;">✅ وضعیت</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr style="border-bottom:1px solid #eee; transition:background 0.3s;">
+                    <td style="padding:15px;">
+                        <strong>{{ user.username }}</strong>
+                    </td>
+                    <td style="padding:15px; font-size:13px;">{{ user.email }}</td>
+                    <td style="padding:15px;">
+                        {% if user.userrole %}
+                            <span style="background:#e3f2fd; color:#1976d2; padding:4px 10px; border-radius:12px; font-size:11px;">
+                                {% if user.userrole.role == 'admin' %}👑 مدیر
+                                {% elif user.userrole.role == 'author' %}✍️ نویسنده
+                                {% elif user.userrole.role == 'editor' %}✏️ ویرایشگر
+                                {% elif user.userrole.role == 'moderator' %}🛡️ ناظر
+                                {% elif user.userrole.role == 'subscriber' %}📖 مشترک
+                                {% endif %}
+                            </span>
+                        {% else %}
+                            <span style="background:#f5f5f5; color:#666; padding:4px 10px; border-radius:12px; font-size:11px;">بدون نقش</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding:15px; font-size:12px;">{{ user.date_joined|date:"Y-m-d H:i" }}</td>
+                    <td style="padding:15px; text-align:center;">
+                        {% if user.is_active %}
+                            <span style="background:#d4edda; color:#155724; padding:4px 10px; border-radius:12px; font-size:11px;">✅ فعال</span>
+                        {% else %}
+                            <span style="background:#f8d7da; color:#721c24; padding:4px 10px; border-radius:12px; font-size:11px;">🔒 غیرفعال</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="padding:30px; text-align:center; color:#999;">هیچ کاربری با این معیارها پیدا نشد.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+{% endblock %}

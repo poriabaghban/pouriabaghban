@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>نمونه کار لوکس</title>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  />
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --black-2: #141414;
+      --panel: #1a1816;
+      --gold: #c9a87c;
+      --gold-soft: rgba(201, 168, 124, 0.72);
+      --cream: #f2ebe2;
+      --muted: #a09080;
+      --line: rgba(201, 168, 124, 0.28);
+      --shadow: rgba(0, 0, 0, 0.72);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 26px 14px;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 18% 14%, rgba(201, 168, 124, 0.14), transparent 30%),
+        radial-gradient(circle at 78% 92%, rgba(242, 235, 226, 0.08), transparent 30%),
+        linear-gradient(145deg, #050505, var(--black) 44%, #11100f);
+      color: var(--cream);
+      font-family: "Poppins", "Segoe UI", Tahoma, sans-serif;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .phone-shell {
+      width: min(100%, 430px);
+      padding: 10px;
+      border-radius: 42px;
+      background:
+        linear-gradient(145deg, rgba(201, 168, 124, 0.82), rgba(90, 70, 48, 0.45) 34%, rgba(242, 235, 226, 0.34)),
+        #100f0e;
+      border: 1px solid rgba(242, 235, 226, 0.18);
+      box-shadow:
+        0 34px 90px var(--shadow),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+        inset 0 0 34px rgba(201, 168, 124, 0.12);
+    }
+
+    .phone-screen {
+      position: relative;
+      min-height: 790px;
+      max-height: min(840px, calc(100vh - 52px));
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(201, 168, 124, 0.45) transparent;
+      border-radius: 34px;
+      border: 1px solid rgba(201, 168, 124, 0.34);
+      background:
+        linear-gradient(180deg, rgba(20, 20, 20, 0.98), rgba(10, 10, 10, 0.99)),
+        var(--black);
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.035),
+        inset 0 18px 42px rgba(201, 168, 124, 0.055);
+    }
+
+    .phone-screen::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .phone-screen::-webkit-scrollbar-thumb {
+      background: rgba(201, 168, 124, 0.44);
+      border-radius: 999px;
+    }
+
+    .content {
+      padding: 34px 24px 28px;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--cream);
+      font-size: clamp(2.08rem, 9vw, 2.5rem);
+      line-height: 1.08;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-shadow: 0 16px 36px rgba(0, 0, 0, 0.52);
+    }
+
+    .image-card {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border-radius: 24px;
+      cursor: zoom-in;
+      background:
+        linear-gradient(145deg, rgba(201, 168, 124, 0.16), rgba(242, 235, 226, 0.035)),
+        #111;
+      border: 1px solid rgba(201, 168, 124, 0.36);
+      box-shadow:
+        0 22px 54px rgba(0, 0, 0, 0.52),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.045);
+      transition: transform 260ms ease, border-color 260ms ease, box-shadow 260ms ease;
+      animation: rise 720ms 80ms ease both;
+    }
+
+    .image-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(201, 168, 124, 0.66);
+      box-shadow: 0 26px 64px rgba(0, 0, 0, 0.62);
+    }
+
+    .image-card img {
+      display: none;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .image-card.has-image img {
+      display: block;
+      animation: imageIn 420ms ease both;
+    }
+
+    .placeholder {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      text-align: center;
+      color: var(--muted);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 52%),
+        repeating-linear-gradient(-45deg, rgba(201, 168, 124, 0.05) 0 1px, transparent 1px 14px);
+    }
+
+    .image-card.has-image .placeholder {
+      display: none;
+    }
+
+    .placeholder i {
+      display: block;
+      margin-bottom: 14px;
+      color: var(--gold);
+      font-size: 2.7rem;
+      filter: drop-shadow(0 14px 24px rgba(201, 168, 124, 0.18));
+    }
+
+    .placeholder span {
+      display: block;
+      color: var(--cream);
+      font-size: 1.04rem;
+      font-weight: 700;
+    }
+
+    .placeholder small {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .upload-btn {
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 0 14px;
+      border: 1px solid rgba(201, 168, 124, 0.5);
+      border-radius: 999px;
+      color: var(--cream);
+      background: rgba(10, 10, 10, 0.56);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.44);
+      transition: transform 220ms ease, background 220ms ease, border-color 220ms ease;
+    }
+
+    .upload-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(201, 168, 124, 0.17);
+      border-color: var(--gold);
+    }
+
+    .upload-btn i {
+      color: var(--gold);
+    }
+
+    .project-copy {
+      margin: 22px 0 0;
+      color: rgba(242, 235, 226, 0.86);
+      font-size: 0.98rem;
+      line-height: 2.05;
+      animation: rise 740ms 160ms ease both;
+    }
+
+    .project-copy strong {
+      color: var(--gold);
+      font-weight: 800;
+    }
+
+    .collab-box {
+      margin-top: 24px;
+      padding: 18px;
+      border-radius: 22px;
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(201, 168, 124, 0.055)),
+        var(--black-2);
+      border: 1px solid var(--line);
+      box-shadow:
+        0 18px 44px rgba(0, 0, 0, 0.42),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.035);
+      animation: rise 760ms 240ms ease both;
+    }
+
+    .collab-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 14px;
+      color: var(--cream);
+      font-size: 1.08rem;
+      font-weight: 800;
+    }
+
+    .collab-title i {
+      color: var(--gold);
+    }
+
+    .email-display {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 46px;
+      margin-bottom: 14px;
+      padding: 0 13px;
+      border-radius: 15px;
+      color: var(--gold);
+      text-decoration: none;
+      direction: ltr;
+      background: rgba(201, 168, 124, 0.075);
+      border: 1px solid rgba(201, 168, 124, 0.22);
+      transition: border-color 220ms ease, background 220ms ease;
+    }
+
+    .email-display:hover {
+      background: rgba(201, 168, 124, 0.13);
+      border-color: rgba(201, 168, 124, 0.54);
+    }
+
+    .collab-form {
+      display: grid;
+      gap: 10px;
+    }
+
+    .field {
+      position: relative;
+    }
+
+    .field i {
+      position: absolute;
+      top: 15px;
+      right: 14px;
+      color: var(--gold-soft);
+      pointer-events: none;
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      border: 1px solid rgba(160, 144, 128, 0.28);
+      border-radius: 15px;
+      outline: none;
+      color: var(--cream);
+      background: rgba(10, 10, 10, 0.38);
+      padding: 13px 42px 13px 13px;
+      transition: border-color 220ms ease, box-shadow 220ms ease, background 220ms ease;
+    }
+
+    .field textarea {
+      min-height: 92px;
+      resize: vertical;
+      line-height: 1.8;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      border-color: rgba(201, 168, 124, 0.66);
+      background: rgba(10, 10, 10, 0.58);
+      box-shadow: 0 0 0 4px rgba(201, 168, 124, 0.08);
+    }
+
+    .submit-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 46px;
+      border: 1px solid rgba(201, 168, 124, 0.62);
+      border-radius: 15px;
+      color: #090807;
+      background: linear-gradient(135deg, #e5c79e, var(--gold) 54%, #9f805d);
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 15px 32px rgba(201, 168, 124, 0.18);
+      transition: transform 220ms ease, filter 220ms ease;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.06);
+    }
+
+    .form-note {
+      min-height: 20px;
+      margin: 0;
+      color: var(--gold-soft);
+      font-size: 0.78rem;
+      line-height: 1.7;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 13px;
+      margin-top: 20px;
+      animation: rise 780ms 320ms ease both;
+    }
+
+    .social-links a {
+      display: inline-grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 1px solid rgba(160, 144, 128, 0.42);
+      color: var(--cream);
+      background: rgba(255, 255, 255, 0.025);
+      text-decoration: none;
+      transition: transform 220ms ease, color 220ms ease, border-color 220ms ease, background 220ms ease;
+    }
+
+    .social-links a:hover {
+      transform: translateY(-4px) scale(1.03);
+      color: var(--gold);
+      border-color: var(--gold);
+      background: rgba(201, 168, 124, 0.1);
+    }
+
+    .portfolio-footer {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(201, 168, 124, 0.22);
+      color: rgba(242, 235, 226, 0.68);
+      text-align: center;
+      animation: rise 800ms 380ms ease both;
+    }
+
+    .portfolio-footer__brand {
+      margin: 0;
+      color: var(--cream);
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    .portfolio-footer__text {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.8;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      background: rgba(5, 5, 5, 0.64);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 260ms ease, visibility 260ms ease;
+    }
+
+    .modal.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-panel {
+      width: min(100%, 390px);
+      max-height: calc(100vh - 44px);
+      overflow-y: auto;
+      padding: 16px;
+      border-radius: 28px;
+      border: 1px solid rgba(201, 168, 124, 0.38);
+      background: rgba(20, 20, 20, 0.72);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      box-shadow:
+        0 32px 80px rgba(0, 0, 0, 0.7),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+      transform: translateY(16px) scale(0.94);
+      transition: transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .modal.open .modal-panel {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border-radius: 22px;
+      border: 1px solid rgba(201, 168, 124, 0.28);
+      background:
+        linear-gradient(145deg, rgba(201, 168, 124, 0.18), rgba(242, 235, 226, 0.04)),
+        #111;
+    }
+
+    .modal-image img {
+      display: none;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .modal-image.has-image img {
+      display: block;
+    }
+
+    .modal-placeholder {
+      height: 100%;
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      font-size: 3.1rem;
+    }
+
+    .modal-image.has-image .modal-placeholder {
+      display: none;
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .modal h2 {
+      margin: 0;
+      color: var(--cream);
+      font-size: 1.34rem;
+    }
+
+    .close-btn {
+      flex: 0 0 auto;
+      display: inline-grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 168, 124, 0.38);
+      color: var(--cream);
+      background: rgba(255, 255, 255, 0.04);
+      cursor: pointer;
+      transition: transform 220ms ease, color 220ms ease, border-color 220ms ease;
+    }
+
+    .close-btn:hover {
+      transform: rotate(90deg);
+      color: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .modal p {
+      margin: 12px 0 2px;
+      color: rgba(242, 235, 226, 0.84);
+      font-size: 0.94rem;
+      line-height: 2;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes imageIn {
+      from {
+        opacity: 0;
+        transform: scale(1.04);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @media (max-width: 400px) {
+      body {
+        padding: 12px 8px;
+      }
+
+      .phone-shell {
+        border-radius: 34px;
+        padding: 7px;
+      }
+
+      .phone-screen {
+        min-height: calc(100vh - 38px);
+        max-height: calc(100vh - 38px);
+        border-radius: 28px;
+      }
+
+      .content {
+        padding: 28px 18px 22px;
+      }
+
+      .collab-box {
+        padding: 15px;
+        border-radius: 19px;
+      }
+
+      .social-links {
+        gap: 9px;
+      }
+
+      .social-links a {
+        width: 42px;
+        height: 42px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="phone-shell" aria-label="قالب موبایل نمونه کار">
+    <section class="phone-screen">
+      <div class="content">
+        <section class="image-card" id="imageCard" aria-label="تصویر شاخص نمونه کار">
+          <img id="previewImage" alt="تصویر نمونه کار" />
+          <div class="placeholder">
+            <div>
+              <i class="fa-solid fa-camera-retro" aria-hidden="true"></i>
+              <span>آپلود عکس</span>
+              <small>یک تصویر شاخص برای نمایش لوکس پروژه انتخاب کنید.</small>
+            </div>
+          </div>
+          <button class="upload-btn" id="uploadButton" type="button">
+            <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+            <span>آپلود</span>
+          </button>
+          <input id="imageInput" type="file" accept="image/*" hidden />
+        </section>
+
+        <p class="project-copy">
+          این پروژه با تمرکز بر سادگی، عمق بصری و تجربه‌ای <strong>لوکس</strong> طراحی شده است؛
+          فضایی آرام برای نمایش تصویر، روایت کوتاه و دعوت حرفه‌ای به همکاری.
+        </p>
+
+        <section class="collab-box" aria-label="پیشنهاد همکاری">
+          <h2 class="collab-title">
+            <i class="fa-regular fa-handshake" aria-hidden="true"></i>
+            پیشنهاد همکاری
+          </h2>
+
+          <a class="email-display" href="mailto:your.project@gmail.com">
+            <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+            <span>your.project@gmail.com</span>
+          </a>
+
+          <form class="collab-form" id="collabForm" action="/contact/" method="post" novalidate>
+            <input type="hidden" name="csrfmiddlewaretoken" id="csrfToken" />
+            <input type="hidden" name="phone" value="" />
+            <input type="hidden" name="subject" value="پیشنهاد همکاری از صفحه نمونه کار" />
+
+            <label class="field">
+              <i class="fa-regular fa-user" aria-hidden="true"></i>
+              <input name="name" type="text" placeholder="نام شما" autocomplete="name" required />
+            </label>
+
+            <label class="field">
+              <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+              <input
+                id="clientEmail"
+                name="email"
+                type="email"
+                placeholder="ایمیل Gmail شما"
+                autocomplete="email"
+                pattern="^[A-Za-z0-9._%+-]+@gmail\.com$"
+                required
+              />
+            </label>
+
+            <label class="field">
+              <i class="fa-regular fa-message" aria-hidden="true"></i>
+              <textarea name="message" placeholder="چند خط درباره همکاری موردنظر بنویسید" required></textarea>
+            </label>
+
+            <button class="submit-btn" type="submit">
+              <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+              ارسال به بک‌اند
+            </button>
+            <p class="form-note" id="formNote">فقط آدرس‌های معتبر Gmail پذیرفته می‌شوند.</p>
+          </form>
+        </section>
+
+        <nav class="social-links" aria-label="لینک‌های ارتباطی امن">
+          <a href="https://instagram.com/" aria-label="Instagram">
+            <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+          </a>
+          <a href="https://t.me/" aria-label="Telegram">
+            <i class="fa-brands fa-telegram" aria-hidden="true"></i>
+          </a>
+          <a href="https://wa.me/" aria-label="WhatsApp">
+            <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+          </a>
+          <a href="mailto:your.project@gmail.com" aria-label="Email">
+            <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+          </a>
+        </nav>
+
+        <footer class="portfolio-footer">
+          <p class="portfolio-footer__brand">Pouria Baghban</p>
+          <p class="portfolio-footer__text">Design and development of digital experiences | © 2026</p>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-panel">
+      <div class="modal-image" id="modalImageBox">
+        <img id="modalImage" alt="نمای بزرگ نمونه کار" />
+        <div class="modal-placeholder">
+          <i class="fa-solid fa-camera-retro" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="modal-head">
+        <h2 id="modalTitle">جزئیات نمونه کار/Projektdetails</h2>
+        <button class="close-btn" id="closeModal" type="button" aria-label="بستن">
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
+      </div>
+      <p>
+        این نمونه کار برای نمایش یک تجربه مینیمال، دقیق و چشم‌نواز ساخته شده است؛
+        ترکیبی از قاب طلایی، تصویر شاخص، متن نرم و مسیر ارتباطی مستقیم برای شروع همکاری حرفه‌ای.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const imageCard = document.getElementById("imageCard");
+    const imageInput = document.getElementById("imageInput");
+    const uploadButton = document.getElementById("uploadButton");
+    const previewImage = document.getElementById("previewImage");
+    const detailModal = document.getElementById("detailModal");
+    const closeModal = document.getElementById("closeModal");
+    const modalImage = document.getElementById("modalImage");
+    const modalImageBox = document.getElementById("modalImageBox");
+    const collabForm = document.getElementById("collabForm");
+    const clientEmail = document.getElementById("clientEmail");
+    const formNote = document.getElementById("formNote");
+    const csrfToken = document.getElementById("csrfToken");
+
+    function getCookie(name) {
+      return document.cookie
+        .split(";")
+        .map((item) => item.trim())
+        .find((item) => item.startsWith(`${name}=`))
+        ?.split("=")[1] || "";
+    }
+
+    csrfToken.value = decodeURIComponent(getCookie("csrftoken"));
+
+    uploadButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      imageInput.click();
+    });
+
+    imageInput.addEventListener("change", () => {
+      const file = imageInput.files && imageInput.files[0];
+
+      if (!file || !file.type.startsWith("image/")) {
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        previewImage.src = reader.result;
+        modalImage.src = reader.result;
+        imageCard.classList.add("has-image");
+        modalImageBox.classList.add("has-image");
+      };
+      reader.readAsDataURL(file);
+    });
+
+    imageCard.addEventListener("click", (event) => {
+      if (event.target.closest(".upload-btn")) {
+        return;
+      }
+
+      detailModal.classList.add("open");
+      document.body.style.overflow = "hidden";
+    });
+
+    function closeDetailModal() {
+      detailModal.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    closeModal.addEventListener("click", closeDetailModal);
+
+    detailModal.addEventListener("click", (event) => {
+      if (event.target === detailModal) {
+        closeDetailModal();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && detailModal.classList.contains("open")) {
+        closeDetailModal();
+      }
+    });
+
+    collabForm.addEventListener("submit", (event) => {
+      const email = clientEmail.value.trim();
+      const gmailOnly = /^[A-Za-z0-9._%+-]+@gmail\.com$/;
+
+      if (!gmailOnly.test(email)) {
+        event.preventDefault();
+        formNote.textContent = "لطفاً فقط یک ایمیل معتبر با دامنه gmail.com وارد کنید.";
+        clientEmail.focus();
+        return;
+      }
+
+      formNote.textContent = "در حال ارسال به بک‌اند...";
+    });
+  </script>
+</body>
+</html>

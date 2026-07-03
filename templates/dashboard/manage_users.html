@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="container" style="margin-top:40px; margin-bottom:80px;">
+    <div style="background:#f9f9f9; padding:20px; border-radius:8px; margin-bottom:30px;">
+        <h1 style="margin:0 0 20px; font-size:28px; color:#333;">👥 مدیریت کاربران</h1>
+        
+        <!-- Filters -->
+        <div style="margin-bottom:20px; display:flex; gap:15px; flex-wrap:wrap;">
+            <form method="get" style="display:flex; gap:10px; flex-wrap:wrap;">
+                <select name="role" style="padding:8px; border-radius:4px; border:1px solid #ddd;">
+                    <option value="">تمام نقش‌ها</option>
+                    <option value="admin" {% if role_filter == 'admin' %}selected{% endif %}>🔑 ادمین</option>
+                    <option value="author" {% if role_filter == 'author' %}selected{% endif %}>✍️ نویسنده</option>
+                    <option value="editor" {% if role_filter == 'editor' %}selected{% endif %}>📝 ویرایشگر</option>
+                    <option value="moderator" {% if role_filter == 'moderator' %}selected{% endif %}>🛡️ مدیریت‌کننده</option>
+                    <option value="subscriber" {% if role_filter == 'subscriber' %}selected{% endif %}>👤 مشترک</option>
+                </select>
+                
+                <select name="status" style="padding:8px; border-radius:4px; border:1px solid #ddd;">
+                    <option value="">تمام وضعیت‌ها</option>
+                    <option value="active" {% if status_filter == 'active' %}selected{% endif %}>✅ فعال</option>
+                    <option value="inactive" {% if status_filter == 'inactive' %}selected{% endif %}>❌ غیرفعال</option>
+                </select>
+                
+                <button type="submit" style="padding:8px 15px; background:#006cff; color:white; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">
+                    🔍 جستجو
+                </button>
+                <a href="{% url 'dashboard:manage-users' %}" style="padding:8px 15px; background:#666; color:white; text-decoration:none; border-radius:4px; cursor:pointer; font-weight:bold;">
+                    🔄 بازنشانی
+                </a>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Users Table -->
+    <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <thead>
+                <tr style="background:#f0f0f0; border-bottom:2px solid #ddd;">
+                    <th style="padding:15px; text-align:right; font-weight:bold;">👤 نام کاربری</th>
+                    <th style="padding:15px; text-align:right; font-weight:bold;">📧 ایمیل</th>
+                    <th style="padding:15px; text-align:right; font-weight:bold;">🎭 نقش</th>
+                    <th style="padding:15px; text-align:right; font-weight:bold;">✅ وضعیت</th>
+                    <th style="padding:15px; text-align:right; font-weight:bold;">⚙️ عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr style="border-bottom:1px solid #eee; transition:background 0.3s;">
+                    <td style="padding:15px;">
+                        <strong>{{ user.username }}</strong>
+                        {% if user.first_name %}
+                            <br><small style="color:#666;">{{ user.first_name }} {{ user.last_name }}</small>
+                        {% endif %}
+                    </td>
+                    <td style="padding:15px;">{{ user.email }}</td>
+                    <td style="padding:15px;">
+                        {% if user.user_role %}
+                            {{ user.user_role.get_role_display }}
+                        {% else %}
+                            <span style="color:#999;">بدون نقش</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding:15px;">
+                        {% if user.is_active %}
+                            <span style="background:#d4edda; color:#155724; padding:4px 10px; border-radius:12px; font-size:12px; font-weight:bold;">✅ فعال</span>
+                        {% else %}
+                            <span style="background:#f8d7da; color:#721c24; padding:4px 10px; border-radius:12px; font-size:12px; font-weight:bold;">❌ غیرفعال</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding:15px;">
+                        <a href="{% url 'dashboard:edit-user-role' user.id %}" style="display:inline-block; padding:6px 12px; background:#006cff; color:white; text-decoration:none; border-radius:4px; margin-right:5px; font-size:12px;">✏️ ویرایش</a>
+                        
+                        <form method="post" action="{% url 'dashboard:toggle-user-status' user.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" style="padding:6px 12px; background:#ffc107; color:#333; border:none; border-radius:4px; margin-right:5px; font-size:12px; cursor:pointer; font-weight:bold;">
+                                {% if user.is_active %}🔒 غیرفعال{% else %}🔓 فعال{% endif %}
+                            </button>
+                        </form>
+                        
+                        {% if user.id != request.user.id %}
+                        <form method="post" action="{% url 'dashboard:delete-user' user.id %}" style="display:inline;" onsubmit="return confirm('آیا از حذف این کاربر مطمئن هستید؟');">
+                            {% csrf_token %}
+                            <button type="submit" style="padding:6px 12px; background:#dc3545; color:white; border:none; border-radius:4px; font-size:12px; cursor:pointer; font-weight:bold;">🗑️ حذف</button>
+                        </form>
+                        {% else %}
+                        <span style="padding:6px 12px; background:#e9ecef; color:#6c757d; border-radius:4px; font-size:12px; cursor:not-allowed;">👤 خود</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="padding:30px; text-align:center; color:#999;">
+                        هیچ کاربری با این معیارها پیدا نشد.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Statistics -->
+    <div style="margin-top:40px; display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px;">
+        <div style="background:white; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); text-align:center;">
+            <div style="font-size:32px; margin-bottom:10px;">👥</div>
+            <div style="font-size:24px; font-weight:bold; color:#006cff;">{{ users.count }}</div>
+            <div style="color:#666; margin-top:5px;">کل کاربران</div>
+        </div>
+        
+        <div style="background:white; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); text-align:center;">
+            <div style="font-size:32px; margin-bottom:10px;">✅</div>
+            <div style="font-size:24px; font-weight:bold; color:#28a745;">{{ users|dictsort:'is_active'|last|default:0 }}</div>
+            <div style="color:#666; margin-top:5px;">کاربران فعال</div>
+        </div>
+        
+        <div style="background:white; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); text-align:center;">
+            <div style="font-size:32px; margin-bottom:10px;">✍️</div>
+            <div style="font-size:24px; font-weight:bold; color:#ffc107;">{{ users|dictsort:'user_role__role'|length|default:0 }}</div>
+            <div style="color:#666; margin-top:5px;">نویسندگان</div>
+        </div>
+    </div>
+</main>
+{% endblock %}

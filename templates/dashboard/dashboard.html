@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-container" style="padding: 20px; max-width: 1400px; margin: 0 auto;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 30px;">
+        <h1 style="margin:0;">📊 داشبورد آماری</h1>
+        <div style="font-size:12px; color:#999;">
+            🔄 آخرین بروزرسانی: <span id="lastUpdate">الآن</span>
+        </div>
+    </div>
+    
+    <!-- آمار کلی - کلیک‌پذیر -->
+    <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px;" id="statsContainer">
+        
+        <!-- پست‌های بلاگ -->
+        <a href="{% url 'dashboard:analytics-posts' %}" style="text-decoration:none; cursor:pointer;">
+        <div class="stat-card clickable" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 8px; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition:all 0.3s;">
+            <div style="font-size: 32px; font-weight: bold;" class="stat-posts-total">{{ total_posts }}</div>
+            <div style="font-size: 14px; opacity: 0.9;">کل پست‌ها</div>
+            <div style="margin-top: 10px; font-size: 12px;">
+                ✅ <span class="stat-posts-pub">{{ published_posts }}</span> منتشر | 📝 <span class="stat-posts-draft">{{ draft_posts }}</span> پیش‌نویس
+            </div>
+            <small style="opacity:0.7;">برای دیدن جزئیات کلیک کنید →</small>
+        </div>
+        </a>
+        
+        <!-- کامنت‌ها -->
+        <a href="{% url 'dashboard:analytics-comments' %}" style="text-decoration:none; cursor:pointer;">
+        <div class="stat-card clickable" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 20px; border-radius: 8px; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition:all 0.3s;">
+            <div style="font-size: 32px; font-weight: bold;" class="stat-comments-total">{{ total_comments }}</div>
+            <div style="font-size: 14px; opacity: 0.9;">کل کامنت‌ها</div>
+            <div style="margin-top: 10px; font-size: 12px;">
+                ✅ <span class="stat-comments-app">{{ approved_comments }}</span> تایید | ⏳ <span class="stat-comments-pend">{{ pending_comments }}</span> منتظر
+            </div>
+            <small style="opacity:0.7;">برای دیدن جزئیات کلیک کنید →</small>
+        </div>
+        </a>
+        
+        <!-- کاربران -->
+        <a href="{% url 'dashboard:analytics-users' %}" style="text-decoration:none; cursor:pointer;">
+        <div class="stat-card clickable" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 20px; border-radius: 8px; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition:all 0.3s;">
+            <div style="font-size: 32px; font-weight: bold;" class="stat-users-total">0</div>
+            <div style="font-size: 14px; opacity: 0.9;">کاربران</div>
+            <div style="margin-top: 10px; font-size: 12px;">
+                ✅ <span class="stat-users-active">0</span> فعال | 👤 <span class="stat-users-staff">0</span> ادمین
+            </div>
+            <small style="opacity:0.7;">برای دیدن جزئیات کلیک کنید →</small>
+        </div>
+        </a>
+        
+    </div>
+    
+    <!-- آمار امروز و ماه -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 40px;">
+        
+        <!-- امروز -->
+        <div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <h3 style="margin: 0 0 15px 0; border-bottom: 2px solid #667eea; padding-bottom: 10px;">📅 امروز</h3>
+            <div style="display: grid; gap: 10px;">
+                <div style="display: flex; justify-content: space-between;">
+                    <span>📝 پست‌های جدید:</span>
+                    <strong class="today-posts">{{ today_posts }}</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>💬 کامنت‌های جدید:</span>
+                    <strong class="today-comments">{{ today_comments }}</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>📧 پیام‌های جدید:</span>
+                    <strong class="today-messages">{{ today_messages }}</strong>
+                </div>
+            </div>
+        </div>
+        
+        <!-- این ماه -->
+        <div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <h3 style="margin: 0 0 15px 0; border-bottom: 2px solid #f5576c; padding-bottom: 10px;">📊 این ماه</h3>
+            <div style="display: grid; gap: 10px;">
+                <div style="display: flex; justify-content: space-between;">
+                    <span>📝 پست‌های جدید:</span>
+                    <strong class="month-posts">0</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>💬 کامنت‌های جدید:</span>
+                    <strong class="month-comments">0</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>📧 پیام‌های جدید:</span>
+                    <strong class="month-messages">0</strong>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- آخرین فعالیت‌ها -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px;">
+        
+        <!-- کامنت‌های منتظر تایید -->
+        <div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <h3 style="margin: 0 0 15px 0;">💬 کامنت‌های منتظر تایید</h3>
+            {% if pending_comments_list %}
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    {% for comment in pending_comments_list %}
+                    <li style="padding: 10px; border-bottom: 1px solid #f0f0f0; font-size: 13px; background: #fffacd; border-left: 3px solid #f5576c; padding-left: 10px;">
+                        <strong>{{ comment.author }}</strong> <span style="color: #666; font-size: 11px;">({{ comment.email }})</span> <br>
+                        در <em>{{ comment.post.title }}</em>
+                        <br><small style="color: #666;">{{ comment.content|truncatewords:15 }}</small>
+                        <br><small style="color: #999;">📅 {{ comment.created_at|date:"Y-m-d H:i" }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p style="color: #999; margin: 0;">هیچ کامنت منتظر تایید نیست ✅</p>
+            {% endif %}
+        </div>
+        
+        <!-- محبوب‌ترین پست‌ها -->
+        <div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <h3 style="margin: 0 0 15px 0;">⭐ آخرین پست‌های منتشرشده</h3>
+            {% if popular_posts %}
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    {% for post in popular_posts %}
+                    <li style="padding: 10px; border-bottom: 1px solid #f0f0f0; font-size: 13px;">
+                        <strong>{{ post.title }}</strong>
+                        <br><small style="color: #999;">✍️ {{ post.author.user.first_name|default:post.author.user.username }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p style="color: #999; margin: 0;">هنوز پستی منتشر نشده است</p>
+            {% endif %}
+        </div>
+        
+    </div>
+    
+</div>
+
+<style>
+    .dashboard-container {
+        direction: rtl;
+    }
+    
+    .stat-card.clickable {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .stat-card.clickable:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2) !important;
+    }
+</style>
+
+<script>
+// تابع برای بروزرسانی آمار هر 5 دقیقه
+function updateDashboardStats() {
+    fetch('{% url "dashboard:api-stats" %}')
+        .then(response => response.json())
+        .then(data => {
+            // بروزرسانی آمار کلی
+            document.querySelector('.stat-posts-total').textContent = data.posts.total;
+            document.querySelector('.stat-posts-pub').textContent = data.posts.published;
+            document.querySelector('.stat-posts-draft').textContent = data.posts.draft;
+            
+            document.querySelector('.stat-comments-total').textContent = data.comments.total;
+            document.querySelector('.stat-comments-app').textContent = data.comments.approved;
+            document.querySelector('.stat-comments-pend').textContent = data.comments.pending;
+            
+            document.querySelector('.stat-users-total').textContent = data.users.total;
+            document.querySelector('.stat-users-active').textContent = data.users.active;
+            document.querySelector('.stat-users-staff').textContent = data.users.staff;
+            
+            // بروزرسانی آمار امروز و ماه
+            document.querySelector('.today-posts').textContent = data.posts.today;
+            document.querySelector('.today-comments').textContent = data.comments.today;
+            
+            document.querySelector('.month-posts').textContent = data.posts.month;
+            document.querySelector('.month-comments').textContent = data.comments.month;
+            
+            // بروزرسانی زمان آخرین به‌روزرسانی
+            const time = new Date(data.timestamp).toLocaleTimeString('fa-IR');
+            document.getElementById('lastUpdate').textContent = time;
+        })
+        .catch(error => console.error('خطا در بروزرسانی:', error));
+}
+
+// بروزرسانی اول
+updateDashboardStats();
+
+// بروزرسانی هر 5 دقیقه (300000 میلی‌ثانیه)
+setInterval(updateDashboardStats, 300000);
+
+// اختیاری: بروزرسانی هر 30 ثانیه برای تست (توضیح داده شده)
+// setInterval(updateDashboardStats, 30000);
+</script>
+
+{% endblock %}
+

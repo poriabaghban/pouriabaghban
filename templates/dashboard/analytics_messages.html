@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="container" style="margin-top:40px; margin-bottom:80px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+        <h1 style="margin:0;">📧 جزئیات پیام‌های تماس</h1>
+        <a href="{% url 'dashboard:index' %}" style="padding:10px 20px; background:#4facfe; color:white; text-decoration:none; border-radius:4px;">← بازگشت</a>
+    </div>
+    
+    <!-- فیلترها -->
+    <div style="background:#f9f9f9; padding:15px; border-radius:8px; margin-bottom:20px;">
+        <form method="get" style="display:flex; gap:10px;">
+            <select name="read" style="padding:8px; border-radius:4px; border:1px solid #ddd;">
+                <option value="">تمام پیام‌ها</option>
+                <option value="read" {% if read_filter == 'read' %}selected{% endif %}>✅ خوانده‌شده</option>
+                <option value="unread" {% if read_filter == 'unread' %}selected{% endif %}>👁️ خوانده‌نشده</option>
+            </select>
+            <button type="submit" style="padding:8px 15px; background:#4facfe; color:white; border:none; border-radius:4px; cursor:pointer;">🔍 فیلتر</button>
+        </form>
+    </div>
+    
+    <!-- آمار -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:15px; margin-bottom:30px;">
+        <div style="background:linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color:white; padding:15px; border-radius:8px; text-align:center;">
+            <div style="font-size:24px; font-weight:bold;">{{ total }}</div>
+            <div style="font-size:12px;">کل پیام‌ها</div>
+        </div>
+        <div style="background:linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color:white; padding:15px; border-radius:8px; text-align:center;">
+            <div style="font-size:24px; font-weight:bold;">{{ read }}</div>
+            <div style="font-size:12px;">خوانده‌شده</div>
+        </div>
+        <div style="background:linear-gradient(135deg, #fa709a 0%, #fee140 100%); color:white; padding:15px; border-radius:8px; text-align:center;">
+            <div style="font-size:24px; font-weight:bold;">{{ unread }}</div>
+            <div style="font-size:12px;">خوانده‌نشده</div>
+        </div>
+        <div style="background:linear-gradient(135deg, #30cfd0 0%, #330867 100%); color:white; padding:15px; border-radius:8px; text-align:center;">
+            <div style="font-size:24px; font-weight:bold;">{{ answered }}</div>
+            <div style="font-size:12px;">پاسخ‌داده‌شده</div>
+        </div>
+    </div>
+    
+    <!-- جدول پیام‌ها -->
+    <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <thead>
+                <tr style="background:#f0f0f0; border-bottom:2px solid #ddd;">
+                    <th style="padding:15px; text-align:right;">👤 نام</th>
+                    <th style="padding:15px; text-align:right;">📧 ایمیل</th>
+                    <th style="padding:15px; text-align:right;">🎯 موضوع</th>
+                    <th style="padding:15px; text-align:right;">📅 تاریخ</th>
+                    <th style="padding:15px; text-align:right;">✅ وضعیت</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for message in messages %}
+                <tr style="border-bottom:1px solid #eee; transition:background 0.3s;">
+                    <td style="padding:15px;">
+                        <strong>{{ message.name }}</strong>
+                    </td>
+                    <td style="padding:15px; font-size:13px;">{{ message.email }}</td>
+                    <td style="padding:15px;">{{ message.subject }}</td>
+                    <td style="padding:15px; font-size:12px;">{{ message.created_at|date:"Y-m-d H:i" }}</td>
+                    <td style="padding:15px; text-align:center;">
+                        {% if message.is_read %}
+                            <span style="background:#d4edda; color:#155724; padding:4px 10px; border-radius:12px; font-size:11px;">✅ خوانده</span>
+                        {% else %}
+                            <span style="background:#f8d7da; color:#721c24; padding:4px 10px; border-radius:12px; font-size:11px;">👁️ خوانده‌نشده</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="padding:30px; text-align:center; color:#999;">هیچ پیامی با این معیارها پیدا نشد.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+{% endblock %}

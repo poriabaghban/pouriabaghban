@@ -1,0 +1,7 @@
+﻿{% if language_filter_buttons %}
+<div class="language-filter-toolbar">
+  {% for button in language_filter_buttons %}
+    <a href="{{ button.url }}" class="{% if button.active %}active{% endif %}">{% if button.flag %}{{ button.flag }} {% endif %}{{ button.label }}</a>
+  {% endfor %}
+</div>
+{% endif %}

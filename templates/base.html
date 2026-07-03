@@ -1,0 +1,1115 @@
+﻿<!DOCTYPE html>
+<html lang="{{ request.LANGUAGE_CODE|default:'fa' }}" dir="{% if request.LANGUAGE_CODE == 'de' or request.LANGUAGE_CODE == 'en' %}ltr{% else %}rtl{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% load static i18n %}
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="{% static 'css/all.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/cs001 (6).css' %}" rel="stylesheet">
+    <link href="{% static 'css/skeleton-loading.css' %}" rel="stylesheet">
+    <link href="{% static 'images/logo.png' %}" rel="icon">
+    <link href="{% static 'fonts/fontawesome-free-7.0.0-web/css/all.min.css' %}" rel="stylesheet">
+        <title>{% block title %}{% trans "pouriabaghban | Full Stack Developer" %}{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{% trans 'Personal website of pouriabaghban; portfolio, articles, and contact information.' %}{% endblock %}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    {% if language_urls.fa %}<link rel="alternate" hreflang="fa" href="{{ language_urls.fa }}">{% endif %}
+    {% if language_urls.en %}<link rel="alternate" hreflang="en" href="{{ language_urls.en }}">{% endif %}
+    {% if language_urls.de %}<link rel="alternate" hreflang="de" href="{{ language_urls.de }}">{% endif %}
+    {% if language_urls.fa %}<link rel="alternate" hreflang="x-default" href="{{ language_urls.fa }}">{% endif %}
+
+    <style>
+        /* ============================================================
+           Ø§Ø³ØªØ§ÛŒÙ„â€ŒÙ‡Ø§ÛŒ Ø±Ø³Ù¾Ø§Ù†Ø³ÛŒÙˆ - Ù„ÙˆÚ¯Ùˆ Ø¯Ø± Ø³Ù…Øª Ø±Ø§Ø³Øª
+           ============================================================ */
+
+        /* ===== Ù‡Ø¯Ø± - Ù„ÙˆÚ¯Ùˆ Ø¯Ø± Ø³Ù…Øª Ø±Ø§Ø³Øª ===== */
+        .site-nav-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding-top: 15px;
+            position: relative;
+            z-index: 2;
+            flex-wrap: wrap;
+            direction: rtl;
+        }
+
+        /* ===== Ø¯Ú©Ù…Ù‡ Ù‡Ù…Ø¨Ø±Ú¯Ø± - Ø¯Ø± Ø³Ù…Øª Ú†Ù¾ ===== */
+        .mobile-nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px 8px;
+            z-index: 1001;
+            order: 3;
+            flex-direction: column;
+            gap: 5px;
+            width: 40px;
+            height: 40px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mobile-nav-toggle span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .mobile-nav-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-nav-toggle.active span:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        .mobile-nav-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ===== Ù„ÙˆÚ¯Ùˆ - Ø¯Ø± Ø³Ù…Øª Ø±Ø§Ø³Øª ===== */
+        #logo {
+            order: 0;
+            flex-shrink: 0;
+            width: 140px;
+            height: auto;
+            margin-top: 0;
+        }
+
+        #logo img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ===== Ù†Ø§ÙˆØ¨Ø±ÛŒ - Ø¯Ø± Ø³Ù…Øª Ú†Ù¾ ===== */
+        .site-nav {
+            order: 1;
+            flex: 1;
+        }
+
+        .site-nav ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 20px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            justify-content: flex-start;
+        }
+
+        .site-nav ul li {
+            list-style: none;
+        }
+
+        .site-nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            padding: 5px 2px;
+            border-bottom: 2px solid transparent;
+            display: inline-block;
+        }
+
+        .site-nav ul li a:hover {
+            color: var(--color-primary, #006cff);
+            border-bottom: 2px solid var(--color-primary, #006cff);
+        }
+
+        @media (min-width: 769px) {
+            .site-nav ul li.resume-nav-item {
+                flex: 0 0 auto;
+                min-width: max-content;
+            }
+
+            #resume-download {
+                display: inline-flex;
+                align-items: center;
+                width: max-content;
+                max-width: none;
+                white-space: nowrap;
+                word-break: keep-all;
+                overflow-wrap: normal;
+            }
+        }
+
+
+        .language-selector {
+            order: 2;
+            position: relative;
+            display: inline-flex;
+            flex-shrink: 0;
+            font-family: inherit;
+        }
+
+        .language-title {
+            display: inline-flex;
+            align-items: center;
+            color: #fff;
+            font-size: 0.86rem;
+            font-weight: 700;
+            margin-inline-end: 8px;
+            white-space: nowrap;
+        }
+
+        .language-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 118px;
+            padding: 8px 13px;
+            color: #fff;
+            background: rgba(0, 108, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            line-height: 1;
+            backdrop-filter: blur(8px);
+            transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+        }
+
+        .language-toggle:hover,
+        .language-toggle.active {
+            background: rgba(0, 108, 255, 0.34);
+            border-color: rgba(255, 255, 255, 0.46);
+            transform: translateY(-1px);
+        }
+
+        .language-arrow {
+            font-size: 0.65rem;
+            transition: transform 0.25s ease;
+        }
+
+        .language-flag-img {
+            width: 20px;
+            height: 14px;
+            border-radius: 2px;
+            object-fit: cover;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.18);
+        }
+
+        .language-toggle.active .language-arrow {
+            transform: rotate(180deg);
+        }
+
+        .language-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 0;
+            z-index: 1002;
+            min-width: 150px;
+            padding: 7px;
+            margin: 0;
+            list-style: none;
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 10px;
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.16);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px);
+            transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+        }
+
+        .language-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .language-option {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 9px 10px;
+            color: #222;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .language-option span,
+        .language-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .language-option:hover,
+        .language-option.active {
+            color: #006cff;
+            background: rgba(0, 108, 255, 0.09);
+        }
+
+        .language-option.active::after {
+            content: "✓";
+            margin-inline-start: auto;
+            color: #006cff;
+        }
+
+        /* ===== ÙÙˆØªØ± ===== */
+        footer .main-footer {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        footer .main-footer .item-footer {
+            color: white;
+        }
+
+        footer .main-footer .item-footer img {
+            max-width: 120px;
+            height: auto;
+            margin: 0 auto 15px;
+            display: block;
+        }
+
+        .footer-contact-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 20px 0;
+            position: relative;
+            transform: translateY(0) !important;
+        }
+
+        #p-footer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            color: white;
+            font-size: clamp(0.7rem, 1vw, 0.9rem);
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        /* ===== Ø§Ù†ÛŒÙ…ÛŒØ´Ù†â€ŒÙ‡Ø§ ===== */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* ============================================================
+           MEDIA QUERIES
+           ============================================================ */
+
+        /* ===== ØªØ¨Ù„Øª (992px Ùˆ Ù¾Ø§ÛŒÛŒÙ†â€ŒØªØ±) ===== */
+        @media (max-width: 992px) {
+            .site-nav-wrapper {
+                padding-top: 10px;
+                gap: 15px;
+            }
+
+            #logo {
+                width: 120px;
+            }
+
+            .site-nav ul {
+                gap: 8px 15px;
+            }
+
+            .site-nav ul li a {
+                font-size: 0.9rem;
+            }
+
+            .footer-contact-row {
+                transform: translateY(0) !important;
+                padding: 15px 0 !important;
+            }
+        }
+
+        /* ===== Ù…ÙˆØ¨Ø§ÛŒÙ„ (768px Ùˆ Ù¾Ø§ÛŒÛŒÙ†â€ŒØªØ±) ===== */
+        @media (max-width: 768px) {
+            /* Ù†Ù…Ø§ÛŒØ´ Ø¯Ú©Ù…Ù‡ Ù‡Ù…Ø¨Ø±Ú¯Ø± Ø¯Ø± Ø³Ù…Øª Ú†Ù¾ */
+            .mobile-nav-toggle {
+                display: flex !important;
+                order: 3 !important;
+                grid-column: 3 !important;
+                justify-self: end !important;
+                z-index: 1003 !important;
+            }
+
+            .site-nav-wrapper {
+                display: grid !important;
+                grid-template-columns: minmax(76px, 1fr) auto minmax(44px, 1fr) !important;
+                align-items: center !important;
+                padding-top: 10px;
+                flex-wrap: nowrap !important;
+                justify-content: normal !important;
+                gap: 8px !important;
+            }
+
+            /* Ù„ÙˆÚ¯Ùˆ Ø¯Ø± Ø³Ù…Øª Ø±Ø§Ø³Øª */
+            #logo {
+                width: 100px;
+                order: 0 !important;
+                grid-column: 1 !important;
+                justify-self: start !important;
+                margin: 0;
+            }
+
+            .language-selector {
+                order: 2 !important;
+                grid-column: 2 !important;
+                justify-self: center !important;
+                align-items: center !important;
+                max-width: min(46vw, 132px) !important;
+                z-index: 1003 !important;
+            }
+
+            .language-title {
+                display: none !important;
+            }
+
+            .language-toggle {
+                min-width: 0 !important;
+                width: auto !important;
+                max-width: 132px !important;
+                gap: 5px !important;
+                padding: 7px 9px !important;
+                font-size: 0.78rem !important;
+            }
+
+            .language-label {
+                max-width: 86px !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                white-space: nowrap !important;
+            }
+
+            .language-menu {
+                left: 50% !important;
+                right: auto !important;
+                min-width: 126px !important;
+                transform: translate(-50%, -8px) !important;
+            }
+
+            .language-menu.show {
+                transform: translate(-50%, 0) !important;
+            }
+
+            /* Ù…Ù†Ùˆ Ø¯Ø± Ù…ÙˆØ¨Ø§ÛŒÙ„ - Ø²ÛŒØ± Ù„ÙˆÚ¯Ùˆ Ùˆ Ù‡Ù…Ø¨Ø±Ú¯Ø± */
+            .site-nav {
+                order: 4 !important;
+                grid-column: 1 / -1 !important;
+                width: 100%;
+                flex: 0 0 100%;
+                display: none;
+                background: rgba(0, 0, 0, 0.92);
+                border-radius: 10px;
+                padding: 15px;
+                margin-top: 10px;
+                backdrop-filter: blur(10px);
+            }
+
+            .site-nav.open {
+                display: block !important;
+            }
+
+            .site-nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+            }
+
+            .site-nav ul li {
+                width: 100%;
+                text-align: center;
+            }
+
+            .site-nav ul li a {
+                display: block;
+                padding: 12px 0;
+                font-size: 1rem;
+                width: 100%;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                justify-content: center;
+            }
+
+            .site-nav ul li a:hover {
+                background: rgba(0, 108, 255, 0.15);
+                border-bottom: 1px solid var(--color-primary, #006cff);
+                padding-bottom: 12px;
+            }
+
+            .site-nav ul li:last-child a {
+                border-bottom: none;
+            }
+
+            /* Ù…Ø­ØªÙˆØ§ÛŒ Ù‡Ø¯Ø± */
+            .content-header {
+                margin-top: 30px;
+            }
+
+            .animated-header h1 {
+                font-size: clamp(1.5rem, 4vw, 2.2rem);
+            }
+
+            .animated-header .signature-name {
+                font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+                margin: 15px 0;
+            }
+
+            .main-mouse {
+                display: none;
+            }
+
+            /* ÙÙˆØªØ± Ù…ÙˆØ¨Ø§ÛŒÙ„ */
+            footer {
+                margin-top: 50px;
+                padding: 30px 0 15px;
+            }
+
+            footer .main-footer {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            footer .main-footer .item-footer img {
+                max-width: 100px;
+            }
+
+            .social-icon {
+                width: 38px;
+                height: 38px;
+                font-size: 1rem;
+            }
+
+            #up-to-top {
+                width: 36px;
+                height: 36px;
+                right: 15px !important;
+                top: -18px !important;
+                font-size: 1rem;
+            }
+
+            .footer-contact-row {
+                gap: 10px;
+                padding: 12px 0 !important;
+                transform: translateY(0) !important;
+            }
+
+            .footer-contact-row span {
+                font-size: 13px !important;
+            }
+
+            .footer-contact-row i {
+                font-size: 20px !important;
+            }
+
+            #p-footer {
+                flex-direction: column;
+                gap: 5px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* ===== Ù…ÙˆØ¨Ø§ÛŒÙ„ Ø®ÛŒÙ„ÛŒ Ú©ÙˆÚ†Ú© (480px Ùˆ Ù¾Ø§ÛŒÛŒÙ†â€ŒØªØ±) ===== */
+        @media (max-width: 480px) {
+            #logo {
+                width: 78px;
+            }
+
+            .mobile-nav-toggle {
+                width: 34px;
+                height: 34px;
+                padding: 6px;
+            }
+
+            .site-nav-wrapper {
+                grid-template-columns: minmax(70px, 1fr) auto minmax(36px, 1fr) !important;
+                gap: 6px !important;
+            }
+
+            .language-toggle {
+                max-width: 112px !important;
+                padding: 6px 8px !important;
+                font-size: 0.72rem !important;
+            }
+
+            .language-label {
+                max-width: 72px !important;
+            }
+
+            .mobile-nav-toggle span {
+                width: 22px;
+                height: 2.5px;
+            }
+
+            .animated-header h1 {
+                font-size: clamp(1.2rem, 4vw, 1.8rem);
+            }
+
+            .animated-header .signature-name {
+                font-size: clamp(0.8rem, 2vw, 1rem);
+                margin: 10px 0;
+            }
+
+            .site-nav {
+                padding: 10px;
+            }
+
+            .site-nav ul li a {
+                padding: 10px 0;
+                font-size: 0.9rem;
+            }
+
+            .social-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 0.85rem;
+            }
+
+            #up-to-top {
+                width: 32px;
+                height: 32px;
+                right: 10px !important;
+                top: -16px !important;
+                font-size: 0.85rem;
+            }
+
+            #p-footer {
+                font-size: 0.7rem;
+            }
+
+            .footer-contact-row span {
+                font-size: 12px !important;
+            }
+
+            .footer-contact-row i {
+                font-size: 18px !important;
+            }
+
+            .footer-contact-row {
+                gap: 8px;
+                padding: 10px 0 !important;
+            }
+        }
+
+        /* ===== Ø­Ø§Ù„Øª Ù¾Ø±ØªØ±Ù‡ (Ø¹Ù…ÙˆØ¯ÛŒ) ===== */
+        @media (orientation: portrait) and (max-width: 768px) {
+            header {
+                min-height: 350px;
+            }
+
+            .animated-header h1 {
+                font-size: clamp(1.3rem, 4vw, 1.8rem);
+            }
+
+            .animated-header .signature-name {
+                font-size: clamp(0.9rem, 2vw, 1.2rem);
+            }
+        }
+
+        /* ===== Ø­Ø§Ù„Øª Ù„Ù†Ø¯Ø§Ø³Ú©ÛŒÙ¾ (Ø§ÙÙ‚ÛŒ) Ø¨Ø§ Ø§Ø±ØªÙØ§Ø¹ Ú©Ù… ===== */
+        @media (orientation: landscape) and (max-height: 500px) {
+            header {
+                min-height: 200px !important;
+            }
+
+            .animated-header h1 {
+                font-size: 1.5rem !important;
+            }
+
+            .animated-header .signature-name {
+                margin: 10px 0 !important;
+                font-size: 1rem !important;
+            }
+
+            .main-mouse {
+                margin-top: 10px !important;
+            }
+
+            .content-header {
+                margin-top: 20px !important;
+            }
+
+            .site-nav-wrapper {
+                padding-top: 5px !important;
+            }
+
+            #logo {
+                width: 80px !important;
+            }
+        }
+
+        /* ===== Ù†Ù…Ø§ÛŒØ´Ú¯Ø±Ù‡Ø§ÛŒ Ø¨Ø³ÛŒØ§Ø± Ø¨Ø²Ø±Ú¯ (4K) ===== */
+        @media (min-width: 1920px) {
+            .container {
+                max-width: 1400px !important;
+            }
+
+            .animated-header h1 {
+                font-size: 4rem !important;
+            }
+
+            .animated-header .signature-name {
+                font-size: 2.5rem !important;
+            }
+
+            #logo {
+                width: 200px !important;
+            }
+
+            .site-nav ul {
+                gap: 25px !important;
+            }
+
+            .site-nav ul li a {
+                font-size: 1.2rem !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    {% block header %}
+    <header>
+        <div class="pattern-h"></div>
+        <div class="container">
+            <!-- Ù‡Ø¯Ø± - Ù„ÙˆÚ¯Ùˆ Ø¯Ø± Ø³Ù…Øª Ø±Ø§Ø³Øª -->
+            <div class="site-nav-wrapper">
+                <!-- Ø¯Ú©Ù…Ù‡ Ù‡Ù…Ø¨Ø±Ú¯Ø± Ø¯Ø± Ø³Ù…Øª Ú†Ù¾ (Ø¨Ø±Ø§ÛŒ Ù…ÙˆØ¨Ø§ÛŒÙ„) -->
+                <button class="mobile-nav-toggle" type="button" aria-label="باز و بسته کردن منو" aria-controls="primary-nav" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <!-- Ù„ÙˆÚ¯Ùˆ Ø¯Ø± Ø³Ù…Øª Ø±Ø§Ø³Øª -->
+                <div id="logo">
+                    <img src="{% static 'images/logo2.png' %}" alt="لوگوی سایت">
+                </div>
+
+                <!-- Ù†Ø§ÙˆØ¨Ø±ÛŒ Ø¯Ø± Ø³Ù…Øª Ú†Ù¾ -->
+                <nav id="primary-nav" class="site-nav">
+                    <ul>
+                        <li><a href="{% url 'pages:home' %}">{% trans "خانه" %}</a></li>
+                        <li><a href="#" id="contact-link">{% trans "ارتباط با من" %}</a></li>
+                        <li><a href="{% url 'blog:blog-list' %}">{% trans "بلاگ" %}</a></li>
+                        <li><a href="{% url 'gallery:portfolio-list' %}">{% trans "نمونه کار" %}</a></li>
+                        <li><a href="{% url 'gallery:gallery-list' %}">{% trans "گالری" %}</a></li>
+                         
+                        {% for item in navbar_items %}
+                        <li><a href="{{ item.url }}"{% if item.opens_new_tab %} target="_blank" rel="noopener"{% endif %}>{{ item.get_title }}</a></li>
+                        {% endfor %}
+                        <li class="resume-nav-item"><a id="resume-download" href="{% static 'poriabaghban.pdf' %}" download="poriabaghban.pdf">{% trans "دانلود رزومه" %}</a></li>
+                    </ul>
+                </nav>
+                <div class="language-selector" data-current-lang="{{ request.LANGUAGE_CODE|default:'fa' }}">
+                    <span class="language-title">Language:</span>
+                    <button class="language-toggle" id="languageDropdown" type="button" aria-haspopup="true" aria-expanded="false">
+                        <span class="language-label" id="currentLanguage">فارسی</span>
+                        <span class="language-arrow" aria-hidden="true">▼</span>
+                    </button>
+                    <ul class="language-menu" id="languageMenu" role="menu">
+                        <li class="language-option active" data-lang="fa" role="menuitem">
+                            <span>فارسی</span>
+                        </li>
+                        <li class="language-option" data-lang="de" role="menuitem">
+                            <span><img class="language-flag-img" src="{% static 'images/Germany.svg' %}" alt="Germany flag"> Deutsch</span>
+                        </li>
+                        <li class="language-option" data-lang="en" role="menuitem">
+                            <span><img class="language-flag-img" src="{% static 'images/England.svg' %}" alt="England flag"> English</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-header">
+                <div class="animated-header">
+                    <h1 id="typewriter"><span id="typed-word"></span><span class="cursor" aria-hidden="true">|</span></h1>
+                    <p class="signature-name">{% if current_language == "fa" %}پوریا باغبان{% else %}pouriabaghban{% endif %}</p>
+                </div>
+            </div>
+
+            
+        </div>
+    </header>
+    {% endblock %}
+
+    <div class="pattern-v">
+
+        {% block content %}
+        {% endblock %}
+
+        <!-- ============================================================
+        Ø§Ø³Ú©Ø±ÛŒÙ¾Øª Ø±Ø³Ù¾Ø§Ù†Ø³ÛŒÙˆ
+        ============================================================ -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // ============================================
+                // Û±. Ø¯Ú©Ù…Ù‡ Ù‡Ù…Ø¨Ø±Ú¯Ø± - Ø¨Ø§Ø² Ùˆ Ø¨Ø³ØªÙ‡ Ú©Ø±Ø¯Ù† Ù…Ù†Ùˆ
+                // ============================================
+                const mobileToggle = document.querySelector('.mobile-nav-toggle');
+                const primaryNav = document.getElementById('primary-nav');
+                const navLinks = document.querySelectorAll('#primary-nav a');
+
+                if (mobileToggle && primaryNav) {
+                    mobileToggle.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const isOpen = primaryNav.classList.toggle('open');
+                        mobileToggle.classList.toggle('active');
+                        mobileToggle.setAttribute('aria-expanded', isOpen);
+                    });
+
+                    navLinks.forEach(link => {
+                        link.addEventListener('click', function() {
+                            primaryNav.classList.remove('open');
+                            mobileToggle.classList.remove('active');
+                            mobileToggle.setAttribute('aria-expanded', 'false');
+                        });
+                    });
+
+                    document.addEventListener('click', function(e) {
+                        if (!primaryNav.contains(e.target) && !mobileToggle.contains(e.target)) {
+                            primaryNav.classList.remove('open');
+                            mobileToggle.classList.remove('active');
+                            mobileToggle.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+
+                    document.addEventListener('keydown', function(e) {
+                        if (e.key === 'Escape' && primaryNav.classList.contains('open')) {
+                            primaryNav.classList.remove('open');
+                            mobileToggle.classList.remove('active');
+                            mobileToggle.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+                }
+
+                // ============================================
+                // Û². Ù„ÛŒÙ†Ú© "Ø§Ø±ØªØ¨Ø§Ø· Ø¨Ø§ Ù…Ù†" - Ø§Ø³Ú©Ø±ÙˆÙ„ Ø¨Ù‡ ÙÙˆØªØ±
+                // ============================================
+                const contactLink = document.getElementById('contact-link');
+                if (contactLink) {
+                    contactLink.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const footer = document.querySelector('footer');
+                        if (footer) {
+                            footer.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+                }
+
+                // ============================================
+                // Û³. Ø¯Ú©Ù…Ù‡ "up-to-top" - Ø§Ø³Ú©Ø±ÙˆÙ„ Ø¨Ù‡ Ø¨Ø§Ù„Ø§
+                // ============================================
+                const upButton = document.getElementById('up-to-top');
+                if (upButton) {
+                    upButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
+                }
+
+                // ============================================
+                // Û´. ÙØ¹Ø§Ù„â€ŒØ³Ø§Ø²ÛŒ Ù„ÛŒÙ†Ú© ÙØ¹Ù„ÛŒ Ø¯Ø± Ù†Ø§ÙˆØ¨Ø§Ø±
+                // ============================================
+                const currentPath = window.location.pathname;
+                document.querySelectorAll('#primary-nav a').forEach(link => {
+                    const href = link.getAttribute('href');
+                    
+                    if (currentPath === href || (currentPath === '/' && href === '/')) {
+                        link.style.color = '#0088ff';
+                        link.style.fontWeight = 'bold';
+                        link.style.borderBottom = '3px solid #0088ff';
+                        link.style.paddingBottom = '5px';
+                    } else {
+                        link.addEventListener('mouseenter', function() {
+                            this.style.color = '#0088ff';
+                        });
+                        link.addEventListener('mouseleave', function() {
+                            if (!this.style.borderBottom || this.style.borderBottom === '3px solid #0088ff') {
+                                this.style.color = '';
+                                this.style.borderBottom = '';
+                            }
+                        });
+                    }
+                });
+
+                // ============================================
+                // Language selector
+                // ============================================
+                const languageSelector = document.querySelector('.language-selector');
+                const dropdownToggle = document.getElementById('languageDropdown');
+                const dropdownMenu = document.getElementById('languageMenu');
+                const currentLanguage = document.getElementById('currentLanguage');
+                const languageOptions = document.querySelectorAll('.language-option');
+                const languages = {
+                    fa: { name: 'فارسی' },
+                    de: { name: '<img class="language-flag-img" src="{% static "images/Germany.svg" %}" alt="Germany flag"> Deutsch' },
+                    en: { name: '<img class="language-flag-img" src="{% static "images/England.svg" %}" alt="England flag"> English' }
+                };
+
+                function languageFromPath() {
+                    const firstSegment = window.location.pathname.split('/')[1];
+                    return ['fa', 'en', 'de'].includes(firstSegment) ? firstSegment : null;
+                }
+
+                function currentSiteLanguage() {
+                    return languageFromPath() || (languageSelector && languageSelector.dataset.currentLang) || document.documentElement.lang || 'fa';
+                }
+
+                function setActiveLanguage(langCode) {
+                    if (!languages[langCode]) return;
+                    if (currentLanguage) currentLanguage.innerHTML = languages[langCode].name;
+                    document.documentElement.lang = langCode;
+                    document.documentElement.dir = ['en', 'de'].includes(langCode) ? 'ltr' : 'rtl';
+                    languageOptions.forEach(option => {
+                        option.classList.toggle('active', option.dataset.lang === langCode);
+                    });
+                }
+
+                function languagePath(langCode) {
+                    const url = new URL(window.location.href);
+                    const parts = url.pathname.split('/');
+                    const hasLanguagePrefix = ['fa', 'en', 'de'].includes(parts[1]);
+
+                    if (langCode === 'de' || langCode === 'en') {
+                        if (hasLanguagePrefix) {
+                            parts[1] = langCode;
+                            url.pathname = parts.join('/') || `/${langCode}/`;
+                        } else {
+                            url.pathname = `/${langCode}` + (url.pathname === '/' ? '/' : url.pathname);
+                        }
+                    } else {
+                        if (hasLanguagePrefix) parts.splice(1, 1);
+                        url.pathname = parts.join('/') || '/';
+                    }
+
+                    return url.toString();
+                }
+
+                async function changeLanguage(langCode) {
+                    if (!languages[langCode]) return;
+                    localStorage.setItem('django_language', langCode);
+                    setActiveLanguage(langCode);
+
+                    try {
+                        const response = await fetch(`/set-language/?lang=${encodeURIComponent(langCode)}`, {
+                            method: 'GET',
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                        });
+                        if (!response.ok) throw new Error('language update failed');
+                    } catch (error) {
+                        document.cookie = `django_language=${langCode}; path=/; max-age=31536000; SameSite=Lax`;
+                    }
+
+                    window.location.href = languagePath(langCode);
+                }
+
+                if (dropdownToggle && dropdownMenu) {
+                    const initialLanguage = currentSiteLanguage();
+                    const savedLanguage = localStorage.getItem('django_language');
+                    setActiveLanguage(initialLanguage);
+
+                    if (savedLanguage && languages[savedLanguage] && savedLanguage !== initialLanguage) {
+                        changeLanguage(savedLanguage);
+                        return;
+                    }
+
+                    dropdownToggle.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const isOpen = dropdownMenu.classList.toggle('show');
+                        dropdownToggle.classList.toggle('active', isOpen);
+                        dropdownToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                    });
+
+                    languageOptions.forEach(option => {
+                        option.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            dropdownMenu.classList.remove('show');
+                            dropdownToggle.classList.remove('active');
+                            dropdownToggle.setAttribute('aria-expanded', 'false');
+                            changeLanguage(this.dataset.lang);
+                        });
+                    });
+
+                    document.addEventListener('click', function() {
+                        dropdownMenu.classList.remove('show');
+                        dropdownToggle.classList.remove('active');
+                        dropdownToggle.setAttribute('aria-expanded', 'false');
+                    });
+                }
+
+                // Basic client-side deterrents. Server-side validation still enforces user input rules.
+                const forbiddenInputPattern = /[%$<>{}]/;
+                const forbiddenInputMessage = 'استفاده از کاراکترهای % $ < > { } مجاز نیست.';
+
+                document.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                });
+
+                document.addEventListener('keydown', function(e) {
+                    const key = (e.key || '').toLowerCase();
+                    const blocksInspectShortcut =
+                        e.key === 'F12' ||
+                        (e.ctrlKey && e.key === 'F12') ||
+                        (e.ctrlKey && e.shiftKey && ['i', 'j', 'c'].includes(key)) ||
+                        (e.ctrlKey && ['u', 's'].includes(key));
+
+                    if (blocksInspectShortcut) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                }, true);
+
+                document.querySelectorAll('input:not([type="hidden"]):not([type="file"]):not([type="checkbox"]):not([type="radio"]), textarea').forEach(field => {
+                    field.addEventListener('input', function() {
+                        if (!forbiddenInputPattern.test(this.value)) {
+                            this.setCustomValidity('');
+                            return;
+                        }
+
+                        this.value = this.value.replace(/[%$<>{}]/g, '');
+                        this.setCustomValidity(forbiddenInputMessage);
+                        this.reportValidity();
+                        window.setTimeout(() => this.setCustomValidity(''), 1200);
+                    });
+                });
+
+                // ============================================
+                // Ûµ. ØªØ§ÛŒÙ¾â€ŒØ±Ø§ÛŒØªØ± - Typewriter Effect
+                // ============================================
+                const words = ['back-end', 'front-end', 'fullstack'];
+                let currentWord = 0;
+                let charIndex = 0;
+                let isDeleting = false;
+
+                function typeWriter() {
+                    const el = document.getElementById('typed-word');
+                    if (!el) return;
+                    
+                    const full = words[currentWord];
+
+                    if (!isDeleting) {
+                        charIndex++;
+                        el.textContent = full.substring(0, charIndex);
+                        if (charIndex === full.length) {
+                            isDeleting = true;
+                            setTimeout(typeWriter, 1200);
+                            return;
+                        }
+                    } else {
+                        charIndex--;
+                        el.textContent = full.substring(0, charIndex);
+                        if (charIndex === 0) {
+                            isDeleting = false;
+                            currentWord = (currentWord + 1) % words.length;
+                        }
+                    }
+
+                    const delay = isDeleting ? 60 : 120;
+                    setTimeout(typeWriter, delay);
+                }
+
+                setTimeout(typeWriter, 300);
+            });
+        </script>
+
+        <!-- ============================================================
+        ÙÙˆØªØ±
+        ============================================================ -->
+        <footer style="position: relative;">
+            <a href="#" id="up-to-top" style="position: absolute; top: 20px; right: 20px;">
+                <i class="fa-solid fa-arrow-up"></i>
+            </a>
+            <div class="container">
+                <div class="main-footer" style="text-align: center;">
+                    <div class="item-footer">
+                        <a href="{% url 'podcast_app:special_list' %}" aria-label="sheerwizhe" style="display: inline-block; text-decoration: none;">
+                            {% if footer.logo %}<img src="{{ footer.logo.url }}" style="max-width: 80px; margin: 0 auto 15px;" alt="{{ footer.site_name|default:'لوگوی سایت' }}">{% endif %}
+                        </a>
+                        {% if footer.site_name %}<h3 style="color: #fff; margin-bottom: 12px;">{{ footer.site_name }}</h3>{% endif %}
+                        {% if footer.description %}<p>{{ footer.description }}</p>{% endif %}
+                        {% if footer.instagram_url or footer.telegram_url %}
+                        <div class="social-network">
+                            {% if footer.instagram_url %}
+                            <a href="{{ footer.instagram_url }}" target="_blank" rel="noopener" title="Instagram" class="social-icon" style="color: #E4405F;">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                            {% endif %}
+                            {% if footer.telegram_url %}
+                            <a href="{{ footer.telegram_url }}" target="_blank" rel="noopener" title="Telegram" class="social-icon" style="color: #0088cc;">
+                                <i class="fa-brands fa-telegram"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="border-footer"></div>
+            <div class="container">
+                {% if footer.email or footer.phone %}
+                <div class="footer-contact-row" style="display: flex; justify-content: center; align-items: center; gap: 15px; padding: 20px 0; position: relative; transform: translateY(-80px);">
+                    {% if footer.email %}
+                    <a href="mailto:{{ footer.email }}" title="{% trans 'ارسال ایمیل' %}" style="text-decoration: none;">
+                        <i class="fa-solid fa-envelope" style="
+                            font-size: 24px;
+                            color: #ffffff;
+                            transition: all 0.3s ease;
+                            display: inline-block;
+                            animation: float 3s ease-in-out infinite, pulse 2s ease-in-out infinite;
+                        "></i>
+                    </a>
+                    <span style="color: #ffffff; font-size: 14px; animation: fadeInOut 2s ease-in-out infinite;">{{ footer.email }}</span>
+                    {% endif %}
+                    {% if footer.phone %}
+                    <span style="color: #ffffff; font-size: 14px; animation: fadeInOut 2s ease-in-out infinite;">{{ footer.phone }}</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+                {% if footer.copyright_text %}
+                <p id="p-footer">
+                    <b>{{ footer.copyright_text }}</b>
+                </p>
+                {% endif %}
+            </div>
+        </footer>
+    </div>
+
+    <script src="{% static 'fonts/fontawesome-free-7.0.0-web/js/all.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/gallery.js' %}"></script>
+    <script src="{% static 'js/skeleton-loading.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>

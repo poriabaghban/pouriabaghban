@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="container" style="margin-top:40px; margin-bottom:80px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+        <h1 style="margin:0;">💬 جزئیات نظرات</h1>
+        <a href="{% url 'dashboard:index' %}" style="padding:10px 20px; background:#f093fb; color:white; text-decoration:none; border-radius:4px;">← بازگشت</a>
+    </div>
+    
+    <!-- فیلترها -->
+    <div style="background:#f9f9f9; padding:15px; border-radius:8px; margin-bottom:20px;">
+        <form method="get" style="display:flex; gap:10px;">
+            <select name="approval" style="padding:8px; border-radius:4px; border:1px solid #ddd;">
+                <option value="">تمام نظرات</option>
+                <option value="approved" {% if approval_filter == 'approved' %}selected{% endif %}>✅ تایید‌شده</option>
+                <option value="pending" {% if approval_filter == 'pending' %}selected{% endif %}>⏳ منتظر</option>
+            </select>
+            <button type="submit" style="padding:8px 15px; background:#f093fb; color:white; border:none; border-radius:4px; cursor:pointer;">🔍 فیلتر</button>
+        </form>
+    </div>
+    
+    <!-- آمار -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:15px; margin-bottom:30px;">
+        <div style="background:linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color:white; padding:15px; border-radius:8px; text-align:center;">
+            <div style="font-size:24px; font-weight:bold;">{{ total }}</div>
+            <div style="font-size:12px;">کل نظرات</div>
+        </div>
+        <div style="background:linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color:white; padding:15px; border-radius:8px; text-align:center;">
+            <div style="font-size:24px; font-weight:bold;">{{ approved }}</div>
+            <div style="font-size:12px;">تایید‌شده</div>
+        </div>
+        <div style="background:linear-gradient(135deg, #fa709a 0%, #fee140 100%); color:white; padding:15px; border-radius:8px; text-align:center;">
+            <div style="font-size:24px; font-weight:bold;">{{ pending }}</div>
+            <div style="font-size:12px;">منتظر</div>
+        </div>
+    </div>
+    
+    <!-- جدول نظرات -->
+    <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <thead>
+                <tr style="background:#f0f0f0; border-bottom:2px solid #ddd;">
+                    <th style="padding:15px; text-align:right;">👤 نویسنده</th>
+                    <th style="padding:15px; text-align:right;">📧 ایمیل</th>
+                    <th style="padding:15px; text-align:right;">📝 نظر</th>
+                    <th style="padding:15px; text-align:right;">📄 پست</th>
+                    <th style="padding:15px; text-align:right;">📅 تاریخ و ساعت</th>
+                    <th style="padding:15px; text-align:right;">✅ وضعیت</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for comment in comments %}
+                {% if not comment.is_approved %}
+                <tr style="border-bottom:1px solid #eee; background:#fffacd;">
+                {% else %}
+                <tr style="border-bottom:1px solid #eee; background:#f9f9f9;">
+                {% endif %}
+                    <td style="padding:15px;">
+                        <strong>{{ comment.author }}</strong>
+                        {% if not comment.is_approved %}
+                        <br><span style="color: #f5576c; font-size: 11px; font-weight: bold;">🔔 نوتیفیکیشن: کامنت جدید</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding:15px; font-size:12px; direction:ltr;">{{ comment.email }}</td>
+                    <td style="padding:15px; font-size:13px;">{{ comment.content|truncatewords:20 }}</td>
+                    <td style="padding:15px; font-weight:500;">{{ comment.post.title }}</td>
+                    <td style="padding:15px; font-size:12px; white-space:nowrap;">{{ comment.created_at|date:"Y-m-d H:i" }}</td>
+                    <td style="padding:15px; text-align:center;">
+                        {% if comment.is_approved %}
+                            <span style="background:#d4edda; color:#155724; padding:4px 10px; border-radius:12px; font-size:11px;">✅ تایید</span>
+                        {% else %}
+                            <span style="background:#fff3cd; color:#856404; padding:4px 10px; border-radius:12px; font-size:11px;">⏳ منتظر</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="padding:30px; text-align:center; color:#999;">هیچ نظری با این معیارها پیدا نشد.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+{% endblock %}

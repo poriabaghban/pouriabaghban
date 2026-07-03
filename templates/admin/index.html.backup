@@ -1,0 +1,253 @@
+  y{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block title %}پنل مدیریت - صفحه اصلی{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    .dashboard-header {
+        background: linear-gradient(135deg, #1a1a2e 0%, #342f73 52%, #6c63ff 100%);
+        border-radius: 8px;
+        box-shadow: 0 18px 48px rgba(26, 26, 46, .18);
+        color: #fff;
+        margin-bottom: 24px;
+        overflow: hidden;
+        padding: 28px 30px;
+        position: relative;
+        text-align: right;
+    }
+
+    .dashboard-header::after {
+        background: linear-gradient(90deg, rgba(0, 208, 255, .35), rgba(0, 210, 91, .16));
+        bottom: 0;
+        content: "";
+        height: 4px;
+        inset-inline: 0;
+        position: absolute;
+    }
+
+    .dashboard-header h1 {
+        color: #fff;
+        font-size: 26px;
+        font-weight: 900;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .dashboard-header p {
+        color: rgba(255, 255, 255, .84);
+        font-size: 14px;
+        line-height: 1.9;
+        margin: 6px 0 0;
+        max-width: 760px;
+    }
+
+    .stats-grid {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        margin-bottom: 24px;
+    }
+
+    .stat-card,
+    .quick-links,
+    .recent-box,
+    .admin-apps {
+        background: #fff;
+        border: 1px solid rgba(26, 26, 46, .08);
+        border-radius: 8px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, .08);
+    }
+
+    .stat-card {
+        min-height: 124px;
+        overflow: hidden;
+        padding: 20px;
+        position: relative;
+        text-align: right;
+    }
+
+    .stat-card::after {
+        bottom: 0;
+        content: "";
+        inset-inline-end: 0;
+        position: absolute;
+        top: 0;
+        width: 4px;
+    }
+
+    .stat-card.posts::after { background: #6c63ff; }
+    .stat-card.comments::after { background: #ff4d4f; }
+    .stat-card.messages::after { background: #00a8d6; }
+    .stat-card.authors::after { background: #00a550; }
+
+    .stat-card h3 {
+        color: #5c6174;
+        font-size: 13px;
+        font-weight: 800;
+        line-height: 1.8;
+        margin: 0 0 10px;
+    }
+
+    .stat-card .number {
+        color: #171827;
+        font-size: 30px;
+        font-weight: 900;
+        line-height: 1.2;
+        margin: 8px 0;
+    }
+
+    .stat-card .detail {
+        color: #6b7280;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.8;
+    }
+
+    .quick-links,
+    .recent-box,
+    .admin-apps { margin-bottom: 24px; padding: 22px; }
+
+    .quick-links h2,
+    .recent-box h3,
+    .admin-apps h2 {
+        border-bottom: 1px solid rgba(26, 26, 46, .08);
+        color: #1a1a2e;
+        font-size: 16px;
+        font-weight: 900;
+        line-height: 1.8;
+        margin: 0 0 16px;
+        padding-bottom: 12px;
+    }
+
+    .links-grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .link-btn {
+        align-items: center;
+        border-radius: 8px;
+        color: #fff !important;
+        display: flex;
+        font-size: 13px;
+        font-weight: 900;
+        gap: 10px;
+        justify-content: center;
+        min-height: 54px;
+        padding: 12px;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .link-btn.blog { background: linear-gradient(135deg, #6c63ff, #5148f0); }
+    .link-btn.comments { background: linear-gradient(135deg, #ff4d4f, #ff7b7d); }
+    .link-btn.messages { background: linear-gradient(135deg, #00a8d6, #00d0ff); }
+    .link-btn.dashboard { background: linear-gradient(135deg, #00a550, #00d25b); }
+
+    .admin-apps .app-list {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        margin: 0;
+        padding: 0;
+    }
+
+    .admin-apps .app-card {
+        border: 1px solid rgba(26, 26, 46, .08);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .admin-apps .app-card h3 {
+        background: #f7f8fc;
+        color: #1a1a2e;
+        font-size: 14px;
+        font-weight: 900;
+        margin: 0;
+        padding: 12px 14px;
+    }
+
+    .admin-apps table { width: 100%; }
+    .admin-apps th, .admin-apps td { padding: 10px 12px; text-align: right; }
+    .admin-apps td { white-space: nowrap; width: 1%; }
+
+    @media (max-width: 767px) {
+        .dashboard-header { padding: 22px 18px; }
+        .dashboard-header h1 { font-size: 21px; }
+        .links-grid,
+        .stats-grid,
+        .admin-apps .app-list { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1>خوش آمدید به پنل مدیریت</h1>
+    <p>سلام {{ user.first_name|default:user.username }}، از اینجا می‌توانید بخش‌های سایت، پیام‌ها، بلاگ و پادکست‌ها را مدیریت کنید.</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card posts">
+        <h3>پست‌های بلاگ</h3>
+        <div class="number">{{ total_posts|default:0 }}</div>
+        <div class="detail">{{ published_posts|default:0 }} منتشر شده</div>
+    </div>
+    <div class="stat-card comments">
+        <h3>کامنت‌ها</h3>
+        <div class="number">{{ total_comments|default:0 }}</div>
+        <div class="detail">{{ pending_comments|default:0 }} منتظر تایید</div>
+    </div>
+    <div class="stat-card messages">
+        <h3>پیام‌های تماس</h3>
+        <div class="number">{{ total_messages|default:0 }}</div>
+        <div class="detail">{{ unread_messages|default:0 }} خوانده نشده</div>
+    </div>
+    <div class="stat-card authors">
+        <h3>نویسندگان فعال</h3>
+        <div class="number">{{ total_authors|default:0 }}</div>
+        <div class="detail">نویسنده فعال</div>
+    </div>
+</div>
+
+<div class="quick-links">
+    <h2>دسترسی سریع</h2>
+    <div class="links-grid">
+        <a href="/admin/blog/blogpost/" class="link-btn blog">پست‌های بلاگ</a>
+        <a href="/admin/blog/blogcomment/" class="link-btn comments">کامنت‌ها</a>
+        <a href="/admin/contact/contactmessage/" class="link-btn messages">پیام‌ها</a>
+        <a href="/admin/podcast_app/podcast/" class="link-btn dashboard">پادکست‌ها</a>
+    </div>
+</div>
+
+<div class="admin-apps">
+    <h2>همه بخش‌های مدیریتی</h2>
+    {% if app_list %}
+        <div class="app-list">
+            {% for app in app_list %}
+                <section class="app-card app-{{ app.app_label }}">
+                    <h3>{{ app.name }}</h3>
+                    <table>
+                        <tbody>
+                        {% for model in app.models %}
+                            <tr class="model-{{ model.object_name|lower }}">
+                                <th scope="row">
+                                    {% if model.admin_url %}<a href="{{ model.admin_url }}">{{ model.name }}</a>{% else %}{{ model.name }}{% endif %}
+                                </th>
+                                <td>{% if model.add_url %}<a href="{{ model.add_url }}">افزودن</a>{% endif %}</td>
+                                <td>{% if model.admin_url %}<a href="{{ model.admin_url }}">ویرایش</a>{% endif %}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>بخشی برای نمایش وجود ندارد.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Pouria Baghban</title>
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/all.min 2.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/cs001 (6).css">
+    <style>
+        /* Color variables - Match main theme */
+        :root {
+            --accent-color: #667eea;
+            --contrast-color: #fff;
+            --default-color: #333;
+            --heading-color: #333;
+            --surface-color: #fff;
+        }
+
+        /* Use site theme variables to keep consistent styling */
+        .blog-header {
+            background: linear-gradient(135deg, color-mix(in srgb, var(--accent-color), transparent 40%) 0%, color-mix(in srgb, var(--accent-color), transparent 10%) 100%);
+            padding: 80px 0 40px;
+            text-align: center;
+            border-bottom: 3px solid var(--accent-color);
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .blog-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--contrast-color, #fff);
+            margin-bottom: 12px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .blog-header p {
+            color: color-mix(in srgb, var(--default-color), transparent 30%);
+            font-size: 16px;
+            animation: fadeInUp 0.6s ease-out 0.15s both;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 40px 0;
+        }
+
+        .blog-card {
+            background: var(--surface-color);
+            color: var(--default-color);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+            border: 1px solid color-mix(in srgb, var(--accent-color), transparent 85%);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 18px 40px color-mix(in srgb, var(--accent-color), transparent 70%);
+            border-color: var(--accent-color);
+        }
+
+        .blog-card-image {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, var(--accent-color) 0%, color-mix(in srgb, var(--accent-color), black 20%) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: var(--contrast-color);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .blog-card-image::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.06) 50%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        .blog-card-content {
+            padding: 20px;
+        }
+
+        .blog-card-date {
+            color: var(--accent-color);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .blog-card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--heading-color);
+            margin-bottom: 10px;
+            transition: color 0.25s ease;
+        }
+
+        .blog-card:hover .blog-card-title {
+            color: var(--accent-color);
+        }
+
+        .blog-card-excerpt {
+            color: color-mix(in srgb, var(--default-color), transparent 30%);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .blog-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid color-mix(in srgb, var(--accent-color), transparent 90%);
+        }
+
+        .blog-card-author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: color-mix(in srgb, var(--default-color), transparent 30%);
+        }
+
+        .blog-card-author-avatar {
+            width: 28px;
+            height: 28px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--contrast-color);
+            font-weight: 700;
+        }
+
+        .blog-card-read-more {
+            color: var(--accent-color);
+            font-size: 12px;
+            font-weight: 600;
+            transition: transform 0.25s ease, color 0.25s ease;
+        }
+
+        .blog-card-read-more:hover {
+            transform: translateX(-5px);
+            color: color-mix(in srgb, var(--accent-color), black 10%);
+        }
+
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px);} to { opacity: 1; transform: translateY(0);} }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(12px);} to { opacity: 1; transform: translateY(0);} }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(18px);} to { opacity: 1; transform: translateY(0);} }
+        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+    </style>
+    <script src="assets/js/include-partials.js" defer></script>
+</head>
+<body>
+    <!-- Header disabled -->
+    <!-- <div id="site-header"></div> -->
+
+    <main class="container" style="margin-top: 40px; margin-bottom: 80px;">
+        <!-- Back to home button -->
+        <div style="margin-bottom: 20px;">
+            <a href="/" style="display: inline-block; padding: 10px 20px; background: #667eea; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">← بازگشت به صفحه اصلی</a>
+        </div>
+
+        <div class="blog-header">
+            <h1><span id="typed-word"></span><span class="cursor" aria-hidden="true">|</span></h1>
+            <p>Technical articles and developer experiences</p>
+        </div>
+
+        <div class="blog-grid" id="blogGrid">
+            <!-- Blog cards will be inserted here by JavaScript -->
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <a href="#" id="up-to-top">↑</a>
+
+    <script>
+        // Blog posts data
+        const blogPosts = [
+            {
+                id: 1,
+                title: 'شروع با React',
+                excerpt: 'یادگیری مبانی React و ساخت اولین کامپوننت‌های شما',
+                content: 'React یکی از محبوب‌ترین کتاب‌خانه‌های جاوااسکریپت برای ساخت رابط‌های کاربری است. در این پست، ما بررسی خواهیم کرد که چگونه شروع به کار کنیم و اولین پروژه خود را بسازیم.',
+                author: 'Pouria Baghban',
+                date: '1403/09/15',
+                emoji: '⚛️'
+            },
+            {
+                id: 2,
+                title: 'بهترین روش‌های JavaScript',
+                excerpt: 'نکات عملی برای نوشتن کد بهتر و قابل نگهداری',
+                content: 'Writing clean and maintainable code is one of the most important skills for a developer. In this article, we review best practices and patterns that can improve your code.',
+                author: 'Pouria Baghban',
+                date: '1403/09/10',
+                emoji: '🚀'
+            },
+            {
+                id: 3,
+                title: 'CSS Grid و Flexbox',
+                excerpt: 'راهنمای کامل برای طراحی تجاوبی مدرن',
+                content: 'طراحی تجاوبی امروزه ضروری است. CSS Grid و Flexbox دو ابزار قدرتمند هستند که می‌توان از آنها برای ایجاد طرح‌های زیبا و انعطاف‌پذیر استفاده کرد.',
+                author: 'Pouria Baghban',
+                date: '1403/09/05',
+                emoji: '🎨'
+            },
+            {
+                id: 4,
+                title: 'API RESTful و Node.js',
+                excerpt: 'ساخت یک سرور Node.js تمام عیار',
+                content: 'Node.js یک محیط اجرای JavaScript سمت سرور است. در این آموزش، ما یاد خواهیم گرفت چگونه یک API RESTful کامل بسازیم و آن را배포 کنیم.',
+                author: 'Pouria Baghban',
+                date: '1403/08/30',
+                emoji: '🔧'
+            }
+        ];
+
+        // Render blog posts
+        function renderBlogPosts() {
+            const blogGrid = document.getElementById('blogGrid');
+            blogGrid.innerHTML = blogPosts.map(post => `
+                <div class="blog-card" onclick="window.location.href='post.html?id=${post.id}'">
+                    <div class="blog-card-image">
+                        ${post.emoji}
+                    </div>
+                    <div class="blog-card-content">
+                        <div class="blog-card-date">${post.date}</div>
+                        <h3 class="blog-card-title">${post.title}</h3>
+                        <p class="blog-card-excerpt">${post.excerpt}</p>
+                        <div class="blog-card-footer">
+                            <div class="blog-card-author">
+                                <div class="blog-card-author-avatar">${post.author.charAt(0)}</div>
+                                <span>${post.author}</span>
+                            </div>
+                            <div class="blog-card-read-more">بیشتر بدانید <i class="fas fa-arrow-left"></i></div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        renderBlogPosts();
+
+        // Scroll to top — attach after DOMContentLoaded so footer partial is injected
+        document.addEventListener('DOMContentLoaded', function(){
+            const up = document.getElementById('up-to-top');
+            if (!up) return;
+            up.addEventListener('click', (e) => {
+                e.preventDefault();
+                const footer = document.querySelector('#site-footer');
+                if (footer) {
+                    footer.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    // اگر فوتر پیدا نشد، به آخر صفحه برو
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Typewriter animation for frontend/backend
+        document.addEventListener('DOMContentLoaded', function(){
+            const words = ['front end','back end'];
+            let current = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+
+            function tick(){
+                const el = document.getElementById('typed-word');
+                if (!el) return;
+                const full = words[current];
+
+                if (!isDeleting){
+                    charIndex++;
+                    el.textContent = full.substring(0, charIndex);
+                    if (charIndex === full.length){
+                        isDeleting = true;
+                        setTimeout(tick, 900);
+                        return;
+                    }
+                } else {
+                    charIndex--;
+                    el.textContent = full.substring(0, charIndex);
+                    if (charIndex === 0){
+                        isDeleting = false;
+                        current = (current + 1) % words.length;
+                    }
+                }
+
+                const delay = isDeleting ? 60 : 120;
+                setTimeout(tick, delay);
+            }
+
+            setTimeout(tick, 300);
+        });
+    </script>
+</body>
+</html>

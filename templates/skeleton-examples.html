@@ -1,0 +1,88 @@
+<!-- Skeleton Loading Examples -->
+
+<!-- 1. Text Skeleton -->
+<div id="skeleton-text-example">
+    <div class="skeleton skeleton-text"></div>
+    <div class="skeleton skeleton-text"></div>
+    <div class="skeleton skeleton-text large"></div>
+</div>
+
+<!-- 2. Card Skeleton -->
+<div id="skeleton-card-example" class="skeleton-container">
+    <div class="skeleton-card">
+        <div class="skeleton skeleton-image sm"></div>
+        <div class="skeleton skeleton-text" style="width: 80%;"></div>
+        <div class="skeleton skeleton-text" style="width: 60%;"></div>
+        <div class="skeleton skeleton-button" style="margin-top: 1rem;"></div>
+    </div>
+    
+    <div class="skeleton-card">
+        <div class="skeleton skeleton-image sm"></div>
+        <div class="skeleton skeleton-text" style="width: 80%;"></div>
+        <div class="skeleton skeleton-text" style="width: 60%;"></div>
+        <div class="skeleton skeleton-button" style="margin-top: 1rem;"></div>
+    </div>
+</div>
+
+<!-- 3. Table Skeleton -->
+<div id="skeleton-table-example">
+    <div class="skeleton-table">
+        <div class="skeleton-table-row">
+            <div class="skeleton-table-cell"></div>
+            <div class="skeleton-table-cell"></div>
+            <div class="skeleton-table-cell"></div>
+        </div>
+        <div class="skeleton-table-row">
+            <div class="skeleton-table-cell"></div>
+            <div class="skeleton-table-cell"></div>
+            <div class="skeleton-table-cell"></div>
+        </div>
+    </div>
+</div>
+
+<!-- 4. Avatar + Text Skeleton -->
+<div id="skeleton-profile-example">
+    <div style="display: flex; align-items: center;">
+        <div class="skeleton skeleton-avatar lg"></div>
+        <div style="flex: 1;">
+            <div class="skeleton skeleton-text large"></div>
+            <div class="skeleton skeleton-text" style="width: 60%;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- 5. List Skeleton -->
+<div id="skeleton-list-example">
+    <div style="margin-bottom: 1rem;">
+        <div class="skeleton skeleton-text large"></div>
+    </div>
+    <div style="margin-bottom: 1rem;">
+        <div style="display: flex; gap: 1rem;">
+            <div class="skeleton skeleton-avatar"></div>
+            <div style="flex: 1;">
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text" style="width: 70%;"></div>
+            </div>
+        </div>
+    </div>
+    <div style="margin-bottom: 1rem;">
+        <div style="display: flex; gap: 1rem;">
+            <div class="skeleton skeleton-avatar"></div>
+            <div style="flex: 1;">
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text" style="width: 70%;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// مثال استفاده:
+// skeletonLoader.showSkeleton('skeleton-text-example', 'text', 3);
+// skeletonLoader.showLoadingBar();
+// skeletonLoader.showOverlay();
+// skeletonLoader.hideOverlay();
+
+// برای بارگذاری داده‌ها با skeleton:
+// fetchWithSkeleton('/api/data/', 'content-id', 'card');
+</script>

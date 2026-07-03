@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+<main class="container min-vh-100 d-flex align-items-center justify-content-center py-5" dir="rtl">
+  <div class="text-center" style="max-width:680px; width:100%;">
+    <div class="alert alert-warning border shadow-sm" role="alert">
+      <div class="fw-bold mb-2">403</div>
+      <p class="mb-1">درخواست شما به دلایل امنیتی تأیید نشد.</p>
+      <p class="mb-0">لطفاً صفحه را رفرش کنید و دوباره تلاش کنید.</p>
+    </div>
+    <a href="/" class="btn btn-primary">بازگشت به صفحه اصلی</a>
+  </div>
+</main>
+{% endblock %}

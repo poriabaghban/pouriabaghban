@@ -1,0 +1,27 @@
+$ignore = @"
+env/
+staticfiles/
+__pycache__/
+*.pyc
+*.pyo
+*.log
+db.sqlite3
+.vscode/
+.idea/
+.git/
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+*.md
+*_backup.txt
+requirements_backup.txt
+data.json
+index.html
+pure-gallery.html
+pure-portfolio.html
+"@
+
+$utf8NoBom = New-Object System.Text.UTF8Encoding $false
+[System.IO.File]::WriteAllText("$PWD\.runflareignore", $ignore, $utf8NoBom)

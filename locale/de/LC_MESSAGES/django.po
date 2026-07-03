@@ -1,0 +1,634 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: pouriabaghban3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-27 00:00+0000\n"
+"PO-Revision-Date: 2026-06-27 00:00+0000\n"
+"Last-Translator: Codex\n"
+"Language-Team: German\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Active"
+msgstr "Aktiv"
+
+msgid "Inactive"
+msgstr "Inaktiv"
+
+msgid "Published"
+msgstr "Veroeffentlicht"
+
+msgid "Draft"
+msgstr "Entwurf"
+
+msgid "Archived"
+msgstr "Archiviert"
+
+msgid "Audio file"
+msgstr "Audiodatei"
+
+msgid "Audio URL"
+msgstr "Audio-URL"
+
+msgid "Video file"
+msgstr "Videodatei"
+
+msgid "Video URL"
+msgstr "Video-URL"
+
+msgid "Media"
+msgstr "Medien"
+
+msgid "Publishing"
+msgstr "Veroeffentlichung"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Post \"%(title)s\" was created successfully."
+msgstr "Beitrag \"%(title)s\" wurde erfolgreich erstellt."
+
+msgid "Post \"%(title)s\" was updated successfully."
+msgstr "Beitrag \"%(title)s\" wurde erfolgreich aktualisiert."
+
+msgid "Please correct the errors below."
+msgstr "Bitte korrigieren Sie die folgenden Fehler."
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "%(label)s must be one of these formats: %(formats)s."
+msgstr "%(label)s muss eines dieser Formate haben: %(formats)s."
+
+msgid "%(label)s URL must point to one of these formats: %(formats)s."
+msgstr "Die %(label)s-URL muss auf eines dieser Formate verweisen: %(formats)s."
+
+msgid "%(label)s URL must be a direct media URL or a supported embed URL."
+msgstr "Die %(label)s-URL muss eine direkte Medien-URL oder eine unterstützte Embed-URL sein."
+
+msgid "Please enter a valid http or https URL."
+msgstr "Bitte geben Sie eine gültige http- oder https-URL ein."
+
+msgid "Post details"
+msgstr "Beitragsdetails"
+
+msgid "All statuses"
+msgstr "Alle Status"
+
+msgid "Filter"
+msgstr "Filtern"
+
+msgid "Total posts"
+msgstr "Beitraege insgesamt"
+
+msgid "Title"
+msgstr "Titel"
+
+msgid "Author"
+msgstr "Autor"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "No posts found for these filters."
+msgstr "Keine Beiträge für diese Filter gefunden."
+
+msgid "آخر"
+msgstr "Letzte"
+
+msgid "آخرین نوشته‌ها"
+msgstr "Neueste Beitraege"
+
+msgid "آخرین مقالات"
+msgstr "Neueste Beitraege"
+
+msgid "آخرین نوشته‌ها و تجربه‌های فنی پوریا باغبان."
+msgstr "Aktuelle Artikel und technische Erfahrungen von Pouria Baghban."
+
+msgid "نوشته‌های تکنیکی و تجربیات توسعه‌دهنده"
+msgstr "Technische Artikel und Entwicklererfahrungen"
+
+msgid "ابزارهای مطالعه"
+msgstr "Lesewerkzeuge"
+
+msgid "ادامه مطلب"
+msgstr "Weiterlesen"
+
+msgid "ارتباط با من"
+msgstr "Kontakt"
+
+msgid "ارسال ایمیل"
+msgstr "E-Mail senden"
+
+msgid "ارسال نظر"
+msgstr "Kommentar senden"
+
+msgid "ارسال پاسخ"
+msgstr "Antwort senden"
+
+msgid "اشتراک‌گذاری"
+msgstr "Teilen"
+
+msgid "امتیاز شما"
+msgstr "Ihre Bewertung"
+
+msgid "اندازه فونت"
+msgstr "Schriftgroesse"
+
+msgid "اندازه متن"
+msgstr "Textgroesse"
+
+msgid "اول"
+msgstr "Erste"
+
+msgid "ایران، مشهد"
+msgstr "Iran, Maschhad"
+
+msgid "ایمیل"
+msgstr "E-Mail"
+
+msgid "ایمیل خود را وارد کنید"
+msgstr "Geben Sie Ihre E-Mail ein"
+
+msgid "ایمیل شما"
+msgstr "Ihre E-Mail"
+
+msgid "ایمیل شما:"
+msgstr "Ihre E-Mail:"
+
+msgid "بازدید"
+msgstr "Aufrufe"
+
+msgid "بازگشت به بالا"
+msgstr "Nach oben"
+
+msgid "بازگشت به صفحه اصلی"
+msgstr "Zurueck zur Startseite"
+
+msgid "برای مطالعه راحت‌تر می‌توانید اندازه و چینش متن را از همین صفحه تنظیم کنید."
+msgstr "Fuer angenehmeres Lesen koennen Sie Textgroesse und Ausrichtung direkt auf dieser Seite anpassen."
+
+msgid "برچسب فعال"
+msgstr "Aktive Tags"
+
+msgid "برچسب‌ها"
+msgstr "Tags"
+
+msgid "بعدی"
+msgstr "Weiter"
+
+msgid "بلاگ"
+msgstr "Blog"
+
+msgid "بلاگ - %(category)s"
+msgstr "Blog - %(category)s"
+
+msgid "بلاگ | پوریا باغبان"
+msgstr "Blog | Pouria Baghban"
+
+msgid "بیشتر"
+msgstr "Mehr"
+
+msgid "بیشتر بدانید"
+msgstr "Mehr erfahren"
+
+msgid "تغییر حالت مطالعه"
+msgstr "Lesemodus wechseln"
+
+msgid "تلگرام"
+msgstr "Telegram"
+
+msgid "توسعه‌دهنده Full Stack و طراح وب"
+msgstr "Full-Stack-Entwickler und Webdesigner"
+
+msgid "توسعه‌دهندهٔ Full Stack"
+msgstr "Full-Stack-Entwickler"
+
+msgid "سازنده و توسعه‌دهنده پوریا باغبان"
+msgstr "Erstellt und entwickelt von Pouria Baghban"
+
+msgid "توییتر"
+msgstr "Twitter"
+
+msgid "جزئیات مقاله"
+msgstr "Artikeldetails"
+
+msgid "جزئیات نمونه کار"
+msgstr "Portfolio-Details"
+
+msgid "جستجو"
+msgstr "Suchen"
+
+msgid "جستجوی مقاله‌ها"
+msgstr "Artikel suchen"
+
+msgid "جستجوی مقاله‌ها..."
+msgstr "Artikel suchen..."
+
+msgid "خانه"
+msgstr "Startseite"
+
+msgid "خطا در ارسال"
+msgstr "Fehler beim Senden"
+
+msgid "خطای سرور"
+msgstr "Serverfehler"
+
+msgid "دانلود رزومه"
+msgstr "Lebenslauf"
+
+msgid "دانلود فایل پروژه"
+msgstr "Projektdatei herunterladen"
+
+msgid "در این دسته هنوز تصویری وجود ندارد."
+msgstr "In dieser Kategorie gibt es noch keine Bilder."
+
+msgid "در این دسته هنوز نمونه کاری ثبت نشده است."
+msgstr "In dieser Kategorie gibt es noch keinen Portfolio-Eintrag."
+
+msgid "در حال ارسال..."
+msgstr "Wird gesendet..."
+
+msgid "در حال بارگذاری"
+msgstr "Wird geladen"
+
+msgid "درخواست نامعتبر"
+msgstr "Ungueltige Anfrage"
+
+msgid "دسترسی ممنوع"
+msgstr "Zugriff verweigert"
+
+msgid "دقیقه"
+msgstr "Min."
+
+msgid "دقیقه مطالعه"
+msgstr "Min. Lesezeit"
+
+msgid "راست چین"
+msgstr "Rechtsbuendig"
+
+msgid "سایدبار مقاله"
+msgstr "Artikel-Seitenleiste"
+
+msgid "شما اجازهٔ دسترسی به این صفحه را ندارید."
+msgstr "Sie haben keine Berechtigung, auf diese Seite zuzugreifen."
+
+msgid "شما اینجا هستید"
+msgstr "Sie sind hier"
+
+msgid "صفحه %(current)s از %(total)s"
+msgstr "Seite %(current)s von %(total)s"
+
+msgid "صفحه پیدا نشد"
+msgstr "Seite nicht gefunden"
+
+msgid "طراحی و توسعه توسط پوریا باغبان"
+msgstr "Design und Entwicklung von Pouria Baghban"
+
+msgid "عبارت جستجو یا فیلتر انتخاب‌شده را تغییر دهید."
+msgstr "Aendern Sie den Suchbegriff oder den ausgewaehlten Filter."
+
+msgid "عنوانی در متن مقاله پیدا نشد."
+msgstr "Im Artikeltext wurde keine Ueberschrift gefunden."
+
+msgid "فهرست مطالب"
+msgstr "Inhaltsverzeichnis"
+
+msgid "فیلتر بر اساس برچسب"
+msgstr "Nach Tag filtern"
+
+msgid "قبلی"
+msgstr "Zurueck"
+
+msgid "لطفاً تمام فیلدها را پر کنید."
+msgstr "Bitte fuellen Sie alle Felder aus."
+
+msgid "لیست مقاله‌ها"
+msgstr "Artikelliste"
+
+msgid "لینک مقاله:"
+msgstr "Artikel-Link:"
+
+msgid "متأسفانه، درخواست شما نامعتبر است."
+msgstr "Leider ist Ihre Anfrage ungueltig."
+
+msgid "متأسفانه، سرور یک خطا برخورد کرد."
+msgstr "Leider ist auf dem Server ein Fehler aufgetreten."
+
+msgid "متأسفانه، صفحه‌ای که دنبال آن می‌گردید پیدا نشد."
+msgstr "Leider wurde die gesuchte Seite nicht gefunden."
+
+msgid "مجله دانش و فناوری"
+msgstr "Magazin fuer Wissen und Technologie"
+
+msgid "مشاهده پروژه"
+msgstr "Projekt ansehen"
+
+msgid "مشاهدهٔ تمام مقالات"
+msgstr "Alle Artikel ansehen"
+
+msgid "مشکلی پیش آمد، لطفاً دوباره تلاش کنید."
+msgstr "Es ist ein Problem aufgetreten. Bitte versuchen Sie es erneut."
+
+msgid "مطالب مرتبط"
+msgstr "Aehnliche Beitraege"
+
+msgid "مطلب در این فهرست"
+msgstr "Beitraege in dieser Liste"
+
+msgid "مطلبی با این جستجو پیدا نشد."
+msgstr "Zu dieser Suche wurde kein Beitrag gefunden."
+
+msgid "مطلبی پیدا نشد"
+msgstr "Kein Beitrag gefunden"
+
+msgid "مقاله ویژه"
+msgstr "Empfohlener Artikel"
+
+msgid "من یک توسعه‌دهندهٔ Full Stack هستم که علاقه‌مند به ساخت وب‌سایت‌های کاربرپسند و کارآمد هستم. با تجربهٔ کار با فناوری‌های مختلف، تلاش می‌کنم بهترین راهکارها را برای هر پروژه پیدا کنم."
+msgstr "Ich bin Full-Stack-Entwickler und entwickle gerne benutzerfreundliche, leistungsfaehige Websites. Mit Erfahrung in verschiedenen Technologien finde ich fuer jedes Projekt die passende Loesung."
+
+msgid "موقعیت"
+msgstr "Standort"
+
+msgid "نام خود را وارد کنید"
+msgstr "Geben Sie Ihren Namen ein"
+
+msgid "نام شما"
+msgstr "Ihr Name"
+
+msgid "نام شما:"
+msgstr "Ihr Name:"
+
+msgid "نظر تایید شده"
+msgstr "bestaetigter Kommentar"
+
+msgid "نظر خود را اینجا بنویسید..."
+msgstr "Schreiben Sie Ihren Kommentar hier..."
+
+msgid "نظر شما (حداکثر 500 کاراکتر):"
+msgstr "Ihre Nachricht (maximal 500 Zeichen):"
+
+msgid "نظر شما با موفقیت ارسال شد!"
+msgstr "Ihre Nachricht wurde erfolgreich gesendet!"
+
+msgid "نظر شما ثبت شد و پس از بررسی نمایش داده خواهد شد."
+msgstr "Ihr Kommentar wurde gespeichert und wird nach Pruefung angezeigt."
+
+msgid "نظر و پیشنهاد خود را بنویسید..."
+msgstr "Schreiben Sie Ihre Meinung oder Ihren Vorschlag..."
+
+msgid "نظرات"
+msgstr "Kommentare"
+
+msgid "نمایش گسترده"
+msgstr "Erweiterte Ansicht"
+
+msgid "نمونه کار"
+msgstr "Portfolio"
+
+msgid "نمونه کار - %(category)s"
+msgstr "Portfolio - %(category)s"
+
+msgid "نمونه‌کارها، نوشته‌ها، مهارت‌ها و راه‌های ارتباط با پوریا باغبان."
+msgstr "Portfolio, Artikel, Faehigkeiten und Kontaktmoeglichkeiten von Pouria Baghban."
+
+msgid "نوشتن اولین پست"
+msgstr "Ersten Beitrag schreiben"
+
+msgid "همه"
+msgstr "Alle"
+
+msgid "هنوز تصویری در گالری وجود ندارد."
+msgstr "Es gibt noch keine Bilder in der Galerie."
+
+msgid "هنوز مطلب مرتبطی برای نمایش وجود ندارد."
+msgstr "Es gibt noch keine aehnlichen Beitraege."
+
+msgid "هنوز نظری ثبت نشده است"
+msgstr "Es gibt noch keine Empfehlung."
+
+msgid "هنوز نظری ثبت نشده است. اولین نفر باشید."
+msgstr "Es gibt noch keinen Kommentar. Seien Sie die erste Person."
+
+msgid "هنوز نمونه کاری ثبت نشده است."
+msgstr "Es wurde noch kein Portfolio-Eintrag angelegt."
+
+msgid "هنوز پستی منتشر نشده است."
+msgstr "Es wurde noch kein Beitrag veroeffentlicht."
+
+msgid "فعلا بلاگی نیست"
+msgstr "Derzeit gibt es keinen Blog."
+
+msgid "واتساپ"
+msgstr "WhatsApp"
+
+msgid "وب‌سایت شخصی پوریا باغبان؛ نمونه‌کارها، نوشته‌ها و راه‌های ارتباطی."
+msgstr "Persoenliche Website von Pouria Baghban: Portfolio, Artikel und Kontaktmoeglichkeiten."
+
+msgid "وسط چین"
+msgstr "Zentriert"
+
+msgid "پاسخ"
+msgstr "Antworten"
+
+msgid "پاسخ خود را بنویسید..."
+msgstr "Schreiben Sie Ihre Antwort..."
+
+msgid "پاک کردن"
+msgstr "Zuruecksetzen"
+
+msgid "پسندیدن"
+msgstr "Gefaellt mir"
+
+msgid "پسندیده شد"
+msgstr "Gefaellt mir"
+
+msgid "پوریا باغبان | توسعه‌دهنده Full Stack"
+msgstr "Pouria Baghban | Full-Stack-Entwickler"
+
+msgid "چپ چین"
+msgstr "Linksbuendig"
+
+msgid "چینش متن"
+msgstr "Textausrichtung"
+
+msgid "کاراکترهای باقی:"
+msgstr "Verbleibende Zeichen:"
+
+msgid "کپی شد"
+msgstr "Kopiert"
+
+msgid "کپی لینک"
+msgstr "Link kopieren"
+
+msgid "گالری"
+msgstr "Galerie"
+
+msgid "گالری - %(category)s"
+msgstr "Galerie - %(category)s"
+
+msgid "گالری تصاویر و نمونه‌کارهای پوریا باغبان."
+msgstr "Bildergalerie und Portfolio von Pouria Baghban."
+
+msgid "یادداشت‌ها، تجربه‌ها و تحلیل‌های تازه را در فضایی تمیز و خوانا دنبال کنید."
+msgstr "Lesen Sie neue Notizen, Erfahrungen und Analysen in einer klaren, gut lesbaren Umgebung."
+
+msgid "درباره‌ی من / über mich"
+msgstr "über mich"
+
+msgid "درباره ی من"
+msgstr "Ueber mich"
+
+msgid "مهارت‌ها-skills"
+msgstr "Faehigkeiten"
+
+msgid "مهارت ها"
+msgstr "Faehigkeiten"
+
+msgid "جزئیات پروژه"
+msgstr "Projektdetails"
+
+msgid "دانلود پروژه"
+msgstr "Projekt herunterladen"
+
+msgid "وضعیت"
+msgstr "Status"
+
+msgid "%(count)s posts published."
+msgstr "%(count)s Beitraege veroeffentlicht."
+
+msgid "Publish selected posts"
+msgstr "Ausgewaehlte Beitraege veroeffentlichen"
+
+msgid "%(count)s posts moved to draft."
+msgstr "%(count)s Beitraege in den Entwurf verschoben."
+
+msgid "Move selected posts to draft"
+msgstr "Ausgewaehlte Beitraege in Entwurf verschieben"
+
+msgid "%(count)s posts archived."
+msgstr "%(count)s Beitraege archiviert."
+
+msgid "Archive selected posts"
+msgstr "Ausgewaehlte Beitraege archivieren"
+
+msgid "%(count)s posts featured."
+msgstr "%(count)s Beitraege hervorgehoben."
+
+msgid "Feature selected posts"
+msgstr "Ausgewaehlte Beitraege hervorheben"
+
+msgid "Blog post management"
+msgstr "Blogbeitragsverwaltung"
+
+msgid "Write new post"
+msgstr "Neuen Beitrag schreiben"
+
+msgid "All authors"
+msgstr "Alle Autoren"
+
+msgid "All categories"
+msgstr "Alle Kategorien"
+
+msgid "View"
+msgstr "Ansehen"
+
+msgid "No posts matched these filters."
+msgstr "Keine Beitraege entsprechen diesen Filtern."
+
+msgid "Previous"
+msgstr "Zurueck"
+
+msgid "Next"
+msgstr "Weiter"
+
+msgid "Page"
+msgstr "Seite"
+
+msgid "of"
+msgstr "von"
+
+msgid "Category"
+msgstr "Kategorie"
+
+msgid "Featured"
+msgstr "Hervorgehoben"
+
+msgid "Image"
+msgstr "Bild"
+
+msgid "Slug"
+msgstr "Slug"
+
+msgid "Edit"
+msgstr "Bearbeiten"
+
+msgid "Back"
+msgstr "Zurueck"
+
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgid "Delete"
+msgstr "Loeschen"
+
+msgid "Create new post"
+msgstr "Neuen Beitrag erstellen"
+
+msgid "Create post"
+msgstr "Beitrag erstellen"
+
+msgid "Save changes"
+msgstr "Aenderungen speichern"
+
+msgid "View project"
+msgstr "Projekt ansehen"
+
+msgid "Main information"
+msgstr "Hauptinformationen"
+
+msgid "Persian content"
+msgstr "Persischer Inhalt"
+
+msgid "English content"
+msgstr "Englischer Inhalt"
+
+msgid "German content"
+msgstr "Deutscher Inhalt"
+
+msgid "Legacy Persian fields"
+msgstr "Alte persische Felder"
+
+msgid "Tags"
+msgstr "Tags"
+
+msgid "Stats"
+msgstr "Statistik"
+
+msgid "No image uploaded."
+msgstr "Kein Bild hochgeladen."
+
+msgid "Image preview"
+msgstr "Bildvorschau"
+
+msgid "Actions"
+msgstr "Aktionen"
+
+msgid "pouriabaghban | Full Stack Developer"
+msgstr "pouriabaghban | Full-Stack-Entwickler"
+
+msgid "Personal website of pouriabaghban; portfolio, articles, and contact information."
+msgstr "Persönliche Website von pouriabaghban: Portfolio, Artikel und Kontaktmöglichkeiten."
+
+msgid "Portfolio, articles, skills, and contact information for pouriabaghban."
+msgstr "Portfolio, Artikel, Fähigkeiten und Kontaktmöglichkeiten von pouriabaghban."
+
+msgid "I am a Full Stack Developer interested in building user-friendly and efficient websites. With experience across different technologies, I try to find the best solution for every project."
+msgstr "Ich bin Full-Stack-Entwickler und interessiere mich für benutzerfreundliche und effiziente Websites. Mit Erfahrung in verschiedenen Technologien finde ich für jedes Projekt die passende Lösung."

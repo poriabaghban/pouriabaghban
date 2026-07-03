@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block content %}
+<main class="container" style="margin-top:40px; margin-bottom:80px;">
+    <div style="max-width:800px; margin:0 auto;">
+        <h1 style="margin-bottom:30px; border-bottom:2px solid #667eea; padding-bottom:15px;">
+            {% if is_create %}
+                {% trans "Create new post" %}
+            {% else %}
+                {% trans "Edit" %}: {{ post.get_title }}
+            {% endif %}
+        </h1>
+
+        <form method="post" enctype="multipart/form-data" style="background:white; padding:30px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div style="background:#f8d7da; color:#721c24; padding:12px; border-radius:4px; margin-bottom:20px;">
+                {% for error in form.non_field_errors %}
+                    <p style="margin:5px 0;">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% for field in form.visible_fields %}
+                <div style="margin-bottom:20px;{% if field.name == 'is_featured' or field.name == 'is_active' %} display:flex; align-items:center; gap:10px;{% endif %}">
+                    {% if field.name == 'is_featured' or field.name == 'is_active' %}
+                        {{ field }}
+                        <label for="{{ field.id_for_label }}" style="font-weight:bold; margin:0;">{{ field.label }}</label>
+                    {% else %}
+                        <label for="{{ field.id_for_label }}" style="display:block; margin-bottom:8px; font-weight:bold;">{{ field.label }}</label>
+                        {{ field }}
+                    {% endif %}
+                    {% if field.help_text %}
+                        <small style="display:block; color:#666; margin-top:5px;">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% if field.errors %}
+                        <small style="color:#dc3545;">{{ field.errors.0 }}</small>
+                    {% endif %}
+
+                    {% if field.name == 'image' and form.instance.image %}
+                        <div style="margin-top:10px;">
+                            <img src="{{ form.instance.image.url }}" style="max-width:200px; border-radius:4px;" alt="{% trans 'Current image' %}">
+                            <p style="font-size:12px; color:#666; margin-top:5px;">{% trans "Current image" %}</p>
+                        </div>
+                    {% endif %}
+                    {% if field.name == 'audio_file' and form.instance.audio_file %}
+                        <div style="margin-top:10px;">
+                            <audio controls src="{{ form.instance.audio_file.url }}" style="width:100%;"></audio>
+                        </div>
+                    {% endif %}
+                    {% if field.name == 'video_file' and form.instance.video_file %}
+                        <div style="margin-top:10px;">
+                            <video controls src="{{ form.instance.video_file.url }}" style="width:100%; max-height:320px;"></video>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            {% if image_formset %}
+            <div style="margin-bottom:25px; border-top:1px solid #eee; padding-top:20px;">
+                <label style="display:block; margin-bottom:12px; font-weight:bold;">{% trans "Blog detail images" %}</label>
+                {{ image_formset.management_form }}
+                {% if image_formset.non_form_errors %}
+                    <div style="background:#f8d7da; color:#721c24; padding:12px; border-radius:4px; margin-bottom:15px;">
+                        {{ image_formset.non_form_errors }}
+                    </div>
+                {% endif %}
+                {% for image_form in image_formset %}
+                    <div style="border:1px solid #e5e7eb; border-radius:8px; padding:15px; margin-bottom:14px; background:#fafafa;">
+                        {% for hidden in image_form.hidden_fields %}{{ hidden }}{% endfor %}
+                        <div style="display:grid; grid-template-columns:1fr 120px; gap:12px; margin-bottom:12px;">
+                            <div>
+                                <label style="display:block; margin-bottom:6px; font-weight:bold;">{{ image_form.image.label }}</label>
+                                {{ image_form.image }}
+                                {% if image_form.image.errors %}<small style="color:#dc3545;">{{ image_form.image.errors.0 }}</small>{% endif %}
+                            </div>
+                            <div>
+                                <label style="display:block; margin-bottom:6px; font-weight:bold;">{{ image_form.order.label }}</label>
+                                {{ image_form.order }}
+                                {% if image_form.order.errors %}<small style="color:#dc3545;">{{ image_form.order.errors.0 }}</small>{% endif %}
+                            </div>
+                        </div>
+                        <div style="margin-bottom:12px;">
+                            <label style="display:block; margin-bottom:6px; font-weight:bold;">{{ image_form.title.label }}</label>
+                            {{ image_form.title }}
+                            {% if image_form.title.errors %}<small style="color:#dc3545;">{{ image_form.title.errors.0 }}</small>{% endif %}
+                        </div>
+                        <div style="margin-bottom:12px;">
+                            <label style="display:block; margin-bottom:6px; font-weight:bold;">{{ image_form.content.label }}</label>
+                            {{ image_form.content }}
+                            {% if image_form.content.errors %}<small style="color:#dc3545;">{{ image_form.content.errors.0 }}</small>{% endif %}
+                        </div>
+                        {% if image_form.instance.image %}
+                            <div style="margin-bottom:10px;">
+                                <img src="{{ image_form.instance.image.url }}" style="max-width:180px; border-radius:4px;" alt="{{ image_form.instance.title|default:form.instance.get_title }}">
+                            </div>
+                        {% endif %}
+                        {% if image_form.DELETE %}
+                            <label style="display:flex; align-items:center; gap:8px; color:#dc3545;">
+                                {{ image_form.DELETE }}
+                                {% trans "Delete this image" %}
+                            </label>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div style="display:flex; gap:10px; justify-content:center;">
+                <button type="submit" style="padding:10px 30px; background:#667eea; color:white; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">
+                    {% if is_create %}
+                        {% trans "Create post" %}
+                    {% else %}
+                        {% trans "Save changes" %}
+                    {% endif %}
+                </button>
+
+                {% if not is_create %}
+                    {% if post.status == 'published' and post.is_active %}
+                        <a href="{% url 'blog:post-detail' post.slug %}" style="padding:10px 30px; background:#6c757d; color:white; text-decoration:none; border-radius:4px; display:inline-flex; align-items:center;">
+                            {% trans "Back" %}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'dashboard:blog-posts' %}" style="padding:10px 30px; background:#6c757d; color:white; text-decoration:none; border-radius:4px; display:inline-flex; align-items:center;">
+                            {% trans "Back" %}
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'blog:post-delete' post.slug %}" style="padding:10px 30px; background:#dc3545; color:white; text-decoration:none; border-radius:4px; display:inline-flex; align-items:center;">
+                        {% trans "Delete" %}
+                    </a>
+                {% else %}
+                    <a href="{% url 'blog:blog-list' %}" style="padding:10px 30px; background:#6c757d; color:white; text-decoration:none; border-radius:4px; display:inline-flex; align-items:center;">
+                        {% trans "Cancel" %}
+                    </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</main>
+
+<style>
+    input[type="text"],
+    input[type="url"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-family: inherit;
+        direction: inherit;
+    }
+
+    input[type="file"] {
+        padding: 8px;
+    }
+
+    textarea {
+        resize: vertical;
+    }
+</style>
+{% endblock %}

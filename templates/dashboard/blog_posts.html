@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block content %}
+<main class="container" style="margin-top:40px; margin-bottom:80px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+        <h1 style="margin:0;">{% trans "Blog post management" %}</h1>
+        <a href="{% url 'blog:blog-create' %}" style="padding:10px 20px; background:#667eea; color:white; text-decoration:none; border-radius:4px; font-weight:bold;">{% trans "Write new post" %}</a>
+    </div>
+
+    <div style="background:#f9f9f9; padding:15px; border-radius:8px; margin-bottom:20px;">
+        <form method="get" style="display:flex; gap:10px; flex-wrap:wrap;">
+            <select name="status" style="padding:8px; border-radius:4px; border:1px solid #ddd; flex:1; min-width:150px;">
+                <option value="">{% trans "All statuses" %}</option>
+                <option value="published" {% if status_filter == 'published' %}selected{% endif %}>{% trans "Published" %}</option>
+                <option value="draft" {% if status_filter == 'draft' %}selected{% endif %}>{% trans "Draft" %}</option>
+                <option value="archived" {% if status_filter == 'archived' %}selected{% endif %}>{% trans "Archived" %}</option>
+            </select>
+
+            <select name="author" style="padding:8px; border-radius:4px; border:1px solid #ddd; flex:1; min-width:150px;">
+                <option value="">{% trans "All authors" %}</option>
+                {% for author in authors %}
+                <option value="{{ author.id }}" {% if author_filter|stringformat:"s" == author.id|stringformat:"s" %}selected{% endif %}>{{ author.first_name }} {{ author.last_name }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="category" style="padding:8px; border-radius:4px; border:1px solid #ddd; flex:1; min-width:150px;">
+                <option value="">{% trans "All categories" %}</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}" {% if category_filter|stringformat:"s" == category.id|stringformat:"s" %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" style="padding:8px 15px; background:#667eea; color:white; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">{% trans "Filter" %}</button>
+        </form>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:15px; margin-bottom:30px;">
+        <div style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:white; padding:15px; border-radius:8px; text-align:center;">
+            <div style="font-size:24px; font-weight:bold;">{{ total }}</div>
+            <div style="font-size:12px;">{% trans "Total posts" %}</div>
+        </div>
+        <div style="background:linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color:white; padding:15px; border-radius:8px; text-align:center;">
+            <div style="font-size:24px; font-weight:bold;">{{ published }}</div>
+            <div style="font-size:12px;">{% trans "Published" %}</div>
+        </div>
+        <div style="background:linear-gradient(135deg, #fa709a 0%, #fee140 100%); color:white; padding:15px; border-radius:8px; text-align:center;">
+            <div style="font-size:24px; font-weight:bold;">{{ draft }}</div>
+            <div style="font-size:12px;">{% trans "Draft" %}</div>
+        </div>
+        <div style="background:linear-gradient(135deg, #30cfd0 0%, #330867 100%); color:white; padding:15px; border-radius:8px; text-align:center;">
+            <div style="font-size:24px; font-weight:bold;">{{ archived }}</div>
+            <div style="font-size:12px;">{% trans "Archived" %}</div>
+        </div>
+    </div>
+
+    <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <thead>
+                <tr style="background:#f0f0f0; border-bottom:2px solid #ddd;">
+                    <th style="padding:15px; text-align:right;">{% trans "Title" %}</th>
+                    <th style="padding:15px; text-align:right;">{% trans "Author" %}</th>
+                    <th style="padding:15px; text-align:right;">{% trans "Category" %}</th>
+                    <th style="padding:15px; text-align:right;">{% trans "Date" %}</th>
+                    <th style="padding:15px; text-align:right;">{% trans "Status" %}</th>
+                    <th style="padding:15px; text-align:right;">{% trans "Actions" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr style="border-bottom:1px solid #eee; transition:background 0.3s;">
+                    <td style="padding:15px; font-weight:bold;">
+                        <a href="{% url 'blog:post-detail' post.slug %}" style="color:#667eea; text-decoration:none;">{{ post.get_title }}</a>
+                    </td>
+                    <td style="padding:15px;">{{ post.author.first_name }} {{ post.author.last_name }}</td>
+                    <td style="padding:15px;">
+                        {% if post.category %}
+                            <span style="display:inline-block; background:#f0f0f0; padding:4px 8px; border-radius:4px; font-size:12px;">{{ post.category.name }}</span>
+                        {% else %}
+                            <span style="color:#999;">-</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding:15px; font-size:12px;">{{ post.created_at|date:"Y-m-d H:i" }}</td>
+                    <td style="padding:15px; text-align:center;">
+                        {% if post.status == 'published' %}
+                            <span style="background:#d4edda; color:#155724; padding:4px 10px; border-radius:12px; font-size:11px;">{% trans "Published" %} / {% trans "Active" %}</span>
+                        {% elif post.status == 'draft' %}
+                            <span style="background:#fff3cd; color:#856404; padding:4px 10px; border-radius:12px; font-size:11px;">{% trans "Draft" %} / {% trans "Inactive" %}</span>
+                        {% else %}
+                            <span style="background:#e2e3e5; color:#383d41; padding:4px 10px; border-radius:12px; font-size:11px;">{% trans "Archived" %} / {% trans "Inactive" %}</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding:15px; text-align:center;">
+                        <a href="{% url 'blog:post-edit' post.slug %}" style="padding:6px 10px; background:#667eea; color:white; text-decoration:none; border-radius:4px; font-size:11px; margin:2px;">{% trans "Edit" %}</a>
+                        <a href="{% url 'blog:post-detail' post.slug %}" style="padding:6px 10px; background:#28a745; color:white; text-decoration:none; border-radius:4px; font-size:11px; margin:2px;">{% trans "View" %}</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="padding:30px; text-align:center; color:#999;">{% trans "No posts matched these filters." %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if posts.has_other_pages %}
+    <div style="margin-top:30px; text-align:center;">
+        <div style="display:flex; justify-content:center; gap:8px; align-items:center; flex-wrap:wrap;">
+            {% if posts.has_previous %}
+            <a href="?page=1{% if status_filter %}&status={{ status_filter }}{% endif %}{% if author_filter %}&author={{ author_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}" style="padding:8px 12px; background:#f0f0f0; border-radius:4px; text-decoration:none;">&laquo;</a>
+            <a href="?page={{ posts.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if author_filter %}&author={{ author_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}" style="padding:8px 12px; background:#f0f0f0; border-radius:4px; text-decoration:none;">{% trans "Previous" %}</a>
+            {% endif %}
+
+            <span style="padding:8px 12px;">{% trans "Page" %} {{ posts.number }} {% trans "of" %} {{ posts.paginator.num_pages }}</span>
+
+            {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if author_filter %}&author={{ author_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}" style="padding:8px 12px; background:#f0f0f0; border-radius:4px; text-decoration:none;">{% trans "Next" %}</a>
+            <a href="?page={{ posts.paginator.num_pages }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if author_filter %}&author={{ author_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}" style="padding:8px 12px; background:#f0f0f0; border-radius:4px; text-decoration:none;">&raquo;</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</main>
+{% endblock %}

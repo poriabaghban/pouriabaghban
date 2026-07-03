@@ -1,0 +1,279 @@
+﻿{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block header %}{% endblock %}
+
+{% block title %}{{ title }} | pouriabaghban{% endblock %}
+{% block meta_description %}{% trans 'Image gallery and portfolio of Pouria Baghban.' %}{% endblock %}
+
+{% block content %}
+<main class="container" style="margin-top:40px; margin-bottom:80px;">
+  <nav id="galleryBreadcrumb" class="gallery-breadcrumb" aria-label="breadcrumb"></nav>
+
+  <div style="text-align:center; margin-bottom:30px;">
+    <h1 style="font-size:32px; font-weight:700; margin-bottom:12px;">{{ title }}</h1>
+    <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+      <a href="{% url 'gallery:portfolio-list' %}" class="gallery-tab {% if page_kind == 'portfolio' %}active{% endif %}">{% trans "نمونه کار" %}</a>
+      <a href="{% url 'gallery:gallery-list' %}" class="gallery-tab {% if page_kind == 'gallery' %}active{% endif %}">{% trans "گالری" %}</a>
+    </div>
+  </div>
+
+  {% if categories %}
+  <div style="text-align:center; margin-bottom:30px;">
+    <a href="{% url all_url_name %}" class="gallery-filter-btn {% if not selected_category %}active{% endif %}">{% trans "همه" %}</a>
+    {% for cat in categories %}
+    <a href="{% url category_url_name cat.name %}" class="gallery-filter-btn {% if selected_category == cat.name %}active{% endif %}">{{ cat.name }}</a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="row g-3" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
+    {% for image in images %}
+    <div class="gallery-item" data-image-url="{{ image.image.url }}" data-image-title="{{ image.title }}"{% if page_kind == 'portfolio' %} data-detail-url="{% url 'gallery:portfolio-detail' image.pk %}"{% endif %}>
+      <div style="height:200px; overflow:hidden; background:#eee; display:flex; align-items:center; justify-content:center;">
+        <img src="{{ image.image.url }}" alt="{{ image.title }}" style="width:100%; height:100%; object-fit:cover; transition:transform 0.3s;" class="gallery-img">
+      </div>
+      <div style="padding:15px;">
+        <h3 style="margin:0 0 8px; font-size:16px;">{{ image.title }}</h3>
+        {% if image.description %}
+        <p style="margin:0 0 10px; color:#666; font-size:13px; line-height:1.8;">{{ image.description|truncatewords:15 }}</p>
+        {% endif %}
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+          {% if image.category %}
+          <span class="gallery-chip">{{ image.category.name }}</span>
+          {% endif %}
+          {% if page_kind == 'portfolio' %}
+          <a href="{% url 'gallery:portfolio-detail' image.pk %}" class="project-link" onclick="event.stopPropagation();">{% if current_language == "de" %}Projektdetails{% elif current_language == "en" %}Project Details{% else %}جزئیات پروژه{% endif %}</a>
+          {% endif %}
+          {% if image.project_url %}
+          <a href="{{ image.project_url }}" target="_blank" rel="noopener" class="project-link" onclick="event.stopPropagation();">{% trans "مشاهده پروژه" %}</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <p style="grid-column:1/-1; text-align:center; color:#666; padding:40px 0;">{{ empty_message }}</p>
+    {% endfor %}
+  </div>
+
+  {% if images.has_other_pages %}
+  <div style="margin-top:60px; margin-bottom:40px;">
+    <div class="pagination" style="display:flex; justify-content:center; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:15px;">
+      {% if images.has_previous %}
+      <a href="?page=1" class="pager-primary">{% trans "اول" %}</a>
+      <a href="?page={{ images.previous_page_number }}" class="pager-muted">{% trans "قبلی" %}</a>
+      {% else %}
+      <span class="pager-disabled">{% trans "اول" %}</span>
+      <span class="pager-disabled">{% trans "قبلی" %}</span>
+      {% endif %}
+    </div>
+
+    <div style="text-align:center; padding:15px; background:#f9f9f9; border-radius:4px; margin-bottom:15px;">
+      <span style="font-size:16px; font-weight:600; color:#333;">{% blocktrans with current=images.number total=images.paginator.num_pages %}صفحه {{ current }} از {{ total }}{% endblocktrans %}</span>
+    </div>
+
+    <div class="pagination" style="display:flex; justify-content:center; gap:10px; align-items:center; flex-wrap:wrap;">
+      {% if images.has_next %}
+      <a href="?page={{ images.next_page_number }}" class="pager-muted">{% trans "بعدی" %}</a>
+      <a href="?page={{ images.paginator.num_pages }}" class="pager-primary">{% trans "آخر" %}</a>
+      {% else %}
+      <span class="pager-disabled">{% trans "بعدی" %}</span>
+      <span class="pager-disabled">{% trans "آخر" %}</span>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+</main>
+
+<div id="imageModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:1000; align-items:center; justify-content:center;">
+  <div style="position:relative; max-width:90%; max-height:90%; display:flex; flex-direction:column; align-items:center;">
+    <span id="closeModal" style="position:absolute; top:-40px; right:0; color:white; font-size:28px; cursor:pointer; font-weight:bold;">&times;</span>
+    <img id="modalImage" src="" alt="" style="max-width:100%; max-height:80vh; object-fit:contain; border-radius:8px;">
+    <h3 id="modalTitle" style="color:white; margin-top:15px; text-align:center;"></h3>
+  </div>
+</div>
+
+<style>
+.gallery-item { background:#f9f9f9; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); transition:transform 0.3s, box-shadow 0.3s; cursor:pointer; }
+.gallery-item:hover { transform: translateY(-5px); box-shadow:0 10px 25px rgba(0,108,255,0.2); }
+.gallery-item:hover .gallery-img { transform: scale(1.05); }
+.gallery-filter-btn, .gallery-tab { padding:8px 16px; margin:0 5px 10px; border-radius:20px; text-decoration:none; background:#f0f0f0; cursor:pointer; display:inline-block; transition:all 0.3s; font-weight:500; color:#333; }
+.gallery-filter-btn.active, .gallery-tab.active { background:linear-gradient(135deg, #006cff 0%, #0052cc 100%); color:white; }
+.gallery-filter-btn:hover, .gallery-tab:hover { background:#0066ff; color:white; }
+.gallery-chip { background:#e8f4f8; color:#006cff; padding:4px 10px; border-radius:12px; font-size:12px; display:inline-block; }
+.project-link { color:#006cff; font-size:12px; font-weight:700; text-decoration:none; }
+.pager-primary, .pager-muted, .pager-disabled { padding:10px 15px; border-radius:4px; text-decoration:none; font-weight:600; display:inline-block; }
+.pager-primary { background:linear-gradient(135deg, #006cff 0%, #0052cc 100%); color:white; }
+.pager-muted { background:#f0f0f0; color:#333; }
+.pager-disabled { background:#e0e0e0; color:#999; }
+/* Breadcrumb component - independent from the site header */
+.gallery-breadcrumb {
+  display: none;
+  margin: 0 0 28px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(0, 108, 255, 0.12);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.gallery-breadcrumb.is-visible {
+  display: block;
+}
+
+.gallery-breadcrumb__list {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gallery-breadcrumb__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.8;
+  white-space: nowrap;
+}
+
+.gallery-breadcrumb__item::after {
+  content: ">";
+  color: #b6c3d1;
+  font-size: 13px;
+}
+
+.gallery-breadcrumb__item:last-child::after {
+  content: "";
+}
+
+.gallery-breadcrumb__link {
+  color: #006cff;
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.gallery-breadcrumb__link:hover,
+.gallery-breadcrumb__link:focus {
+  color: #004db3;
+  outline: none;
+}
+
+.gallery-breadcrumb__current {
+  color: #253041;
+  font-weight: 700;
+}
+
+@media (max-width: 576px) {
+  .gallery-breadcrumb {
+    margin-bottom: 22px;
+    padding: 10px 12px;
+  }
+
+  .gallery-breadcrumb__list,
+  .gallery-breadcrumb__item {
+    gap: 8px;
+  }
+
+  .gallery-breadcrumb__item {
+    font-size: 13px;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById('imageModal');
+  const modalImage = document.getElementById('modalImage');
+  const modalTitle = document.getElementById('modalTitle');
+  const closeModal = document.getElementById('closeModal');
+
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    item.addEventListener('click', function() {
+      const detailUrl = this.getAttribute('data-detail-url');
+      if (detailUrl) {
+        window.location.href = detailUrl;
+        return;
+      }
+      modalImage.src = this.getAttribute('data-image-url');
+      modalTitle.textContent = this.getAttribute('data-image-title');
+      modal.style.display = 'flex';
+    });
+  });
+
+  if (closeModal) closeModal.addEventListener('click', function() { modal.style.display = 'none'; });
+  if (modal) modal.addEventListener('click', function(e) { if (e.target === modal) modal.style.display = 'none'; });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && modal) modal.style.display = 'none'; });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const breadcrumb = document.getElementById('galleryBreadcrumb');
+  if (!breadcrumb) return;
+
+  const labels = {
+    home: '{% trans 'خانه' %}',
+    gallery: '{% trans 'گالری' %}',
+    portfolio: '{% trans 'نمونه کار' %}'
+  };
+
+  const pathParts = window.location.pathname
+    .split('/')
+    .map(part => part.trim())
+    .filter(Boolean);
+
+  const langPrefix = ['fa', 'en', 'de'].includes(pathParts[0]) ? pathParts.shift() : '';
+  const urlPrefix = langPrefix ? '/' + langPrefix : '';
+  const isGalleryPage = pathParts[0] === 'gallery';
+  const isPortfolioPage = isGalleryPage && pathParts[1] === 'portfolio';
+
+  // Keep the component visible only for gallery and portfolio routes.
+  if (!isGalleryPage) return;
+
+  const sectionLabel = isPortfolioPage ? labels.portfolio : labels.gallery;
+  const sectionUrl = isPortfolioPage ? `${urlPrefix}/gallery/portfolio/` : `${urlPrefix}/gallery/`; 
+  const categoryIndex = pathParts.indexOf('category');
+  const rawAlbumName = categoryIndex !== -1 ? pathParts[categoryIndex + 1] : '';
+  const albumName = rawAlbumName ? decodeURIComponent(rawAlbumName.replace(/-/g, ' ')) : '';
+
+  const crumbs = [
+    { label: labels.home, url: urlPrefix + '/' },
+    { label: sectionLabel, url: sectionUrl },
+  ];
+
+  if (albumName) {
+    crumbs.push({ label: albumName });
+  }
+
+  const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[char]));
+
+  breadcrumb.innerHTML = `
+    <ol class="gallery-breadcrumb__list">
+      ${crumbs.map((crumb, index) => {
+        const isLast = index === crumbs.length - 1;
+        const content = crumb.url && !isLast
+          ? `<a class="gallery-breadcrumb__link" href="${crumb.url}">${escapeHtml(crumb.label)}</a>`
+          : `<span class="gallery-breadcrumb__current" aria-current="page">${escapeHtml(crumb.label)}</span>`;
+
+        return `<li class="gallery-breadcrumb__item">${content}</li>`;
+      }).join('')}
+    </ol>
+  `;
+
+  breadcrumb.classList.add('is-visible');
+});
+</script>
+{% endblock %}

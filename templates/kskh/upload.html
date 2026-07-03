@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Upload to kskh{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+{% include "kskh/_styles.html" %}
+<main class="kskh-shell">
+  <div class="kskh-wrap" style="max-width: 760px;">
+    <section class="kskh-panel">
+      <div class="kskh-actions" style="justify-content: space-between;">
+        <h1 class="kskh-title">Upload</h1>
+        <a class="kskh-btn" href="{% url 'kskh:index' %}">Back</a>
+      </div>
+      <form method="post" enctype="multipart/form-data" style="margin-top: 22px;">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="kskh-field">
+          <label for="{{ form.title.id_for_label }}">Title</label>
+          {{ form.title }}
+          {{ form.title.errors }}
+        </div>
+        <div class="kskh-field">
+          <label for="{{ form.description.id_for_label }}">Description</label>
+          {{ form.description }}
+          {{ form.description.errors }}
+        </div>
+        <div class="kskh-field">
+          <label for="{{ form.file.id_for_label }}">App / Config file</label>
+          {{ form.file }}
+          {{ form.file.errors }}
+        </div>
+        <button class="kskh-btn kskh-btn-primary" type="submit">Upload file</button>
+      </form>
+    </section>
+  </div>
+</main>
+{% endblock %}

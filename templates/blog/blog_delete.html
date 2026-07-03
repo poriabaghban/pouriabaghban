@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="container" style="margin-top:40px; margin-bottom:80px;">
+    <div style="max-width:500px; margin:0 auto;">
+        <div style="background:white; padding:40px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); text-align:center;">
+            <h1 style="color:#dc3545; margin-bottom:20px;">⚠️ حذف پست</h1>
+            
+            <p style="font-size:16px; margin-bottom:10px;">آیا مطمئن هستید که می‌خواهید این پست را حذف کنید؟</p>
+            <p style="font-size:18px; font-weight:bold; color:#333; margin-bottom:30px;">{{ post.title }}</p>
+            
+            <p style="color:#666; margin-bottom:30px; font-size:14px;">
+                ⚠️ این عملیات قابل برگشت نیست و تمام کامنت‌های این پست نیز حذف خواهند شد.
+            </p>
+            
+            <form method="post" style="margin-bottom:15px;">
+                {% csrf_token %}
+                <button type="submit" style="padding:12px 30px; background:#dc3545; color:white; border:none; border-radius:4px; cursor:pointer; font-weight:bold; font-size:16px;">
+                    🗑️ بله، حذف کن
+                </button>
+            </form>
+            
+            <a href="{% url 'blog:post-detail' post.slug %}" style="padding:12px 30px; background:#6c757d; color:white; text-decoration:none; border-radius:4px; display:inline-block; font-weight:bold;">
+                ← خیر، برگشت
+            </a>
+        </div>
+    </div>
+</main>
+{% endblock %}

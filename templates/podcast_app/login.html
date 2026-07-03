@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ login_title|default:'ورود پادکست' }}</title>
+  <style>
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; font-family: Tahoma, Arial, sans-serif; background: linear-gradient(135deg, #eef4fb, #ffffff); }
+    form { width: min(420px, calc(100% - 32px)); background: #fff; border: 1px solid rgba(0,108,255,.16); border-radius: 8px; padding: 28px; box-shadow: 0 22px 60px rgba(16,24,40,.12); }
+    h1 { margin: 0 0 22px; font-size: 24px; }
+    label { display: block; margin: 14px 0 8px; font-weight: 800; }
+    input { width: 100%; padding: 12px; border: 1px solid #d0d5dd; border-radius: 6px; font-size: 15px; }
+    button, a { margin-top: 18px; width: 100%; border: 0; border-radius: 6px; padding: 12px; background: #006cff; color: #fff; font-weight: 900; cursor: pointer; text-decoration: none; display: block; text-align: center; box-sizing: border-box; }
+    a { background: #101828; }
+    .errorlist { color: #c1121f; }
+  </style>
+</head>
+<body>
+  <form method="post">
+    {% csrf_token %}
+    <h1>{{ login_title|default:'ورود به پادکست' }}</h1>
+    {{ form.non_field_errors }}
+    {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+    <label for="id_username">&#1606;&#1575;&#1605; &#1705;&#1575;&#1585;&#1576;&#1585;&#1740;</label>
+    {{ form.username }}
+    <label for="id_password">&#1585;&#1605;&#1586; &#1593;&#1576;&#1608;&#1585;</label>
+    {{ form.password }}
+    <button type="submit">&#1608;&#1585;&#1608;&#1583;</button>
+    <a href="/">&#1582;&#1575;&#1606;&#1607;</a>
+  </form>
+</body>
+</html>

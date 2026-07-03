@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="container" style="margin-top:40px; margin-bottom:80px;">
+    <div style="max-width:600px; margin:0 auto;">
+        <h1 style="margin:0 0 30px; font-size:28px; color:#333;">✏️ ویرایش نقش کاربر</h1>
+        
+        {% if messages %}
+        <div style="margin-bottom:20px;">
+            {% for message in messages %}
+            <div style="padding:15px; background:#d4edda; color:#155724; border-radius:4px; margin-bottom:10px;">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <div style="background:white; padding:30px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <div style="margin-bottom:20px; padding:15px; background:#f0f0f0; border-radius:4px;">
+                <p style="margin:0; color:#666;"><strong>👤 کاربر:</strong> {{ user.username }}</p>
+                {% if user.first_name %}
+                <p style="margin:10px 0 0; color:#666;"><strong>📛 نام:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+                {% endif %}
+                <p style="margin:10px 0 0; color:#666;"><strong>📧 ایمیل:</strong> {{ user.email }}</p>
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:bold; color:#333;">🎭 انتخاب نقش:</label>
+                    <select name="role" required style="width:100%; padding:12px; border:1px solid #ddd; border-radius:4px; font-size:14px;">
+                        {% for value, label in role_choices %}
+                        <option value="{{ value }}" {% if user_role.role == value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <small style="color:#666; display:block; margin-top:5px;">
+                        ✓ انتخاب نقش اختیارات مربوطه را خودکار تنظیم می‌کند
+                    </small>
+                </div>
+                
+                <div style="margin-bottom:20px;">
+                    <label style="display:flex; align-items:center; cursor:pointer;">
+                        <input type="checkbox" name="is_active" {% if user_role.is_active %}checked{% endif %} style="margin-right:10px; width:18px; height:18px;">
+                        <span style="font-weight:bold; color:#333;">✅ کاربر فعال است</span>
+                    </label>
+                </div>
+                
+                <!-- اختیارات -->
+                <div style="background:#f9f9f9; padding:15px; border-radius:4px; margin-bottom:20px;">
+                    <h3 style="margin:0 0 15px; color:#333;">🔐 اختیارات (خودکار براساس نقش):</h3>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                        <label style="display:flex; align-items:center;">
+                            <input type="checkbox" disabled {% if user_role.can_write %}checked{% endif %} style="margin-right:8px;">
+                            <span>✍️ نوشتن</span>
+                        </label>
+                        <label style="display:flex; align-items:center;">
+                            <input type="checkbox" disabled {% if user_role.can_edit %}checked{% endif %} style="margin-right:8px;">
+                            <span>📝 ویرایش</span>
+                        </label>
+                        <label style="display:flex; align-items:center;">
+                            <input type="checkbox" disabled {% if user_role.can_delete %}checked{% endif %} style="margin-right:8px;">
+                            <span>🗑️ حذف</span>
+                        </label>
+                        <label style="display:flex; align-items:center;">
+                            <input type="checkbox" disabled {% if user_role.can_manage_comments %}checked{% endif %} style="margin-right:8px;">
+                            <span>💬 مدیریت نظرات</span>
+                        </label>
+                        <label style="display:flex; align-items:center;">
+                            <input type="checkbox" disabled {% if user_role.can_manage_users %}checked{% endif %} style="margin-right:8px;">
+                            <span>👥 مدیریت کاربران</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div style="display:flex; gap:10px;">
+                    <button type="submit" style="flex:1; padding:12px; background:#006cff; color:white; border:none; border-radius:4px; font-weight:bold; cursor:pointer; font-size:14px;">
+                        💾 ذخیره تغییرات
+                    </button>
+                    <a href="{% url 'dashboard:manage-users' %}" style="flex:1; padding:12px; background:#6c757d; color:white; text-decoration:none; border-radius:4px; font-weight:bold; cursor:pointer; font-size:14px; text-align:center;">
+                        ❌ انصراف
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock %}
