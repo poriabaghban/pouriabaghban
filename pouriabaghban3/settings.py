@@ -29,7 +29,7 @@ environ.Env.read_env(BASE_DIR / '.env')
 SECRET_KEY = 'django-insecure-4k!didb)t*1*vc50xox(ngdl-wtpb)ad_gj8@)s&p_*m*-krr$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "pouriabaghban.ir",
