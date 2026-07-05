@@ -16,3 +16,5 @@ channels==4.0.0
 channels-redis==4.1.0
 django-jalali==5.0.0
 django-rosetta==0.10.2
+django-ckeditor==6.7.1
+Pillow
