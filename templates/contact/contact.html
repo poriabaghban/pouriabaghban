@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تماس با من</title>
+    {% load static i18n %}
+
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'fonts/fontawesome-free-7.0.0-web/css/all.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/cs001 (6).css' %}">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Tahoma, Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #f5f7fa, #e8eef3);
+            color: #222;
+        }
+
+        body.success-bg {
+            background: linear-gradient(135deg, #0f9b55, #7ed957);
+        }
+
+        body.error-bg {
+            background: linear-gradient(135deg, #b00020, #ff6b6b);
+        }
+
+        .page-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 16px;
+        }
+
+        .contact-card {
+            width: 100%;
+            max-width: 540px;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 24px;
+            padding: 34px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+        }
+
+        .contact-card h1 {
+            margin: 0 0 10px;
+            font-size: 28px;
+            color: #173b2f;
+            text-align: center;
+        }
+
+        .subtitle {
+            margin: 0 0 28px;
+            text-align: center;
+            color: #666;
+            line-height: 1.9;
+        }
+
+        .message-box {
+            padding: 14px 16px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .message-box.success {
+            background: #e6f7ee;
+            color: #116b3c;
+            border: 1px solid #99dfb8;
+        }
+
+        .message-box.error {
+            background: #ffe8e8;
+            color: #9b111e;
+            border: 1px solid #ffb3b3;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            border: 1px solid #d7d7d7;
+            border-radius: 14px;
+            padding: 13px 14px;
+            font-size: 15px;
+            outline: none;
+            background: #fafafa;
+            transition: 0.2s ease;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #139b63;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(19, 155, 99, 0.12);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .error-text {
+            margin-top: 7px;
+            font-size: 13px;
+            color: #b00020;
+        }
+
+        .submit-btn {
+            width: 100%;
+            border: none;
+            border-radius: 16px;
+            padding: 15px;
+            background: linear-gradient(135deg, #138f5b, #18b875);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(19, 143, 91, 0.3);
+        }
+
+        .note {
+            margin-top: 18px;
+            text-align: center;
+            color: #444;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        .home-btn-wrapper {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.home-glow-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 190px;
+    padding: 13px 28px;
+    border-radius: 999px;
+    text-decoration: none;
+    color: #173b2f;
+    background: rgba(255, 255, 255, 0.92);
+    font-size: 15px;
+    font-weight: bold;
+    overflow: hidden;
+    z-index: 1;
+    box-shadow: 0 0 8px rgba(39, 232, 122, 0.18);
+    animation: softGlow 2.4s ease-in-out infinite;
+}
+
+.home-glow-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        #1f9bff,
+        #22e68a,
+        #1f9bff
+    );
+    background-size: 220% 100%;
+    animation: borderMove 2.2s linear infinite;
+    z-index: -1;
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+
+.home-glow-btn::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.94);
+    z-index: -1;
+}
+
+.home-glow-btn:hover {
+    color: #0f5132;
+    transform: translateY(-2px);
+    box-shadow: 0 0 22px rgba(39, 232, 122, 0.45);
+}
+
+@keyframes borderMove {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 220% 50%;
+    }
+}
+
+@keyframes softGlow {
+    0% {
+        box-shadow: 0 0 6px rgba(31, 155, 255, 0.18),
+                    0 0 10px rgba(34, 230, 138, 0.12);
+    }
+
+    50% {
+        box-shadow: 0 0 14px rgba(31, 155, 255, 0.36),
+                    0 0 28px rgba(34, 230, 138, 0.34);
+    }
+
+    100% {
+        box-shadow: 0 0 6px rgba(31, 155, 255, 0.18),
+                    0 0 10px rgba(34, 230, 138, 0.12);
+    }
+}
+    </style>
+</head>
+
+<body class="{% if messages %}{% for message in messages %}{% if message.tags == 'success' %}success-bg{% elif message.tags == 'error' %}error-bg{% endif %}{% endfor %}{% elif form.errors %}error-bg{% endif %}">
+
+    <main class="page-wrapper">
+        <section class="contact-card">
+            <h1>تماس با ما</h1>
+
+            <p class="subtitle">
+                اطلاعات خود را وارد کنید؛ حتماً باهاتون تماس می‌گیریم.
+            </p>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message-box {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if form.errors %}
+                <div class="message-box error">
+                    لطفاً خطاهای فرم را بررسی کنید و دوباره ارسال کنید.
+                </div>
+            {% endif %}
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="id_first_name">نام *</label>
+                    <input
+                        type="text"
+                        name="first_name"
+                        id="id_first_name"
+                        required
+                        value="{{ form.first_name.value|default:'' }}"
+                        placeholder="نام خود را وارد کنید"
+                    >
+                    {% if form.first_name.errors %}
+                        <div class="error-text">{{ form.first_name.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_last_name">نام خانوادگی *</label>
+                    <input
+                        type="text"
+                        name="last_name"
+                        id="id_last_name"
+                        required
+                        value="{{ form.last_name.value|default:'' }}"
+                        placeholder="نام خانوادگی خود را وارد کنید"
+                    >
+                    {% if form.last_name.errors %}
+                        <div class="error-text">{{ form.last_name.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_email">ایمیل *</label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="id_email"
+                        required
+                        value="{{ form.email.value|default:'' }}"
+                        placeholder="example@email.com"
+                    >
+                    {% if form.email.errors %}
+                        <div class="error-text">{{ form.email.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_phone">شماره تلفن *</label>
+                    <input
+                        type="tel"
+                        name="phone"
+                        id="id_phone"
+                        required
+                        maxlength="11"
+                        minlength="11"
+                        pattern="09[0-9]{9}"
+                        value="{{ form.phone.value|default:'' }}"
+                        placeholder="09123456789"
+                    >
+                    {% if form.phone.errors %}
+                        <div class="error-text">{{ form.phone.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_message">پیام شما</label>
+                    <textarea
+                        name="message"
+                        id="id_message"
+                        placeholder="پیام خود را بنویسید..."
+                    >{{ form.message.value|default:'' }}</textarea>
+                    {% if form.message.errors %}
+                        <div class="error-text">{{ form.message.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="submit-btn">ارسال درخواست تماس</button>
+
+                <p class="note">
+                    بعد از ثبت فرم، حتماً باهاتون تماس می‌گیریم.
+                </p>
+            </form>
+                    <div class="home-btn-wrapper">
+                     <a href="/" class="home-glow-btn">
+                     بازگشت به خانه
+                     </a>
+                    </div>
+        </section>
+    </main>
+
+     {% load static i18n %}
+
+<footer style="position: relative;">
+    <a href="#" id="up-to-top" style="position: absolute; top: 20px; right: 20px;">
+        <i class="fa-solid fa-arrow-up"></i>
+    </a>
+
+    <div class="container">
+        <div class="main-footer" style="text-align: center;">
+            <div class="item-footer">
+                <a href="{% url 'podcast_app:special_list' %}" aria-label="sheerwizhe" style="display: inline-block; text-decoration: none;">
+                    {% if footer.logo %}
+                        <img src="{{ footer.logo.url }}" style="max-width: 80px; margin: 0 auto 15px;" alt="{{ footer.site_name|default:'لوگوی سایت' }}">
+                    {% endif %}
+                </a>
+
+                {% if footer.site_name %}
+                    <h3 style="color: #fff; margin-bottom: 12px;">{{ footer.site_name }}</h3>
+                {% endif %}
+
+                {% if footer.description %}
+                    <p>{{ footer.description }}</p>
+                {% endif %}
+
+                {% if footer.instagram_url or footer.telegram_url %}
+                    <div class="social-network">
+                        {% if footer.instagram_url %}
+                            <a href="{{ footer.instagram_url }}" target="_blank" rel="noopener" title="Instagram" class="social-icon" style="color: #E4405F;">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                        {% endif %}
+
+                        {% if footer.telegram_url %}
+                            <a href="{{ footer.telegram_url }}" target="_blank" rel="noopener" title="Telegram" class="social-icon" style="color: #0088cc;">
+                                <i class="fa-brands fa-telegram"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="border-footer"></div>
+
+    <div class="container">
+        {% if footer.email or footer.phone %}
+            <div class="footer-contact-row" style="display: flex; justify-content: center; align-items: center; gap: 15px; padding: 20px 0; position: relative; transform: translateY(-80px);">
+                {% if footer.email %}
+                    <a href="mailto:{{ footer.email }}" title="{% trans 'ارسال ایمیل' %}" style="text-decoration: none;">
+                        <i class="fa-solid fa-envelope" style="
+                            font-size: 24px;
+                            color: #ffffff;
+                            transition: all 0.3s ease;
+                            display: inline-block;
+                            animation: float 3s ease-in-out infinite, pulse 2s ease-in-out infinite;
+                        "></i>
+                    </a>
+                    <span style="color: #ffffff; font-size: 14px; animation: fadeInOut 2s ease-in-out infinite;">{{ footer.email }}</span>
+                {% endif %}
+
+                {% if footer.phone %}
+                    <span style="color: #ffffff; font-size: 14px; animation: fadeInOut 2s ease-in-out infinite;">{{ footer.phone }}</span>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if footer.copyright_text %}
+            <p id="p-footer">
+                <b>{{ footer.copyright_text }}</b>
+            </p>
+        {% endif %}
+    </div>
+</footer>
+<script src="{% static 'fonts/fontawesome-free-7.0.0-web/js/all.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

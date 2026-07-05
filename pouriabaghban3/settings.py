@@ -29,7 +29,7 @@ environ.Env.read_env(BASE_DIR / '.env')
 SECRET_KEY = 'django-insecure-4k!didb)t*1*vc50xox(ngdl-wtpb)ad_gj8@)s&p_*m*-krr$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "pouriabaghban.ir",
@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'django_jalali',
     'rosetta',
     'rest_framework',
+    'ckeditor',
+    "ckeditor_uploader",
     
     # Local apps
     'message.apps.MessageConfig',
@@ -125,31 +127,58 @@ CHANNEL_LAYERS = {
     },
 }
 
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": os.environ.get("CACHE_URL", REDIS_URL),
-        "TIMEOUT": int(os.environ.get("CACHE_DEFAULT_TIMEOUT", "300")),
-        "KEY_PREFIX": os.environ.get("CACHE_KEY_PREFIX", "pouriabaghban"),
+USE_REDIS = os.environ.get("USE_REDIS", "0") == "1"
+
+REDIS_URL = os.environ.get("REDIS_URL", "redis://127.0.0.1:6379/1")
+
+if USE_REDIS:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": os.environ.get("CACHE_URL", REDIS_URL),
+            "TIMEOUT": int(os.environ.get("CACHE_DEFAULT_TIMEOUT", "300")),
+            "KEY_PREFIX": os.environ.get("CACHE_KEY_PREFIX", "pouriabaghban"),
+        }
     }
-}
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "local-dev-cache",
+            "TIMEOUT": int(os.environ.get("CACHE_DEFAULT_TIMEOUT", "300")),
+            "KEY_PREFIX": os.environ.get("CACHE_KEY_PREFIX", "pouriabaghban"),
+        }
+    }
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "pouriabagtw_db",
-        "USER": "root",
-        "PASSWORD": "bA9go5MY3BZKAdllnzhu",
-        "HOST": "pouriabaghban-db-pca-service",
-        "PORT": "3306",
-        "OPTIONS": {
-            "charset": "utf8mb4",
-        },
+ 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+USE_MYSQL = os.getenv("USE_MYSQL", "0") == "1"
+
+if USE_MYSQL:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": os.getenv("DB_NAME", "pouriabagtw_db"),
+            "USER": os.getenv("DB_USER", "root"),
+            "PASSWORD": os.getenv("DB_PASSWORD", ""),
+            "HOST": os.getenv("DB_HOST", "127.0.0.1"),
+            "PORT": os.getenv("DB_PORT", "3306"),
+            "OPTIONS": {
+                "charset": "utf8mb4",
+            },
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -341,7 +370,7 @@ STATICFILES_DIRS = [
 MEDIA_URL = "/public/media/"
 MEDIA_ROOT = BASE_DIR / "public" / "media"
 PROTECTED_MEDIA_ROOT = BASE_DIR / "protected_media"
-
+CKEDITOR_UPLOAD_PATH = "ckeditor/uploads/"
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",

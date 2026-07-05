@@ -43,7 +43,10 @@ class AdminSecurityMiddleware:
                     return redirect('home')
                 
                 if request.user.is_staff:
-                    cache.set(f'admin_presence_{request.user.id}', True, 90)
+                  try:
+                                cache.set(f"admin_presence_{request.user.id}", True, 90)
+                  except Exception as e:
+                                             print(f"Admin presence cache failed: {e}")
 
                 break
         

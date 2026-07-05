@@ -1,75 +1,116 @@
 from django.contrib import admin
-from django.utils import timezone
 from django.utils.html import format_html
-
-from .models import ContactMessage, ContactSetting
+from .models import ContactMessage
 
 
 @admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):
-    list_display = ("get_name_badge", "email", "subject", "created_at", "get_read_status", "get_reply_status")
-    list_filter = ("is_read", "is_replied", "created_at")
-    search_fields = ("name", "email", "subject", "message")
-    readonly_fields = ("created_at", "replied_at", "get_full_message")
-    actions = ["mark_as_read", "mark_as_unread", "mark_as_replied"]
-    fieldsets = (
-        ("اطلاعات فرستنده", {"fields": ("name", "email", "phone")}),
-        ("پیام دریافت‌شده", {"fields": ("subject", "get_full_message", "created_at")}),
-        ("وضعیت", {"fields": ("is_read", "is_replied")}),
-        ("پاسخ شما", {"fields": ("reply_message", "replied_at")}),
+    list_display = (
+        "full_name",
+        "phone",
+        "email",
+        "status_badge",
+        "created_at",
     )
 
-    def get_name_badge(self, obj):
-        color = "#28a745" if obj.is_replied else "#ffc107"
-        return format_html(
-            '<span style="background-color: {}; padding: 5px 10px; border-radius: 3px; color: white;">{}</span>',
-            color,
-            obj.name,
-        )
-    get_name_badge.short_description = "نام"
+    list_filter = (
+        "is_read",
+        "created_at",
+    )
 
-    def get_read_status(self, obj):
+    search_fields = (
+        "first_name",
+        "last_name",
+        "phone",
+        "email",
+        "message",
+    )
+
+    readonly_fields = (
+        "first_name",
+        "last_name",
+        "phone",
+        "email",
+        "message",
+        "created_at",
+        "status_badge",
+    )
+
+    ordering = ("-created_at",)
+
+    actions = (
+        "mark_as_read",
+        "mark_as_unread",
+    )
+
+    fieldsets = (
+        ("اطلاعات کاربر", {
+            "fields": (
+                "first_name",
+                "last_name",
+                "phone",
+                "email",
+            )
+        }),
+        ("پیام", {
+            "fields": (
+                "message",
+            )
+        }),
+        ("وضعیت", {
+            "fields": (
+                "status_badge",
+                "is_read",
+                "created_at",
+            )
+        }),
+    )
+
+    def full_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
+
+    full_name.short_description = "نام و نام خانوادگی"
+
+    def status_badge(self, obj):
         if obj.is_read:
-            return format_html('<span style="color: green;">خوانده شده</span>')
-        return format_html('<span style="color: red;">خوانده نشده</span>')
-    get_read_status.short_description = "وضعیت خواندن"
+            return format_html(
+                '<span style="'
+                'background:#16a34a;'
+                'color:white;'
+                'padding:6px 12px;'
+                'border-radius:999px;'
+                'font-weight:bold;'
+                'font-size:13px;'
+                'display:inline-block;'
+                'min-width:110px;'
+                'text-align:center;'
+                '">خوانده شده</span>'
+            )
 
-    def get_reply_status(self, obj):
-        if obj.is_replied:
-            return format_html('<span style="color: green;">پاسخ داده شده</span>')
-        return format_html('<span style="color: orange;">در انتظار پاسخ</span>')
-    get_reply_status.short_description = "وضعیت پاسخ"
+        return format_html(
+            '<span style="'
+            'background:#facc15;'
+            'color:#3a2f00;'
+            'padding:6px 12px;'
+            'border-radius:999px;'
+            'font-weight:bold;'
+            'font-size:13px;'
+            'display:inline-block;'
+            'min-width:130px;'
+            'text-align:center;'
+            '">در انتظار خواندن</span>'
+        )
 
-    def get_full_message(self, obj):
-        return format_html('<div style="white-space: pre-wrap; background: #f5f5f5; padding: 10px; border-radius: 5px;">{}</div>', obj.message)
-    get_full_message.short_description = "متن کامل پیام"
+    status_badge.short_description = "وضعیت"
 
     def mark_as_read(self, request, queryset):
-        count = queryset.update(is_read=True)
-        self.message_user(request, f"{count} پیام به عنوان خوانده شده علامت‌گذاری شد.")
+        updated = queryset.update(is_read=True)
+        self.message_user(request, f"{updated} پیام به حالت خوانده شده تغییر کرد.")
+
     mark_as_read.short_description = "علامت‌گذاری به عنوان خوانده شده"
 
     def mark_as_unread(self, request, queryset):
-        count = queryset.update(is_read=False)
-        self.message_user(request, f"{count} پیام به عنوان خوانده نشده علامت‌گذاری شد.")
-    mark_as_unread.short_description = "علامت‌گذاری به عنوان خوانده نشده"
+        updated = queryset.update(is_read=False)
+        self.message_user(request, f"{updated} پیام به حالت در انتظار خواندن تغییر کرد.")
 
-    def mark_as_replied(self, request, queryset):
-        count = queryset.update(is_replied=True, is_read=True, replied_at=timezone.now())
-        self.message_user(request, f"{count} پیام به عنوان پاسخ داده شده علامت‌گذاری شد.")
-    mark_as_replied.short_description = "علامت‌گذاری به عنوان پاسخ داده شده"
-
-
-@admin.register(ContactSetting)
-class ContactSettingAdmin(admin.ModelAdmin):
-    list_display = ("email", "phone")
-    fieldsets = (
-        ("اطلاعات تماس", {"fields": ("email", "phone", "address")}),
-        ("شبکه‌های اجتماعی", {"fields": ("whatsapp", "telegram", "instagram", "linkedin")}),
-    )
-
-    def has_add_permission(self, request):
-        return not ContactSetting.objects.exists()
-
-    def has_delete_permission(self, request, obj=None):
-        return False
+    mark_as_unread.short_description = "علامت‌گذاری به عنوان در انتظار خواندن"

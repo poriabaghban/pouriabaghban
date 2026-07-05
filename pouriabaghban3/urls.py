@@ -29,6 +29,7 @@ admin.site.index_title = 'داشبورد مدیریت'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
     path('downloads/', RedirectView.as_view(pattern_name='kskh:index', permanent=False)),
     path('downloads/<path:unused>/', RedirectView.as_view(pattern_name='kskh:index', permanent=False)),
     path('kskh/', include('kskh.urls')),

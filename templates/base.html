@@ -307,6 +307,64 @@
             padding-bottom: 20px;
         }
 
+        .social-network {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .social-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            transition: all 0.25s ease;
+        }
+
+        .social-icon:hover {
+            color: #ffffff;
+            transform: translateY(-4px);
+            background: rgba(0, 108, 255, 0.25);
+            border-color: rgba(0, 108, 255, 0.55);
+        }
+
+        #up-to-top {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 46px;
+            height: 46px;
+            background: #ffffff;
+            color: #006cff;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            z-index: 50;
+            box-shadow: 0 10px 30px rgba(0, 108, 255, 0.22);
+            transition: 0.25s ease;
+        }
+
+        #up-to-top i {
+            color: #006cff;
+            font-size: 18px;
+        }
+
+        #up-to-top:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 36px rgba(0, 108, 255, 0.34);
+        }
+
         /* ===== Ø§Ù†ÛŒÙ…ÛŒØ´Ù†â€ŒÙ‡Ø§ ===== */
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
@@ -719,16 +777,27 @@
                 <!-- Ù†Ø§ÙˆØ¨Ø±ÛŒ Ø¯Ø± Ø³Ù…Øª Ú†Ù¾ -->
                 <nav id="primary-nav" class="site-nav">
                     <ul>
-                        <li><a href="{% url 'pages:home' %}">{% trans "خانه" %}</a></li>
-                        <li><a href="#" id="contact-link">{% trans "ارتباط با من" %}</a></li>
-                        <li><a href="{% url 'blog:blog-list' %}">{% trans "بلاگ" %}</a></li>
-                        <li><a href="{% url 'gallery:portfolio-list' %}">{% trans "نمونه کار" %}</a></li>
-                        <li><a href="{% url 'gallery:gallery-list' %}">{% trans "گالری" %}</a></li>
-                         
-                        {% for item in navbar_items %}
-                        <li><a href="{{ item.url }}"{% if item.opens_new_tab %} target="_blank" rel="noopener"{% endif %}>{{ item.get_title }}</a></li>
-                        {% endfor %}
-                        <li class="resume-nav-item"><a id="resume-download" href="{% static 'poriabaghban.pdf' %}" download="poriabaghban.pdf">{% trans "دانلود رزومه" %}</a></li>
+                        {% if navbar_items %}
+                            {% for item in navbar_items %}
+                                <li>
+                                    <a href="{{ item.url }}"{% if item.opens_new_tab %} target="_blank" rel="noopener"{% endif %}>
+                                        {{ item.get_title }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li><a href="{% url 'pages:home' %}">{% trans "خانه" %}</a></li>
+                            <li><a href="#site-footer" id="contact-link">{% trans "ارتباط با من" %}</a></li>
+                            <li><a href="{% url 'blog:blog-list' %}">{% trans "بلاگ" %}</a></li>
+                            <li><a href="{% url 'gallery:portfolio-list' %}">{% trans "نمونه کار" %}</a></li>
+                            <li><a href="{% url 'gallery:gallery-list' %}">{% trans "گالری" %}</a></li>
+                        {% endif %}
+
+                        <li class="resume-nav-item">
+                            <a id="resume-download" href="{% static 'poriabaghban.pdf' %}" download="poriabaghban.pdf">
+                                {% trans "دانلود رزومه" %}
+                            </a>
+                        </li>
                     </ul>
                 </nav>
                 <div class="language-selector" data-current-lang="{{ request.LANGUAGE_CODE|default:'fa' }}">
@@ -1044,64 +1113,122 @@
         </script>
 
         <!-- ============================================================
-        ÙÙˆØªØ±
+        فوتر
         ============================================================ -->
-        <footer style="position: relative;">
-            <a href="#" id="up-to-top" style="position: absolute; top: 20px; right: 20px;">
+        <footer id="site-footer" style="position: relative;">
+
+            <a href="#" id="up-to-top" aria-label="{% trans 'بازگشت به بالا' %}">
                 <i class="fa-solid fa-arrow-up"></i>
             </a>
+
             <div class="container">
                 <div class="main-footer" style="text-align: center;">
                     <div class="item-footer">
-                        <a href="{% url 'podcast_app:special_list' %}" aria-label="sheerwizhe" style="display: inline-block; text-decoration: none;">
-                            {% if footer.logo %}<img src="{{ footer.logo.url }}" style="max-width: 80px; margin: 0 auto 15px;" alt="{{ footer.site_name|default:'لوگوی سایت' }}">{% endif %}
-                        </a>
-                        {% if footer.site_name %}<h3 style="color: #fff; margin-bottom: 12px;">{{ footer.site_name }}</h3>{% endif %}
-                        {% if footer.description %}<p>{{ footer.description }}</p>{% endif %}
-                        {% if footer.instagram_url or footer.telegram_url %}
-                        <div class="social-network">
-                            {% if footer.instagram_url %}
-                            <a href="{{ footer.instagram_url }}" target="_blank" rel="noopener" title="Instagram" class="social-icon" style="color: #E4405F;">
-                                <i class="fa-brands fa-instagram"></i>
+
+                        {% if footer %}
+                            <a href="{% url 'podcast_app:special_list' %}" aria-label="sheerwizhe" style="display: inline-block; text-decoration: none;">
+                                {% if footer.logo %}
+                                    <img src="{{ footer.logo.url }}" style="max-width: 80px; margin: 0 auto 15px;" alt="{{ footer.site_name|default:'لوگوی سایت' }}">
+                                {% endif %}
                             </a>
+
+                            {% if footer.site_name %}
+                                <h3 style="color: #fff; margin-bottom: 12px;">{{ footer.site_name }}</h3>
                             {% endif %}
-                            {% if footer.telegram_url %}
-                            <a href="{{ footer.telegram_url }}" target="_blank" rel="noopener" title="Telegram" class="social-icon" style="color: #0088cc;">
-                                <i class="fa-brands fa-telegram"></i>
-                            </a>
-                            {% endif %}
-                        </div>
+
+                            {% with footer_description=footer.get_description %}
+                                {% if footer_description %}
+                                    <p>{{ footer_description }}</p>
+                                {% endif %}
+                            {% endwith %}
                         {% endif %}
+
+                        {% if social_links %}
+                            <div class="social-network">
+                                {% for link in social_links %}
+                                    <a href="{{ link.url }}"
+                                       target="_blank"
+                                       rel="noopener"
+                                       title="{{ link.get_platform_display }}"
+                                       class="social-icon">
+                                        {% if link.icon %}
+                                            <i class="{{ link.icon }}"></i>
+                                        {% else %}
+                                            {{ link.get_platform_display }}
+                                        {% endif %}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        {% elif footer %}
+                            {% if footer.github_url or footer.instagram_url or footer.telegram_url %}
+                                <div class="social-network">
+                                    {% if footer.github_url %}
+                                        <a href="{{ footer.github_url }}" target="_blank" rel="noopener" title="GitHub" class="social-icon">
+                                            <i class="fa-brands fa-github"></i>
+                                        </a>
+                                    {% endif %}
+
+                                    {% if footer.instagram_url %}
+                                        <a href="{{ footer.instagram_url }}" target="_blank" rel="noopener" title="Instagram" class="social-icon">
+                                            <i class="fa-brands fa-instagram"></i>
+                                        </a>
+                                    {% endif %}
+
+                                    {% if footer.telegram_url %}
+                                        <a href="{{ footer.telegram_url }}" target="_blank" rel="noopener" title="Telegram" class="social-icon">
+                                            <i class="fa-brands fa-telegram"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
                     </div>
                 </div>
             </div>
+
             <div class="border-footer"></div>
+
             <div class="container">
-                {% if footer.email or footer.phone %}
-                <div class="footer-contact-row" style="display: flex; justify-content: center; align-items: center; gap: 15px; padding: 20px 0; position: relative; transform: translateY(-80px);">
-                    {% if footer.email %}
-                    <a href="mailto:{{ footer.email }}" title="{% trans 'ارسال ایمیل' %}" style="text-decoration: none;">
-                        <i class="fa-solid fa-envelope" style="
-                            font-size: 24px;
-                            color: #ffffff;
-                            transition: all 0.3s ease;
-                            display: inline-block;
-                            animation: float 3s ease-in-out infinite, pulse 2s ease-in-out infinite;
-                        "></i>
-                    </a>
-                    <span style="color: #ffffff; font-size: 14px; animation: fadeInOut 2s ease-in-out infinite;">{{ footer.email }}</span>
+                {% if footer %}
+                    {% if footer.email or footer.phone %}
+                        <div class="footer-contact-row" style="display: flex; justify-content: center; align-items: center; gap: 15px; padding: 20px 0; position: relative;">
+
+                            {% if footer.email %}
+                                <a href="mailto:{{ footer.email }}" title="{% trans 'ارسال ایمیل' %}" style="text-decoration: none;">
+                                    <i class="fa-solid fa-envelope" style="
+                                        font-size: 24px;
+                                        color: #ffffff;
+                                        transition: all 0.3s ease;
+                                        display: inline-block;
+                                        animation: float 3s ease-in-out infinite, pulse 2s ease-in-out infinite;
+                                    "></i>
+                                </a>
+
+                                <span style="color: #ffffff; font-size: 14px; animation: fadeInOut 2s ease-in-out infinite;">
+                                    {{ footer.email }}
+                                </span>
+                            {% endif %}
+
+                            {% if footer.phone %}
+                                <span style="color: #ffffff; font-size: 14px; animation: fadeInOut 2s ease-in-out infinite;">
+                                    {{ footer.phone }}
+                                </span>
+                            {% endif %}
+
+                        </div>
                     {% endif %}
-                    {% if footer.phone %}
-                    <span style="color: #ffffff; font-size: 14px; animation: fadeInOut 2s ease-in-out infinite;">{{ footer.phone }}</span>
-                    {% endif %}
-                </div>
-                {% endif %}
-                {% if footer.copyright_text %}
-                <p id="p-footer">
-                    <b>{{ footer.copyright_text }}</b>
-                </p>
+
+                    {% with footer_copyright=footer.get_copyright_text %}
+                        {% if footer_copyright %}
+                            <p id="p-footer">
+                                <b>{{ footer_copyright }}</b>
+                            </p>
+                        {% endif %}
+                    {% endwith %}
                 {% endif %}
             </div>
+
         </footer>
     </div>
 

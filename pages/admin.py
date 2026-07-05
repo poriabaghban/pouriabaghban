@@ -251,7 +251,6 @@ class TestimonialAdmin(admin.ModelAdmin):
         return "★" * obj.rating
     get_rating_stars.short_description = "امتیاز"
 
-
 @admin.register(NavbarItem)
 class NavbarItemAdmin(LanguageFilterMixin, admin.ModelAdmin):
     list_display = ("get_admin_title", "available_languages", "url", "order", "opens_new_tab", "is_active")
@@ -266,41 +265,101 @@ class NavbarItemAdmin(LanguageFilterMixin, admin.ModelAdmin):
         "all": ("title_fa", "title_en", "title_de", "title"),
     }
     ordering = ("order", "title")
+
     fieldsets = (
-        ("Main link settings", {"fields": ("url", "order")} ),
-        ("Persian content", {"fields": ("title_fa",), "classes": ("lang-fa-section",)}),
-        ("English content", {"fields": ("title_en",), "classes": ("lang-en-section",)}),
-        ("German content", {"fields": ("title_de",), "classes": ("lang-de-section",)}),
-        ("Legacy Persian fields", {"fields": ("title",), "classes": ("collapse",)}),
-        ("Display behavior", {"fields": ("opens_new_tab", "is_active")} ),
+        ("تنظیمات اصلی لینک", {
+            "fields": ("url", "order")
+        }),
+        ("محتوای فارسی", {
+            "fields": ("title_fa",),
+            "classes": ("lang-fa-section",)
+        }),
+        ("محتوای انگلیسی", {
+            "fields": ("title_en",),
+            "classes": ("lang-en-section",)
+        }),
+        ("محتوای آلمانی", {
+            "fields": ("title_de",),
+            "classes": ("lang-de-section",)
+        }),
+        ("فیلد قدیمی فارسی", {
+            "fields": ("title",),
+            "classes": ("collapse",)
+        }),
+        ("تنظیمات نمایش", {
+            "fields": ("opens_new_tab", "is_active")
+        }),
     )
 
     def get_admin_title(self, obj):
         return obj.get_title()
-    get_admin_title.short_description = "Title"
 
+    get_admin_title.short_description = "عنوان"
 
 @admin.register(FooterSettings)
 class FooterSettingsAdmin(LanguageFilterMixin, admin.ModelAdmin):
     list_display = ("site_name", "email", "phone", "available_languages", "get_admin_copyright", "is_active")
     list_editable = ("is_active",)
     language_required_fields = ("description", "copyright_text")
-    search_fields = ("site_name", "description_fa", "description_en", "description_de", "copyright_text_fa", "copyright_text_en", "copyright_text_de", "description", "copyright_text", "email", "phone")
+    search_fields = (
+        "site_name",
+        "description_fa",
+        "description_en",
+        "description_de",
+        "copyright_text_fa",
+        "copyright_text_en",
+        "copyright_text_de",
+        "description",
+        "copyright_text",
+        "email",
+        "phone",
+    )
+
     fieldsets = (
-        ("Main footer settings", {"fields": ("site_name", "logo", "email", "phone", "github_url", "instagram_url", "telegram_url", "copyright_year", "is_active")} ),
-        ("Persian content", {"fields": ("description_fa", "copyright_text_fa"), "classes": ("lang-fa-section",)}),
-        ("English content", {"fields": ("description_en", "copyright_text_en"), "classes": ("lang-en-section",)}),
-        ("German content", {"fields": ("description_de", "copyright_text_de"), "classes": ("lang-de-section",)}),
-        ("Legacy Persian fields", {"fields": ("description", "copyright_text"), "classes": ("collapse",)}),
+        ("تنظیمات اصلی فوتر", {
+            "fields": (
+                "site_name",
+                "logo",
+                "email",
+                "phone",
+                "copyright_year",
+                "is_active",
+            )
+        }),
+        ("لینک‌های قدیمی فوتر", {
+            "fields": (
+                "github_url",
+                "instagram_url",
+                "telegram_url",
+            ),
+            "classes": ("collapse",),
+            "description": "بهتر است لینک‌های شبکه اجتماعی را از بخش «لینک‌های اجتماعی» مدیریت کنید."
+        }),
+        ("محتوای فارسی", {
+            "fields": ("description_fa", "copyright_text_fa"),
+            "classes": ("lang-fa-section",)
+        }),
+        ("محتوای انگلیسی", {
+            "fields": ("description_en", "copyright_text_en"),
+            "classes": ("lang-en-section",)
+        }),
+        ("محتوای آلمانی", {
+            "fields": ("description_de", "copyright_text_de"),
+            "classes": ("lang-de-section",)
+        }),
+        ("فیلدهای قدیمی فارسی", {
+            "fields": ("description", "copyright_text"),
+            "classes": ("collapse",)
+        }),
     )
 
     def get_admin_copyright(self, obj):
         return obj.get_copyright_text()
-    get_admin_copyright.short_description = "Copyright"
+
+    get_admin_copyright.short_description = "کپی‌رایت"
 
     def has_delete_permission(self, request, obj=None):
         return False
-
 
 @admin.register(HomePageComment)
 class HomePageCommentAdmin(admin.ModelAdmin):
